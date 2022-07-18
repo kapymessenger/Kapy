@@ -1,4 +1,4 @@
-package org.kapyteam.messenger
+package org.kapyteam.messenger.activity
 
 import android.os.Bundle
 import android.widget.Button
@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.kapyteam.messenger.databinding.ActivityFaceRecognitionBinding
 
-class FaceRecognition : AppCompatActivity() {
+class FaceRecognitionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFaceRecognitionBinding
     private lateinit var button: Button
