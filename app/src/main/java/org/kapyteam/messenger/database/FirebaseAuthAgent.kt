@@ -50,7 +50,13 @@ class FirebaseAuthAgent {
                             if (it.hasChild(profile.phone) || it.hasChild(profile.nickname)) {
 
                             } else {
+                                dbReference
+                                    .child("users")
+                                    .child(profile.phone)
+                                    .let { db ->
+                                        db.child("firstname").setValue(profile.firstname)
 
+                                }
                             }
                         }
                     }
