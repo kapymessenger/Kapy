@@ -88,6 +88,8 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val outputs = model.process(inputFeature0)
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer
 
+
+
         val confidences: FloatArray = outputFeature0.floatArray
         var maxPos = 0
         var maxConfidence = 0f

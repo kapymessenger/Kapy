@@ -25,7 +25,8 @@
             android:layout_width="250dp"
             android:layout_height="64dp"
             android:layout_weight="1"
-            android:text="Take Photo" />
+            android:text="Take Photo"
+            android:backgroundTint="#CC00ED"/>
 
         <TextView
             android:id="@+id/resultText"
