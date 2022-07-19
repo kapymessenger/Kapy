@@ -21,7 +21,7 @@ class GreetingActivity : AppCompatActivity() {
 
         sign_up_button = findViewById(R.id.sign_up_button)
         sign_up_button.setOnClickListener{
-            val intent = Intent(this, registration1::class.java)
+            val intent = Intent(this, Registration1::class.java)
             startActivity(intent)
         }
     }

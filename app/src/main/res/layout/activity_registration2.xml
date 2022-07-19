@@ -4,43 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.registration2">
+    tools:context=".activity.Registration2">
 
     <Button
         android:id="@+id/register_continue2"
         style="@style/ButtonStyle"
+        android:layout_marginTop="123dp"
         android:layout_marginBottom="40dp"
         android:text="resend code"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verification_code" />
 
     <ImageView
         android:id="@+id/register_image2"
         android:layout_width="179dp"
         android:layout_height="140dp"
         android:layout_marginTop="60dp"
-        app:layout_constraintBottom_toTopOf="@+id/verification_layout"
+        app:layout_constraintBottom_toTopOf="@+id/verification_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/registration_image" />
 
-    <LinearLayout
-        android:id="@+id/verification_layout"
-        android:layout_width="412dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="312dp"
-        android:orientation="vertical"
+    <com.chaos.view.PinView
+        android:id="@+id/verification_code"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:layout_marginTop="173dp"
+        android:elevation="10dp"
+        android:hint="000000"
+        android:inputType="number"
+        android:itemBackground="@drawable/rounder_edittext"
+        app:itemSpacing="15dp"
         app:layout_constraintBottom_toTopOf="@+id/register_continue2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_image2"
-        app:layout_constraintVertical_bias="1.0"
-        android:padding="15dp">
+        app:itemRadius="10dp"
+        app:lineColor="#D9D9D9"
+        app:itemCount="6"/>
 
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
