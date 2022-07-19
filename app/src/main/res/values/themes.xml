@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.Kapy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#CC00ED</item>
-        <item name="colorPrimaryVariant">#CC00ED</item>
+        <item name="colorPrimary">#B40CE8</item>
+        <item name="colorPrimaryVariant">#B40CE8</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#005550</item>
         <item name="colorSecondaryVariant">#005550</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">#CC00ED</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#B40CE8</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -27,6 +27,7 @@
 
     <style name="RegisterEditTextStyle">
         <item name="android:textColor">#5B5B5B</item>
+
         <item name="cornerRadius">25sp</item>
         <item name="android:background">@drawable/rounder_edittext</item>
     </style>
