@@ -28,9 +28,7 @@ class FirebaseAuthAgent {
                 120,
                 TimeUnit.SECONDS,
                 activity,
-                verifyCallback(),
-
-                )
+                verifyCallback())
         }
 
         private fun verifyCallback() =
