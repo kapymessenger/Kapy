@@ -37,10 +37,12 @@
 
     <Button
         android:id="@+id/sing_in_button"
-        android:layout_width="wrap_content"
+        style="@style/ButtonStyle"
+        android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="sing in"
+        app:cornerRadius="80sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +50,8 @@
 
     <Button
         android:id="@+id/sing_up_button"
-        android:layout_width="wrap_content"
+        style="@style/ButtonStyle"
+        android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="sing up"
