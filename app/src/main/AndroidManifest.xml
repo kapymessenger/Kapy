@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.kapyteam.messenger">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,10 +16,11 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".activity.FaceRecognitionActivity"
+            android:name=".activity.MainActivity"
+
             android:exported="false"/>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.FaceRecognitionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
