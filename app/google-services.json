@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "541532226110",
+    "firebase_url": "https://kapy-messenger-default-rtdb.firebaseio.com",
     "project_id": "kapy-messenger",
     "storage_bucket": "kapy-messenger.appspot.com"
   },
