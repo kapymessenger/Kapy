@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "541532226110",
+    "project_id": "kapy-messenger",
+    "storage_bucket": "kapy-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541532226110:android:3c61ba3970baa0b174076f",
+        "android_client_info": {
+          "package_name": "org.kapyteam.messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541532226110-vnoi2c03er08sokb5aubg4d3vdgkmudp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1omFqUk_qe9RVE226kryzvihO7q48a9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541532226110-vnoi2c03er08sokb5aubg4d3vdgkmudp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
