@@ -11,7 +11,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="greeting_header_text"
+        android:text="@string/greeting_header_text"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
@@ -26,7 +26,8 @@
         android:id="@+id/greeting_text"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
-        android:text="greeting_text"
+        android:layout_marginTop="20dp"
+        android:text="@string/greeting_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
@@ -36,39 +37,45 @@
         app:layout_constraintTop_toBottomOf="@+id/greeting_header" />
 
     <Button
-        android:id="@+id/sing_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/sign_in_button"
+        style="@style/ButtonStyle"
+        android:layout_width="150sp"
+        android:layout_height="48sp"
         android:layout_marginTop="20dp"
-        android:text="sing_in_button_text"
+        android:layout_marginBottom="10dp"
+        android:text="sign in"
+        app:cornerRadius="80sp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
-        android:id="@+id/sing_up_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/sign_up_button"
+        style="@style/ButtonStyle"
+        android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="sign_up_button_text"
+        android:text="sign up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sing_in_button"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
         app:layout_constraintVertical_bias="0.359" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="310dp"
         android:layout_height="218dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:contentDescription="TODO"
-        app:layout_constraintBottom_toTopOf="@+id/sing_in_button"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/greeting_text"
-        app:srcCompat="@drawable/img" />
+        app:srcCompat="@drawable/capybara1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
