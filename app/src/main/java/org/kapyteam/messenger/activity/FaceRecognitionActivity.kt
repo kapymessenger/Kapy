@@ -100,16 +100,17 @@ class FaceRecognitionActivity : AppCompatActivity() {
             }
         }
 
-        println(confidences[2])
-        val classes = arrayOf("😐", "😀", "😥", "😲", "😨", "🤢", "😡", "😏")
+        val classes = arrayOf("👩", "👨")
         //resText!!.text = classes[maxPos]
 
         var s = ""
         for (i in classes.indices) {
-            s += String.format("%s: %.1f%%\n", classes[i], confidences[i] * 100)
+            if(Math.round(confidences[i]*100) != 0) {
+                println(Math.round(confidences[i]*100))
+                s += String.format("%s: %.1f%%\n", classes[i], confidences[i] * 100)
+            }
         }
         resText.text = s
-// Releases model resources if no longer used.
         model.close()
 
     }
