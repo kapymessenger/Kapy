@@ -6,7 +6,6 @@
 package org.kapyteam.messenger.database
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.annotation.NonNull
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -17,14 +16,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import org.kapyteam.messenger.traits.Profile
+import org.kapyteam.messenger.model.Profile
 import java.util.concurrent.TimeUnit
 
 class FirebaseAuthAgent {
     companion object {
-        @JvmStatic
         private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-        @JvmStatic
         private var dbReference = FirebaseDatabase
             .getInstance()
             .getReferenceFromUrl("https://kapy-messenger-default-rtdb.firebaseio.com/")
@@ -34,9 +31,10 @@ class FirebaseAuthAgent {
         fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
         fun phoneAuth(phone: String, activity: Activity) {
+            // надо потом перестать юзать депрекейтед
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phone,
-                120,
+                300,
                 TimeUnit.SECONDS,
                 activity,
                 verifyCallback())
@@ -50,9 +48,12 @@ class FirebaseAuthAgent {
                             if (it.hasChild(profile.phone) || it.hasChild(profile.nickname)) {
 
                             } else {
-
+                                dbReference
+                                    .child("users")
+                                    .child(profile.phone)
+                                    .setValue(profile)
+                                }
                             }
-                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
