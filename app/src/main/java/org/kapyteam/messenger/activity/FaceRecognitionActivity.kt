@@ -101,7 +101,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
         }
 
         println(confidences[2])
-        val classes = arrayOf("😳", "😲", "😑", "🙂", "😃")
+        val classes = arrayOf("😐", "😀", "😥", "😲", "😨", "🤢", "😡", "😏")
         //resText!!.text = classes[maxPos]
 
         var s = ""
