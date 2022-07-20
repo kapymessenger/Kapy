@@ -14,10 +14,23 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
+            android:name=".Registration3"
+            android:exported="false" />
+        <activity
+            android:name=".activity.Registration2"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Registration1"
+            android:exported="false" />
+        <activity
             android:name=".activity.FaceRecognitionActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.GreetingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
