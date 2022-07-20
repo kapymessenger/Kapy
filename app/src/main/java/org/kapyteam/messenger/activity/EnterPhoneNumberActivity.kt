@@ -6,18 +6,18 @@ import android.os.Bundle
 import android.widget.Button
 import org.kapyteam.messenger.R
 
-class Registration1 : AppCompatActivity() {
+class EnterPhoneNumberActivity : AppCompatActivity() {
 
-    private lateinit var continue_button :Button
+    private lateinit var continueButton :Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration1)
+        setContentView(R.layout.activity_enter_phone_number)
 
-        continue_button = findViewById(R.id.register_continue)
+        continueButton = findViewById(R.id.register_continue)
 
-        continue_button.setOnClickListener {
-            val intent = Intent(this, Registration2::class.java)
+        continueButton.setOnClickListener {
+            val intent = Intent(this, EnterVerificationCodeActivity::class.java)
             startActivity(intent)
         }
     }

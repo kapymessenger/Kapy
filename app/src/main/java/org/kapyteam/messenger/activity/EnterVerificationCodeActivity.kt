@@ -6,27 +6,25 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.getSystemService
-import androidx.core.widget.addTextChangedListener
 import com.chaos.view.PinView
 import org.kapyteam.messenger.R
 
-class Registration2 : AppCompatActivity() {
+class EnterVerificationCodeActivity : AppCompatActivity() {
 
-    private lateinit var verification_code: PinView
+    private lateinit var verificationCode: PinView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration2)
+        setContentView(R.layout.activity_enter_verification_code)
         supportActionBar?.hide()
 
-        verification_code = findViewById(R.id.verification_code)
+        verificationCode = findViewById(R.id.verification_code)
 
-        verification_code.requestFocus()
+        verificationCode.requestFocus()
         val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY)
 
-        verification_code.addTextChangedListener(object : TextWatcher {
+        verificationCode.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
