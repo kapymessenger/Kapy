@@ -42,7 +42,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="188dp"
         android:ems="10"
-        android:hint="Enter your phone number"
+        android:hint="   Enter your phone number"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/register_continue"
         app:layout_constraintEnd_toEndOf="parent"

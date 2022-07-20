@@ -10,7 +10,7 @@ data class Profile(
     val lastname: String,
     val phone: String,
     val nickname: String,
-    val photo: String,
-    val lastSeen: String,
-    val online: Boolean
+    val photo: String = "",
+    val lastSeen: String = "",
+    val online: Boolean = false
 )
