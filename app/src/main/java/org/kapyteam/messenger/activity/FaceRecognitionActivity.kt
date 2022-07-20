@@ -101,8 +101,9 @@ class FaceRecognitionActivity : AppCompatActivity() {
         }
 
         println(confidences[2])
-        val classes = arrayOf("😐", "😀", "😥", "😲", "😨", "🤢", "😡", "😏")
+        val classes = arrayOf("😀", "😡", "👆", "✊", "🤟")
         //resText!!.text = classes[maxPos]
+        //https://www.kaggle.com/datasets/parikshitkumar/hand-gestures
 
         var s = ""
         for (i in classes.indices) {
