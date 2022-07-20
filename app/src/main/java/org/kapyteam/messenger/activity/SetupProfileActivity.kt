@@ -24,7 +24,7 @@ class SetupProfileActivity : AppCompatActivity() {
         phoneNumber = intent.getStringExtra("phone")!!
 
         finishRegistrationButton.setOnClickListener {
-
+            register()
         }
     }
 
