@@ -1,11 +1,12 @@
-package org.kapyteam.messenger
+package org.kapyteam.messenger.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import org.kapyteam.messenger.R
 
-class Registration3 : AppCompatActivity() {
+class SetupProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration3)
+        setContentView(R.layout.activity_setup_profile)
     }
 }

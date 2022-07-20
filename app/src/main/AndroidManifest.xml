@@ -14,14 +14,14 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".Registration3"
+            android:name=".activity.SetupProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.Registration2"
+            android:name=".activity.EnterVerificationCodeActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.Registration1"
+            android:name=".activity.EnterPhoneNumberActivity"
             android:exported="false" />
         <activity
             android:name=".activity.FaceRecognitionActivity"
