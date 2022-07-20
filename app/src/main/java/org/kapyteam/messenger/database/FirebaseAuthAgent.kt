@@ -7,14 +7,9 @@ package org.kapyteam.messenger.database
 
 import android.app.Activity
 import android.content.Intent
-import androidx.annotation.NonNull
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import org.kapyteam.messenger.activity.SetupProfileActivity
 import org.kapyteam.messenger.model.Profile
 import java.util.concurrent.TimeUnit
 
@@ -61,5 +56,9 @@ class FirebaseAuthAgent {
 
                 override fun onVerificationCompleted(p0: PhoneAuthCredential) {}
             }
+
+        fun test() {
+            println(dbReference.child("users").child(auth.uid!!).toString())
+        }
     }
 }

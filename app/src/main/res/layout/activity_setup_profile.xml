@@ -29,7 +29,7 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/lastname_edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_image3" />
 
@@ -41,6 +41,20 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="   Enter your lastname"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstname_edit" />
+
+    <EditText
+        android:id="@+id/nickname_edit"
+        style="@style/RegisterEditTextStyle"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="108dp"
+        android:ems="10"
+        android:hint="   Enter your nickname"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"

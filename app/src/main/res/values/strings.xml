@@ -12,6 +12,6 @@
     <string name="greeting_header_text">Welcome to KapyMessenger!</string>
     <string name="greeting_text">This is KapyMessenger - fast and reliable messenger made by few nerds that won\'t sell your data to anyone! But our main feature is searching emojis just by your face expression. Join and enjoy!</string>
     <string name="register_text">Enter your phone number to continue registration</string>
-
-
+    <string name="title_activity_messenger">MessengerActivity</string>
+    <string name="title_chats">Chats</string>
 </resources>
