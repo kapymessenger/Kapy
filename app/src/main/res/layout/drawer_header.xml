@@ -5,15 +5,30 @@
     android:orientation="vertical"
     android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
-    android:background="@color/white">
+    android:background="#464646">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/registration_image" />
 
     <TextView
+        android:id="@+id/drawer_person_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:paddingTop="8dp"
+        android:text="Саня"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/drawer_person_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="Телефон Сани"
+        android:textColor="#AEAEAE"
+        android:textSize="15sp" />
 
 </LinearLayout>
