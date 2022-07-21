@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity.ui.chats
+package org.kapyteam.messenger.fragment.chats
 
 import android.os.Bundle
 import android.view.LayoutInflater

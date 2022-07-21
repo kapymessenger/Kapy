@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="org.kapyteam.messenger.activity.ui.chats.ChatsFragment"
+        android:name="org.kapyteam.messenger.fragment.chats.ChatsFragment"
         android:label="@string/title_chats"
         tools:layout="@layout/fragment_chats" />
 </navigation>

@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity.ui.chats
+package org.kapyteam.messenger.fragment.chats
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
