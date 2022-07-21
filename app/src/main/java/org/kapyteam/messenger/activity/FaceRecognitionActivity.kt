@@ -117,9 +117,9 @@ class FaceRecognitionActivity : AppCompatActivity() {
             }
         }
 
-        val classes = arrayOf("😀", "😡", "👆", "✊", "🤟")
+        val classes = arrayOf("😀", "😡", "👆", "✊", "🤟", "🐱", "🐔", "🐴")
 
-        showDialog(classes[maxPos], confidences[maxPos] * 100)
+        showDialog(classes[maxPos], confidences[maxPos] * 100, bitmap)
 
         var s = ""
         for (i in classes.indices) {
@@ -131,7 +131,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
         model.close()
 
     }
-    private fun showDialog(title: String, percent: Float) {
+    private fun showDialog(title: String, percent: Float, bitmap: Bitmap) {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -140,14 +140,16 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val perText = dialog.findViewById(R.id.percent) as TextView
         resText.text = title
         perText.text = String.format("AI recognized it as %.1f%%\n", percent)
+        val imageView = dialog.findViewById(R.id.image) as ImageView
+        imageView.setImageBitmap(bitmap)
         val okButton = dialog.findViewById(R.id.okButton) as Button
-        val copyButton = dialog.findViewById(R.id.copyButton) as TextView
+        val copyButton = dialog.findViewById(R.id.copyButton) as Button
 
         copyButton.setOnClickListener {
             val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", title)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(this, title+" was copied!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$title was copied!", Toast.LENGTH_SHORT).show()
         }
 
         okButton.setOnClickListener {
