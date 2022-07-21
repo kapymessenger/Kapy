@@ -76,23 +76,6 @@ class MessengerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        DBAgent.getChild(
-            FirebaseAuthAgent.getReference().child("users"),
-            "+12345678900",
-            object : IWait {
-                override fun onSuccess(snapshot: DataSnapshot) {
-                    println(snapshot.value.toString())
-                }
-
-                override fun onFail() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onStart() {
-                    // ok
-                }
-
-            }
-        )
+        DBAgent.parseContacts(this@MessengerActivity)
     }
 }
