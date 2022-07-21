@@ -20,6 +20,11 @@ class EnterPhoneNumberActivity : AppCompatActivity() {
         phoneEdit = findViewById(R.id.register_phone_number)
         continueButton = findViewById(R.id.register_continue)
 
+        if (FirebaseAuthAgent.getCurrentUser() != null) {
+            startActivity(Intent(this, MessengerActivity::class.java))
+            finish()
+        }
+
         continueButton.setOnClickListener {
             phoneEdit.text.toString().let {
                 if (Validator.isPhoneNumber(it)) {
