@@ -35,7 +35,7 @@ class DialogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dialog, container, false)
+        return inflater.inflate(R.layout.layout_dialog, container, false)
     }
 
     companion object {
