@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/drawer_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/drawer_contact"
+        android:icon="@drawable/registration_image"
+        android:title="Contact" />
+
+    <item
+        android:id="@+id/drawer_logout"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="Log Out" />
+
+    <item
+        android:id="@+id/drawer_qr"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Scan QR" />
+</menu>
