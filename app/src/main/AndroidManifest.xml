@@ -17,6 +17,9 @@
             android:name=".DrawerActivity"
             android:exported="false"/>
         <activity
+            android:name=".activity.GreetingActivity"
+            android:exported="false"/>
+        <activity
             android:name=".activity.MessengerActivity"
             android:exported="false"
             android:label="@string/title_activity_messenger" />
