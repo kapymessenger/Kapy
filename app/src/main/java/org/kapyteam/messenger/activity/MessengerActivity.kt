@@ -3,11 +3,6 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-/*
- * This file is a part of Kapy Messenger project.
- * Original link: https://github.com/kapymessenger/Kapy
- */
-
 package org.kapyteam.messenger.activity
 
 import android.os.Bundle
@@ -28,8 +23,13 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import org.kapyteam.messenger.DrawerActivity
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.DBAgent
+import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
+import org.kapyteam.messenger.util.IWait
 
 data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int)
 
@@ -120,5 +120,7 @@ class MessengerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        DBAgent.parseContacts(this@MessengerActivity)
+    }
 }
