@@ -3,20 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginTop="16dp"
-    android:layout_marginStart="16dp"
     android:background="#464646">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/registration_image" />
+        android:src="@drawable/registration_image"
+        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/drawer_person_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
+        android:layout_marginStart="10dp"
         android:text="Саня"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
+        android:layout_marginStart="10dp"
         android:text="Телефон Сани"
         android:textColor="#AEAEAE"
         android:textSize="15sp" />
