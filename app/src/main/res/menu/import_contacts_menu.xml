@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/scan_qr"
+        android:icon="@drawable/qr_icon"
+        android:title="@string/scan_qr_code" />
+</menu>

@@ -23,36 +23,38 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DataSnapshot
-import org.kapyteam.messenger.DrawerActivity
 import org.kapyteam.messenger.R
-import org.kapyteam.messenger.database.DBAgent
-import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
-import org.kapyteam.messenger.util.IWait
+import org.kapyteam.messenger.threading.NewDialogActivityTask
 
-data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int)
+data class Person(
+    val name: String,
+    val lats_message: String,
+    val last_message_time: String,
+    val message_count: Int
+)
 
-class ChatsRecyclerAdapter(private val chats : List<Person>):
-    RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>(){
-        class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val contact_image = itemView.findViewById<ImageView>(R.id.contact_image)
-            val contact_name = itemView.findViewById<TextView>(R.id.contact_name)
-            val contact_last_message = itemView.findViewById<TextView>(R.id.contact_last_message)
-            val contact_last_message_time = itemView.findViewById<TextView>(R.id.contact_last_message_time)
-            val contact_message_count = itemView.findViewById<TextView>(R.id.contact_message_count)
-        }
+class ChatsRecyclerAdapter(private val chats: List<Person>) :
+    RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
+        val contactName: TextView = itemView.findViewById(R.id.contact_name)
+        val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
+        val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
+        val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.layout_dialog, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.layout_dialog, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.contact_name.text = chats[position].name
-        holder.contact_last_message.text = chats[position].lats_message
-        holder.contact_last_message_time.text = chats[position].last_message_time
-        holder.contact_message_count.text = chats[position].message_count.toString()
+        holder.contactName.text = chats[position].name
+        holder.contactLastMessage.text = chats[position].lats_message
+        holder.contactLastMessageTime.text = chats[position].last_message_time
+        holder.contactMessageCount.text = chats[position].message_count.toString()
     }
 
     override fun getItemCount(): Int {
@@ -71,12 +73,12 @@ class MessengerActivity : AppCompatActivity() {
 
         val recyclerView: RecyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter =ChatsRecyclerAdapter(fillList())
+        recyclerView.adapter = ChatsRecyclerAdapter(fillList())
     }
 
     private fun fillList(): List<Person> {
         val data = mutableListOf<Person>()
-        (0..30).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99)) }
+        (0..30).forEach { _ -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99)) }
         return data
     }
 
@@ -121,6 +123,10 @@ class MessengerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        DBAgent.parseContacts(this@MessengerActivity)
+        val task = NewDialogActivityTask(
+            this@MessengerActivity,
+            listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
+        )
+        task.execute()
     }
 }

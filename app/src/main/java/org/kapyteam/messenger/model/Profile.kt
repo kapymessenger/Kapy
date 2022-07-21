@@ -5,6 +5,8 @@
 
 package org.kapyteam.messenger.model
 
+import java.io.Serializable
+
 data class Profile(
     val firstname: String,
     val lastname: String,
@@ -13,7 +15,7 @@ data class Profile(
     val photo: String = "",
     val lastSeen: String = "",
     val online: Boolean = false
-) {
+) : Serializable {
     companion object {
         fun parse(meta: Map<*, *>): Profile {
             return Profile(
