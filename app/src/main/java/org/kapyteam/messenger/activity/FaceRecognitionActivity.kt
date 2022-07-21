@@ -123,10 +123,11 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
         var s = ""
         for (i in classes.indices) {
+            if((confidences[i]*100).toInt() != 0)
             s += String.format("%s: %.1f%%\n", classes[i], confidences[i] * 100)
         }
         resText.text = s
-// Releases model resources if no longer used.
+
         model.close()
 
     }
