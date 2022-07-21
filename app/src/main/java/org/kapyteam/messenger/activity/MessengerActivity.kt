@@ -10,18 +10,24 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
+import org.kapyteam.messenger.DrawerActivity
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 
 class MessengerActivity : AppCompatActivity() {
-
+    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,5 +48,37 @@ class MessengerActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val drawerLayout: DrawerLayout = findViewById(R.id.container)
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.drawer_settings -> println("Settings")
+                R.id.drawer_contact -> println("Contact")
+                R.id.drawer_logout -> println("Log Out")
+                R.id.drawer_qr -> println("QR code")
+            }
+
+            true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return toggle.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(
+            this,
+            DrawerActivity::class.java
+        )
+        startActivity(intent)
     }
 }
