@@ -5,16 +5,23 @@
 
 package org.kapyteam.messenger.activity
 
+import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import android.os.Bundle
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import org.kapyteam.messenger.R
 import org.kapyteam.messenger.databinding.ActivityFaceRecognitionBinding
 import org.kapyteam.messenger.ml.ModelUnquant
 import org.tensorflow.lite.DataType
@@ -42,6 +49,8 @@ class FaceRecognitionActivity : AppCompatActivity() {
         button = binding.photoButton
         resText = binding.resultText
         imageView = binding.imageView2
+
+
 
         button.setOnClickListener{
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -108,10 +117,9 @@ class FaceRecognitionActivity : AppCompatActivity() {
             }
         }
 
-        println(confidences[2])
         val classes = arrayOf("😀", "😡", "👆", "✊", "🤟")
-        //resText!!.text = classes[maxPos]
-        //https://www.kaggle.com/datasets/parikshitkumar/hand-gestures
+
+        showDialog(classes[maxPos], confidences[maxPos] * 100)
 
         var s = ""
         for (i in classes.indices) {
@@ -120,6 +128,31 @@ class FaceRecognitionActivity : AppCompatActivity() {
         resText.text = s
 // Releases model resources if no longer used.
         model.close()
+
+    }
+    private fun showDialog(title: String, percent: Float) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_window)
+        val resText = dialog.findViewById(R.id.resultText) as TextView
+        val perText = dialog.findViewById(R.id.percent) as TextView
+        resText.text = title
+        perText.text = String.format("AI recognized it as %.1f%%\n", percent)
+        val okButton = dialog.findViewById(R.id.okButton) as Button
+        val copyButton = dialog.findViewById(R.id.copyButton) as TextView
+
+        copyButton.setOnClickListener {
+            val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("", title)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, title+" was copied!", Toast.LENGTH_SHORT).show()
+        }
+
+        okButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
 
     }
 }
