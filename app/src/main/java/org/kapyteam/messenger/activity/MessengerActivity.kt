@@ -10,9 +10,13 @@
 
 package org.kapyteam.messenger.activity
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,10 +25,40 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import org.kapyteam.messenger.DrawerActivity
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
+
+data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int)
+
+class ChatsRecyclerAdapter(private val chats : List<Person>):
+    RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>(){
+        class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val contact_image = itemView.findViewById<ImageView>(R.id.contact_image)
+            val contact_name = itemView.findViewById<TextView>(R.id.contact_name)
+            val contact_last_message = itemView.findViewById<TextView>(R.id.contact_last_message)
+            val contact_last_message_time = itemView.findViewById<TextView>(R.id.contact_last_message_time)
+            val contact_message_count = itemView.findViewById<TextView>(R.id.contact_message_count)
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.layout_dialog, parent, false)
+        return MyViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.contact_name.text = chats[position].name
+        holder.contact_last_message.text = chats[position].lats_message
+        holder.contact_last_message_time.text = chats[position].last_message_time
+        holder.contact_message_count.text = chats[position].message_count.toString()
+    }
+
+    override fun getItemCount(): Int {
+        return chats.size
+    }
+}
 
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -34,6 +68,16 @@ class MessengerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
         initNavDrawer()
+
+        val recyclerView: RecyclerView = findViewById(R.id.chats_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter =ChatsRecyclerAdapter(fillList())
+    }
+
+    private fun fillList(): List<Person> {
+        val data = mutableListOf<Person>()
+        (0..30).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99)) }
+        return data
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
