@@ -32,23 +32,30 @@ class MessengerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initBottomDrawer()
+        initNavDrawer()
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return toggle.onOptionsItemSelected(item)
+    }
+
+    private fun initBottomDrawer() {
         binding = ActivityMessengerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_chats
-            )
+            setOf(R.id.navigation_chats)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
 
+    private fun initNavDrawer() {
         val drawerLayout: DrawerLayout = findViewById(R.id.container)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
 
@@ -65,20 +72,9 @@ class MessengerActivity : AppCompatActivity() {
                 R.id.drawer_logout -> println("Log Out")
                 R.id.drawer_qr -> println("QR code")
             }
-
             true
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return toggle.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent(
-            this,
-            DrawerActivity::class.java
-        )
-        startActivity(intent)
-    }
+    override fun onBackPressed() {}
 }
