@@ -85,6 +85,7 @@
             android:importantForAutofill="no" />
 
         <ImageView
+            android:id="@+id/send_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"

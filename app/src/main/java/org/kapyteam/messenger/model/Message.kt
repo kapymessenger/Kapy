@@ -9,6 +9,5 @@ data class Message(
     val sender: String,
     val receiver: String,
     val createTime: String,
-    val dialog: String,
-    val read: Boolean
+    val content: String
 )
