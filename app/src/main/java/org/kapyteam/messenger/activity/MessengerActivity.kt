@@ -3,11 +3,6 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-/*
- * This file is a part of Kapy Messenger project.
- * Original link: https://github.com/kapymessenger/Kapy
- */
-
 package org.kapyteam.messenger.activity
 
 import android.content.Intent
@@ -22,9 +17,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
 import org.kapyteam.messenger.DrawerActivity
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.DBAgent
+import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
+import org.kapyteam.messenger.util.IWait
 
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -76,5 +75,24 @@ class MessengerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        DBAgent.getChild(
+            FirebaseAuthAgent.getReference().child("users"),
+            "+12345678900",
+            object : IWait {
+                override fun onSuccess(snapshot: DataSnapshot) {
+                    println(snapshot.value.toString())
+                }
+
+                override fun onFail() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onStart() {
+                    // ok
+                }
+
+            }
+        )
+    }
 }

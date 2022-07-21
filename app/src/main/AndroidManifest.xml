@@ -14,8 +14,11 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
+            android:name=".activity.GreetingActivity"
+            android:exported="false" />
+        <activity
             android:name=".DrawerActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activity.MessengerActivity"
             android:exported="false"
@@ -35,8 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
