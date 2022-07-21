@@ -13,6 +13,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,18 +24,25 @@
         <Button
             android:id="@+id/photoButton"
             android:layout_width="250dp"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Take Photo"
-            android:backgroundTint="#CC00ED"/>
+            android:backgroundTint="#CC00ED"
+            android:text="Take Photo" />
 
         <TextView
             android:id="@+id/resultText"
             android:layout_width="match_parent"
-            android:layout_height="625dp"
+            android:layout_height="231dp"
             android:layout_weight="1"
             android:text="TextView"
             android:textSize="34sp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="357dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_launcher_background" />
     </LinearLayout>
 
 

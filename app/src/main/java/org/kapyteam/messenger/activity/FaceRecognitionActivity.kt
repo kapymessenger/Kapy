@@ -5,11 +5,10 @@
 
 package org.kapyteam.messenger.activity
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import android.os.Bundle
-import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,12 +21,15 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.math.min
+
 
 class FaceRecognitionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFaceRecognitionBinding
     private lateinit var button: Button
     private lateinit var resText: TextView
+    private lateinit var imageView: ImageView
 
     private val imageSize = 224
 
@@ -39,6 +41,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
         button = binding.photoButton
         resText = binding.resultText
+        imageView = binding.imageView2
 
         button.setOnClickListener{
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -60,7 +63,12 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
     private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()){bitmap ->
         if(bitmap != null){
-            outputGenerator(bitmap)
+            val dimension = min(bitmap.width, bitmap.height)
+            var bitmap_fin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
+
+            bitmap_fin = Bitmap.createScaledBitmap(bitmap_fin, imageSize, imageSize, false)
+            imageView.setImageBitmap(bitmap_fin)
+            outputGenerator(bitmap_fin)
         }
     }
 
@@ -76,10 +84,10 @@ class FaceRecognitionActivity : AppCompatActivity() {
         var pixel = 0
         for (i in 0 until imageSize) {
             for (j in 0 until imageSize) {
-                val `val` = intValues[pixel++]
-                byteBuffer.putFloat((`val` shr 16 and 0xFF) * (1f / 255f))
-                byteBuffer.putFloat((`val` shr 8 and 0xFF) * (1f / 255f))
-                byteBuffer.putFloat((`val` and 0xFF) * (1f / 255f))
+                val value = intValues[pixel++]
+                byteBuffer.putFloat((value shr 16 and 0xFF) * (1f / 255f))
+                byteBuffer.putFloat((value shr 8 and 0xFF) * (1f / 255f))
+                byteBuffer.putFloat((value and 0xFF) * (1f / 255f))
             }
         }
 
