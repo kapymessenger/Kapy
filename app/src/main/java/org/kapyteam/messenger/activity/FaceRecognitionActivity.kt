@@ -139,11 +139,16 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val resText = dialog.findViewById(R.id.resultText) as TextView
         val perText = dialog.findViewById(R.id.percent) as TextView
         resText.text = title
-        perText.text = String.format("AI recognized it as %.1f%%\n", percent)
+        perText.text = String.format("AI is %.1f%% sure", percent)
         val imageView = dialog.findViewById(R.id.image) as ImageView
         imageView.setImageBitmap(bitmap)
         val okButton = dialog.findViewById(R.id.okButton) as Button
         val copyButton = dialog.findViewById(R.id.copyButton) as Button
+        val sendButton = dialog.findViewById(R.id.sendButton) as Button
+
+        sendButton.setOnClickListener {
+            Toast.makeText(this, "This shit was sent! \n FUCK YOU!!!", Toast.LENGTH_LONG).show()
+        }
 
         copyButton.setOnClickListener {
             val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
