@@ -5,6 +5,8 @@
 
 package org.kapyteam.messenger.activity
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -30,7 +32,7 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.util.IWait
 
-data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int)
+data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int, val image : Bitmap)
 
 class ChatsRecyclerAdapter(private val chats : List<Person>):
     RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>(){
@@ -52,6 +54,7 @@ class ChatsRecyclerAdapter(private val chats : List<Person>):
         holder.contact_last_message.text = chats[position].lats_message
         holder.contact_last_message_time.text = chats[position].last_message_time
         holder.contact_message_count.text = chats[position].message_count.toString()
+        holder.contact_image.setImageBitmap(chats[position].image)
     }
 
     override fun getItemCount(): Int {
@@ -75,7 +78,7 @@ class MessengerActivity : AppCompatActivity() {
 
     private fun fillList(): List<Person> {
         val data = mutableListOf<Person>()
-        (0..30).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99)) }
+        (0..30).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99, BitmapFactory.decodeResource(resources, R.drawable.empty_user_image))) }
         return data
     }
 
