@@ -25,7 +25,6 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var usernameText: TextView
     private lateinit var statusText: TextView
     private lateinit var member: Profile
-    private lateinit var self: Profile
     private lateinit var chatRecView: RecyclerView
     private lateinit var msgEdit: EditText
     private lateinit var chatAdapter: ChatAdapter
@@ -48,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
 
         phone = intent.getStringExtra("phone")!!
 
-        chatAdapter = ChatAdapter(messages, this@ChatActivity, phone)
+        chatAdapter = ChatAdapter(messages, phone)
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
 

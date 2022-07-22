@@ -1,20 +1,10 @@
 package org.kapyteam.messenger.database
 
 import android.app.Activity
-import android.content.Context
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import org.kapyteam.messenger.model.Profile
-import org.kapyteam.messenger.util.Contacts
 import java.time.LocalDateTime
 
-class DBAgent {
-    companion object {
-        private val profiles  = mutableListOf<Profile>()
-
-        fun parseContacts(activity: Activity) {
+object DBAgent {
+    fun parseContacts(activity: Activity) {
 //            val contacts = listOf("+12345678900", "+12345678901", "+12345678902")
 //            for (contact in contacts) {
 //                if (isInDB(contact)) {
@@ -38,16 +28,15 @@ class DBAgent {
 //                    })
 //                }
 //            }
-        }
+    }
 
-        fun setOnline(online: Boolean) {
-            FirebaseAuthAgent.getReference().child("users").child("+12345678900").let {
-                if (online) {
-                    it.child("online").setValue(true)
-                } else {
-                   it.child("lastSeen").setValue(LocalDateTime.now())
-                    it.child("online").setValue(false)
-                }
+    fun setOnline(online: Boolean) {
+        FirebaseAuthAgent.getReference().child("users").child("+12345678900").let {
+            if (online) {
+                it.child("online").setValue(true)
+            } else {
+                it.child("lastSeen").setValue(LocalDateTime.now())
+                it.child("online").setValue(false)
             }
         }
     }

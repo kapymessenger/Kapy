@@ -1,7 +1,6 @@
 package org.kapyteam.messenger.util
 
 import android.app.Activity
-import android.content.Context
 import android.provider.ContactsContract
 
 object Contacts {

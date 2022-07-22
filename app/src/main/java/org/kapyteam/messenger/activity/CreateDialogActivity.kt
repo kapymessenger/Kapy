@@ -49,7 +49,7 @@ class CreateDialogActivity : AppCompatActivity() {
     private fun convertToString(list: List<Profile>): MutableList<String> {
         val stringList: MutableList<String> = mutableListOf()
         for (profile in list) {
-            stringList.add("${profile.nickname}")
+            stringList.add(profile.nickname)
         }
         return stringList
     }

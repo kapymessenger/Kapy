@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.util.Validator
@@ -32,7 +33,7 @@ class EnterPhoneNumberActivity : AppCompatActivity() {
                     intent.putExtra("phone", it)
                     FirebaseAuthAgent.phoneAuth(this, intent)
                 } else {
-
+                    Toast.makeText(this, "Please, enter a valid phone number", Toast.LENGTH_LONG).show()
                 }
             }
         }

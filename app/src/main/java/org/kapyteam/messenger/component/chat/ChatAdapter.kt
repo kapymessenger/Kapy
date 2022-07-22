@@ -5,20 +5,16 @@
 
 package org.kapyteam.messenger.component.chat
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.model.Message
-import org.kapyteam.messenger.model.Profile
 
 class ChatAdapter(
     private var messages: MutableList<Message>,
-    private val context: Context,
     private val self: String
 ) : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 
