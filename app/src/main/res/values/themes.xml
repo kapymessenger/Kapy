@@ -3,14 +3,14 @@
     <style name="Theme.Kapy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#EBAE31</item>
-        <item name="colorPrimaryVariant">#D49037</item>
+        <item name="colorPrimaryVariant">#EB7F31</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#EB7F31</item>
+        <item name="colorSecondary">#E0602F</item>
         <item name="colorSecondaryVariant">#E0602F</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">#E0B82F</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#EB7F31</item>
         <!-- Customize your theme here. -->
     </style>
 
