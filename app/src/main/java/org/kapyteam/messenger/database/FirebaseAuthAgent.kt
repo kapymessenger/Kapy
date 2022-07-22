@@ -7,14 +7,10 @@ package org.kapyteam.messenger.database
 
 import android.app.Activity
 import android.content.Intent
-import androidx.annotation.NonNull
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import org.kapyteam.messenger.activity.SetupProfileActivity
 import org.kapyteam.messenger.model.Profile
 import java.util.concurrent.TimeUnit
 
@@ -26,6 +22,8 @@ class FirebaseAuthAgent {
             .getReferenceFromUrl("https://kapy-messenger-default-rtdb.firebaseio.com/")
 
         fun getInstance(): FirebaseAuth = auth
+
+        fun getReference(): DatabaseReference = dbReference
 
         fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
@@ -43,8 +41,7 @@ class FirebaseAuthAgent {
 
         fun registerProfile(profile: Profile) {
             dbReference.child("users").let {
-                val id = it.push().key
-                it.child(id!!).setValue(profile)
+                it.child(profile.phone).setValue(profile)
             }
         }
 
@@ -61,5 +58,9 @@ class FirebaseAuthAgent {
 
                 override fun onVerificationCompleted(p0: PhoneAuthCredential) {}
             }
+
+        fun test() {
+            println(dbReference.child("users").child(auth.uid!!).toString())
+        }
     }
 }

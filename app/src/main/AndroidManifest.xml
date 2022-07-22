@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.kapyteam.messenger">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,13 +16,19 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".DrawerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".activity.ChatActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CreateDialogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GreetingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MessengerActivity"
+            android:exported="true"
+            android:label="@string/title_activity_messenger">
         </activity>
         <activity
             android:name=".activity.SetupProfileActivity"
@@ -37,16 +45,16 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
-            android:name=".activity.GreetingActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true">
-            <!--- <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
+
         </activity>
     </application>
 

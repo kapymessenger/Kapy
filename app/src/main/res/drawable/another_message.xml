@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/purple_200"/>
+    <corners
+        android:topLeftRadius="50dp"
+        android:topRightRadius="50dp"
+        android:bottomRightRadius="50dp"/>
+</shape>

@@ -17,5 +17,16 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
-
+    <string name="title_activity_messenger">MessengerActivity</string>
+    <string name="title_chats">Chats</string>
+    <string name="add_dialog">add dialog</string>
+    <string name="main_image">main image</string>
+    <string name="additional">Additional</string>
+    <string name="scan_qr_code">Scan QR-code</string>
+    <string name="avatar_of_user">avatar of user</string>
+    <string name="back_to_dialogs">back_to_dialogs</string>
+    <string name="username">Username</string>
+    <string name="offline">Offline</string>
+    <string name="message">Message...</string>
+    <string name="send_icon">send_icon</string>
 </resources>
