@@ -8,6 +8,7 @@ import android.widget.Toast
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
+import org.kapyteam.messenger.util.FileUtil
 
 class SetupProfileActivity : AppCompatActivity() {
     private lateinit var firstnameEdit: EditText
@@ -48,6 +49,7 @@ class SetupProfileActivity : AppCompatActivity() {
             nickname = nicknameEdit.text.toString()
         )
         FirebaseAuthAgent.registerProfile(profile)
+        FileUtil.saveData("{\"phone\": \"$phoneNumber\"}", this)
 
         FirebaseAuthAgent.test()
     }

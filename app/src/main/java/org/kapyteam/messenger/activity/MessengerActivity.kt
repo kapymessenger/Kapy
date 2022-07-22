@@ -5,8 +5,8 @@
 
 package org.kapyteam.messenger.activity
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -25,36 +25,45 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
-import org.kapyteam.messenger.util.IWait
+import org.kapyteam.messenger.model.Profile
+import org.kapyteam.messenger.threading.NewDialogActivityTask
 
-data class Person(val name : String, val lats_message : String, val last_message_time : String, val message_count : Int, val image : Bitmap)
-
-class ChatsRecyclerAdapter(private val chats : List<Person>):
-    RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>(){
-        class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val contact_image = itemView.findViewById<ImageView>(R.id.contact_image)
-            val contact_name = itemView.findViewById<TextView>(R.id.contact_name)
-            val contact_last_message = itemView.findViewById<TextView>(R.id.contact_last_message)
-            val contact_last_message_time = itemView.findViewById<TextView>(R.id.contact_last_message_time)
-            val contact_message_count = itemView.findViewById<TextView>(R.id.contact_message_count)
-        }
+class ChatsRecyclerAdapter(
+    private val chats: List<Profile>,
+    private val activity: Activity,
+    private val intent: Intent,
+    private val phone: String
+) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
+        val contactName: TextView = itemView.findViewById(R.id.contact_name)
+        val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
+        val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
+        val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.layout_dialog, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.layout_dialog, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.contact_name.text = chats[position].name
-        holder.contact_last_message.text = chats[position].lats_message
-        holder.contact_last_message_time.text = chats[position].last_message_time
-        holder.contact_message_count.text = chats[position].message_count.toString()
-        holder.contact_image.setImageBitmap(chats[position].image)
+        holder.itemView.setOnClickListener {
+            FirebaseAuthAgent.getReference()
+            intent.putExtra("member", chats[position])
+            intent.putExtra("phone", phone)
+            activity.startActivity(intent)
+        }
+        holder.contactName.text = chats[position].nickname
+        holder.contactLastMessage.text = "some shit"
+        holder.contactLastMessageTime.text = "15:00"
+        holder.contactMessageCount.text = "1"
     }
 
     override fun getItemCount(): Int {
@@ -65,21 +74,64 @@ class ChatsRecyclerAdapter(private val chats : List<Person>):
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
+    private lateinit var dbReference: DatabaseReference
+    private lateinit var dbReferenceUsers: DatabaseReference
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var phone: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
         initNavDrawer()
 
-        val recyclerView: RecyclerView = findViewById(R.id.chats_recycler_view)
+        dbReference = FirebaseDatabase.getInstance().getReference("chats")
+        dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
+        phone = intent.getStringExtra("phone")!!
+
+        DBAgent.setOnline(true)
+
+        recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter =ChatsRecyclerAdapter(fillList())
+        createDialogList()
     }
 
-    private fun fillList(): List<Person> {
-        val data = mutableListOf<Person>()
-        (0..15).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99, BitmapFactory.decodeResource(resources, R.drawable.empty_user_image))) }
-        return data
+    private fun createDialogList() {
+        val data = mutableListOf<String>()
+        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dialog in snapshot.children) {
+                    val members = dialog.child("members").value as MutableList<String>
+                    if (members.contains(phone)) {
+                       if (members[0] == phone) {
+                           data.add(members[1])
+                       } else {
+                           data.add(members[0])
+                       }
+                    }
+                }
+
+                val profiles = mutableListOf<Profile>()
+
+                dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (profile in snapshot.children) {
+                            if (profile.child("phone").getValue(String::class.java) in data) {
+                                profiles.add(Profile.parse(profile.value as Map<*, *>))
+                            }
+                        }
+
+                        recyclerView.adapter = ChatsRecyclerAdapter(
+                            profiles,
+                            this@MessengerActivity,
+                            Intent(this@MessengerActivity, ChatActivity::class.java),
+                            phone
+                        )
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,7 +167,14 @@ class MessengerActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.drawer_settings -> println("Settings")
                 R.id.drawer_contact -> println("Contact")
-                R.id.drawer_logout -> println("Log Out")
+                R.id.drawer_logout -> {
+                    FirebaseAuthAgent.getInstance().signOut()
+                    val intent = Intent(
+                        this,
+                        GreetingActivity::class.java
+                    )
+                    startActivity(intent)
+                }
                 R.id.drawer_qr -> println("QR code")
             }
             true
@@ -123,6 +182,11 @@ class MessengerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        DBAgent.parseContacts(this@MessengerActivity)
+        val task = NewDialogActivityTask(
+            this@MessengerActivity,
+            listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
+            phone
+        )
+        task.execute()
     }
 }

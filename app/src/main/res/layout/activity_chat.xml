@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChatActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/back_arrow_icon"
+            android:paddingStart="12sp"
+            android:paddingEnd="2sp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/back_to_dialogs" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/empty_user_image"
+            android:layout_toEndOf="@id/back_btn"
+            android:id="@+id/profile_avatar"
+            android:contentDescription="@string/avatar_of_user" />
+
+        <LinearLayout
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/profile_avatar"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offline"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                android:id="@+id/user_status"
+                android:textColor="#505050"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout"
+        android:id="@+id/chat_recycler_view"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <EditText
+            android:id="@+id/message_edit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="#00000000"
+            android:hint="@string/message"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/send_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/send_icon"
+            android:contentDescription="@string/send_icon" />
+    </RelativeLayout>
+</RelativeLayout>
