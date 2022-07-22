@@ -84,20 +84,28 @@ class MessengerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
-        initNavDrawer()
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
+
+        initNavDrawer()
 
         DBAgent.setOnline(true)
 
         addChatBtn = findViewById(R.id.addChat)
 
         addChatBtn.setOnClickListener {
+            // TODO: get contact list from device
             val task = NewDialogActivityTask(
                 this@MessengerActivity,
-                listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
+                listOf(
+                    "+12345678900",
+                    "+12345678902",
+                    "+12345678901",
+                    "+12345678902",
+                    "+12345678903"
+                ),
                 phone
             )
             task.execute()
@@ -115,11 +123,11 @@ class MessengerActivity : AppCompatActivity() {
                 for (dialog in snapshot.children) {
                     val members = dialog.child("members").value as MutableList<String>
                     if (members.contains(phone)) {
-                       if (members[0] == phone) {
-                           data.add(members[1])
-                       } else {
-                           data.add(members[0])
-                       }
+                        if (members[0] == phone) {
+                            data.add(members[1])
+                        } else {
+                            data.add(members[0])
+                        }
                     }
                 }
 
@@ -140,9 +148,11 @@ class MessengerActivity : AppCompatActivity() {
                             phone
                         )
                     }
+
                     override fun onCancelled(error: DatabaseError) {}
                 })
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -169,6 +179,7 @@ class MessengerActivity : AppCompatActivity() {
     private fun initNavDrawer() {
         val drawerLayout: DrawerLayout = findViewById(R.id.container)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        val header = navigationView.inflateHeaderView(R.layout.drawer_header)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -192,6 +203,25 @@ class MessengerActivity : AppCompatActivity() {
             }
             true
         }
+
+        val name: TextView = header.findViewById(R.id.drawer_person_name)
+        val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
+        val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
+
+        phoneText.text = phone
+
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(phone)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    name.text = "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
+                    nickname.text = "@${snapshot.child("nickname").value}"
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     override fun onBackPressed() {}
