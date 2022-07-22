@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -23,7 +24,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.threading.NewDialogActivityTask
 
@@ -34,14 +37,19 @@ data class Person(
     val message_count: Int
 )
 
-class ChatsRecyclerAdapter(private val chats: List<Person>) :
-    RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
+class ChatsRecyclerAdapter(private val chats: List<String>) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
         val contactName: TextView = itemView.findViewById(R.id.contact_name)
         val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
         val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
         val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
+
+        init {
+            itemView.item.setOnClickListener {
+
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -65,21 +73,39 @@ class ChatsRecyclerAdapter(private val chats: List<Person>) :
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
+    private lateinit var dbReference: DatabaseReference
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
         initNavDrawer()
 
-        val recyclerView: RecyclerView = findViewById(R.id.chats_recycler_view)
+        dbReference = FirebaseDatabase.getInstance().getReference("chats")
+
+        recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ChatsRecyclerAdapter(fillList())
+        createDialogList()
     }
 
-    private fun fillList(): List<Person> {
-        val data = mutableListOf<Person>()
-        (0..30).forEach { _ -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99)) }
-        return data
+    private fun createDialogList() {
+        val data = mutableListOf<String>()
+        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dialog in snapshot.children) {
+                    val members = dialog.child("members").value as MutableList<String>
+                    if (members.contains("+12345678900")) {
+                        data.add(members[1])
+                    }
+                }
+                recyclerView.adapter = ChatsRecyclerAdapter(data)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,7 +141,14 @@ class MessengerActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.drawer_settings -> println("Settings")
                 R.id.drawer_contact -> println("Contact")
-                R.id.drawer_logout -> println("Log Out")
+                R.id.drawer_logout -> {
+                    FirebaseAuthAgent.getInstance().signOut()
+                    val intent = Intent(
+                        this,
+                        GreetingActivity::class.java
+                    )
+                    startActivity(intent)
+                }
                 R.id.drawer_qr -> println("QR code")
             }
             true
