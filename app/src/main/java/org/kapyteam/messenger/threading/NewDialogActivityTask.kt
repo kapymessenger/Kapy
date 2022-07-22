@@ -26,7 +26,8 @@ import org.kapyteam.messenger.util.SerializableObject
 @Suppress("deprecation", "StaticFieldLeak")
 class NewDialogActivityTask(
     private val activity: Activity,
-    private val contacts: List<String>
+    private val contacts: List<String>,
+    private val phone: String
 ) : AsyncTask<Unit, Unit, Unit>() {
 
     val profiles = mutableListOf<Profile>()
@@ -66,6 +67,7 @@ class NewDialogActivityTask(
                 activity,
                 CreateDialogActivity::class.java
             )
+            intent.putExtra("phone", phone)
             intent.putExtra("profiles", SerializableObject(profiles))
             activity.startActivity(intent)
         }.start()

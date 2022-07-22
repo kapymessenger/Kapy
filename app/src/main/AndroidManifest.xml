@@ -29,11 +29,6 @@
             android:name=".activity.MessengerActivity"
             android:exported="true"
             android:label="@string/title_activity_messenger">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.SetupProfileActivity"
@@ -55,12 +50,11 @@
             android:name=".activity.SplashActivity"
             android:exported="true">
 
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
+
         </activity>
     </application>
 

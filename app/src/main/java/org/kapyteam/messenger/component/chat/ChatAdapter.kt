@@ -8,26 +8,52 @@ package org.kapyteam.messenger.component.chat
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import org.kapyteam.messenger.R
 import org.kapyteam.messenger.model.Message
+import org.kapyteam.messenger.model.Profile
 
-class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
-    private val messages = mutableListOf<Message>()
-    private lateinit var context: Context
+class ChatAdapter(
+    private var messages: MutableList<Message>,
+    private val context: Context,
+    private val self: String
+) : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
         return messages.size
     }
 
     override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false))
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.chat_layout_adapter, parent, false)
+        )
     }
 
-    class MyViewHolder(@NonNull val view: View) : RecyclerView.ViewHolder(view)
+    fun update(messages: MutableList<Message>) {
+        this.messages = messages
+    }
+
+    class MyViewHolder(@NonNull val view: View) : RecyclerView.ViewHolder(view) {
+        var anotherMessage: TextView = view.findViewById(R.id.another_message)
+        var selfMessage: TextView = view.findViewById(R.id.self_message)
+        var anotherMetadata: TextView = view.findViewById(R.id.another_msg_metadata)
+    }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-
+        val message = messages[position]
+        if (message.sender == self) {
+            holder.selfMessage.visibility = View.VISIBLE
+            holder.anotherMessage.visibility = View.GONE
+            holder.selfMessage.text = message.content
+        } else {
+            holder.selfMessage.visibility = View.GONE
+            holder.anotherMessage.visibility = View.VISIBLE
+            holder.anotherMessage.text = message.content
+        }
     }
 }
 

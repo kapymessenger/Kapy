@@ -10,9 +10,11 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.component.chat.ChatAdapter
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
@@ -23,9 +25,14 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var usernameText: TextView
     private lateinit var statusText: TextView
     private lateinit var member: Profile
+    private lateinit var self: Profile
     private lateinit var chatRecView: RecyclerView
     private lateinit var msgEdit: EditText
+    private lateinit var chatAdapter: ChatAdapter
     private lateinit var dbReference: DatabaseReference
+    private lateinit var phone: String
+
+    private val messages = mutableListOf<Message>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +44,25 @@ class ChatActivity : AppCompatActivity() {
         statusText = findViewById(R.id.user_status)
         msgEdit = findViewById(R.id.message_edit)
 
-        dbReference = FirebaseDatabase.getInstance().getReference("chats")
-
         member = intent.getSerializableExtra("member") as Profile
 
-        FirebaseAuthAgent
+        phone = intent.getStringExtra("phone")!!
+
+        chatAdapter = ChatAdapter(messages, this@ChatActivity, phone)
+
+        dbReference = FirebaseDatabase.getInstance().getReference("chats")
+
+        chatRecView = findViewById(R.id.chat_recycler_view)
+        chatRecView.setHasFixedSize(true)
+        chatRecView.layoutManager = LinearLayoutManager(this@ChatActivity)
+        chatRecView.adapter = chatAdapter
+
+            FirebaseAuthAgent
             .getReference()
             .child("users")
             .child(member.phone)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    println("EVENT!")
                     member.firstname = snapshot.child("firstname").getValue(String::class.java)!!
                     member.lastSeen = snapshot.child("lastSeen").getValue(String::class.java)!!
                     member.nickname = snapshot.child("nickname").getValue(String::class.java)!!
@@ -57,14 +72,12 @@ class ChatActivity : AppCompatActivity() {
                     initUpPanel()
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun onCancelled(error: DatabaseError) {}
             })
 
         initClickListeners()
         initUpPanel()
+        receiveMessage("${member.phone}&${phone}")
     }
 
     private fun initClickListeners() {
@@ -83,7 +96,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun buildModel(content: String): Message {
         return Message(
-            sender = "+12345678900",
+            sender = phone,
             receiver = member.phone,
             createTime = "testTime",
             content = content
@@ -96,6 +109,30 @@ class ChatActivity : AppCompatActivity() {
         // TODO: add avatar
     }
 
+    private fun receiveMessage(child: String) {
+        var lastMsg: Long = 0
+        dbReference.child(child).child("messages").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (message in snapshot.children) {
+                    if (message.key!!.toLong() > lastMsg) {
+                        messages.add(
+                            Message(
+                                message.child("sender").getValue(String::class.java)!!,
+                                message.child("receiver").getValue(String::class.java)!!,
+                                message.child("createTime").getValue(String::class.java)!!,
+                                message.child("content").getValue(String::class.java)!!
+                            )
+                        )
+                        chatAdapter.update(messages)
+                        lastMsg = message.key!!.toLong()
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     private fun sendMessage(model: Message) {
         dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -103,13 +140,13 @@ class ChatActivity : AppCompatActivity() {
                     dbReference
                         .child("${model.sender}&${model.receiver}")
                         .child("messages")
-                        .push()
+                        .child(System.currentTimeMillis().toString())
                         .setValue(model)
                 } else if (snapshot.hasChild("${model.receiver}&${model.sender}")) {
                     dbReference
                         .child("${model.receiver}&${model.sender}")
                         .child("messages")
-                        .push()
+                        .child(System.currentTimeMillis().toString())
                         .setValue(model)
                 } else {
                     dbReference
@@ -119,20 +156,14 @@ class ChatActivity : AppCompatActivity() {
                                 .setValue(listOf(model.sender, model.receiver))
                             it
                                 .child("messages")
-                                .push()
+                                .child(System.currentTimeMillis().toString())
                                 .setValue(model)
                         }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
         })
     }
-
-//    if (dbReference.ha("${model.sender}&${model.receiver}").)
-//    dbReference.child("${model.sender}&${model.receiver}").c.push()
-//    .setValue(model)
 }

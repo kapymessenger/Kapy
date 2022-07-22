@@ -28,6 +28,8 @@ class CreateDialogActivity : AppCompatActivity() {
             profiles = (intent.getSerializableExtra("profiles") as SerializableObject).obj as MutableList<Profile>
         }
 
+        val phone = intent.getStringExtra("phone")
+
         contactList.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, convertToString(profiles))
 
         contactList.setOnItemClickListener { _, item, _, _ ->
@@ -39,6 +41,7 @@ class CreateDialogActivity : AppCompatActivity() {
                 ChatActivity::class.java
             )
             intent.putExtra("member", character)
+            intent.putExtra("phone", phone)
             startActivity(intent)
         }
     }

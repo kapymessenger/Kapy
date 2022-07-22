@@ -36,7 +36,8 @@ import org.kapyteam.messenger.threading.NewDialogActivityTask
 class ChatsRecyclerAdapter(
     private val chats: List<Profile>,
     private val activity: Activity,
-    private val intent: Intent
+    private val intent: Intent,
+    private val phone: String
 ) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
@@ -56,6 +57,7 @@ class ChatsRecyclerAdapter(
         holder.itemView.setOnClickListener {
             FirebaseAuthAgent.getReference()
             intent.putExtra("member", chats[position])
+            intent.putExtra("phone", phone)
             activity.startActivity(intent)
         }
         holder.contactName.text = chats[position].nickname
@@ -75,6 +77,7 @@ class MessengerActivity : AppCompatActivity() {
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
+    private lateinit var phone: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +86,7 @@ class MessengerActivity : AppCompatActivity() {
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
+        phone = intent.getStringExtra("phone")!!
 
         DBAgent.setOnline(true)
 
@@ -97,8 +101,12 @@ class MessengerActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dialog in snapshot.children) {
                     val members = dialog.child("members").value as MutableList<String>
-                    if (members.contains("+12345678900")) {
-                        data.add(members[1])
+                    if (members.contains(phone)) {
+                       if (members[0] == phone) {
+                           data.add(members[1])
+                       } else {
+                           data.add(members[0])
+                       }
                     }
                 }
 
@@ -115,7 +123,8 @@ class MessengerActivity : AppCompatActivity() {
                         recyclerView.adapter = ChatsRecyclerAdapter(
                             profiles,
                             this@MessengerActivity,
-                            Intent(this@MessengerActivity, ChatActivity::class.java)
+                            Intent(this@MessengerActivity, ChatActivity::class.java),
+                            phone
                         )
                     }
                     override fun onCancelled(error: DatabaseError) {}
@@ -176,6 +185,7 @@ class MessengerActivity : AppCompatActivity() {
         val task = NewDialogActivityTask(
             this@MessengerActivity,
             listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
+            phone
         )
         task.execute()
     }
