@@ -32,4 +32,6 @@
     <string name="continue_text">Continue</string>
     <string name="logo">Logo</string>
     <string name="setup_profile">Setup your profile</string>
+    <string name="audio_call_button">audio call button</string>
+    <string name="video_cal_button">video cal button</string>
 </resources>

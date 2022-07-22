@@ -28,15 +28,15 @@
             android:contentDescription="@string/back_to_dialogs" />
 
         <ImageView
+            android:id="@+id/profile_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
-            android:src="@drawable/empty_user_image"
+            android:layout_marginTop="40dp"
             android:layout_toEndOf="@id/back_btn"
-            android:id="@+id/profile_avatar"
-            android:contentDescription="@string/avatar_of_user" />
+            android:contentDescription="@string/avatar_of_user"
+            android:src="@drawable/empty_user_image" />
 
         <LinearLayout
             android:layout_marginStart="10dp"
@@ -70,12 +70,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout"
+        android:layout_marginBottom="70dp"
         android:id="@+id/chat_recycler_view"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
@@ -97,7 +99,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/send_icon"
-            android:contentDescription="@string/send_icon" />
+            android:contentDescription="@string/send_icon"
+            android:src="@drawable/send_icon" />
     </RelativeLayout>
 </RelativeLayout>

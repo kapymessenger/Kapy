@@ -1,5 +1,6 @@
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -51,6 +52,8 @@ class SetupProfileActivity : AppCompatActivity() {
         FirebaseAuthAgent.registerProfile(profile)
         FileUtil.saveData("{\"phone\": \"$phoneNumber\"}", this)
 
-        FirebaseAuthAgent.test()
+        val intent = Intent(this, MessengerActivity::class.java)
+        intent.putExtra("phone", phoneNumber)
+        startActivity(intent)
     }
 }

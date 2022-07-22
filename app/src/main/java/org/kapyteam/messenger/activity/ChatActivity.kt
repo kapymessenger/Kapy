@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -27,6 +28,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var member: Profile
     private lateinit var chatRecView: RecyclerView
     private lateinit var msgEdit: EditText
+    private lateinit var avatar: ImageView
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var dbReference: DatabaseReference
     private lateinit var phone: String
@@ -42,6 +44,7 @@ class ChatActivity : AppCompatActivity() {
         usernameText = findViewById(R.id.user_name)
         statusText = findViewById(R.id.user_status)
         msgEdit = findViewById(R.id.message_edit)
+        avatar = findViewById(R.id.profile_avatar)
 
         member = intent.getSerializableExtra("member") as Profile
 
@@ -110,6 +113,14 @@ class ChatActivity : AppCompatActivity() {
                     msgEdit.text.clear()
                 }
             }
+        }
+        avatar.setOnClickListener {
+            val intent = Intent(
+                this,
+                ProfileActivity::class.java
+            )
+            intent.putExtra("profile", member)
+            startActivity(intent)
         }
     }
 
