@@ -23,8 +23,17 @@ class SplashActivity : AppCompatActivity() {
                 this,
                 MessengerActivity::class.java
             )
-            intent.putExtra("phone", meta.get("phone").asString)
-            startActivity(intent)
+            try {
+                intent.putExtra("phone", meta.get("phone").asString)
+                startActivity(intent)
+            } catch (e: Exception) {
+                FirebaseAuthAgent.getInstance().signOut()
+                startActivity(Intent(
+                    this,
+                    GreetingActivity::class.java
+                ))
+            }
+
         } else {
             val intent = Intent(
                 this,

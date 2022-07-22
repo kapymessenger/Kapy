@@ -57,11 +57,11 @@ class ChatActivity : AppCompatActivity() {
         chatRecView.layoutManager = LinearLayoutManager(this@ChatActivity)
         chatRecView.adapter = chatAdapter
 
-            FirebaseAuthAgent
+        FirebaseAuthAgent
             .getReference()
             .child("users")
             .child(member.phone)
-            .addValueEventListener(object : ValueEventListener{
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     member.firstname = snapshot.child("firstname").getValue(String::class.java)!!
                     member.lastSeen = snapshot.child("lastSeen").getValue(String::class.java)!!
@@ -77,7 +77,27 @@ class ChatActivity : AppCompatActivity() {
 
         initClickListeners()
         initUpPanel()
-        receiveMessage("${member.phone}&${phone}")
+
+        setupMsgListener()
+    }
+
+    private fun setupMsgListener() {
+        FirebaseAuthAgent
+            .getReference()
+            .child("chats")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.hasChild("${member.phone}&${phone}")) {
+                        receiveMessage("${member.phone}&${phone}")
+                    } else if (snapshot.hasChild("${phone}&${member.phone}")) {
+                        receiveMessage("${phone}&${member.phone}")
+                    } else {
+                        receiveMessage("${phone}&${member.phone}")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     private fun initClickListeners() {
@@ -110,11 +130,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun receiveMessage(child: String) {
-        var lastMsg: Long = 0
-        dbReference.child(child).child("messages").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (message in snapshot.children) {
-                    if (message.key!!.toLong() > lastMsg) {
+        dbReference.child(child).child("messages")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    messages.clear()
+                    for (message in snapshot.children) {
                         messages.add(
                             Message(
                                 message.child("sender").getValue(String::class.java)!!,
@@ -123,14 +143,13 @@ class ChatActivity : AppCompatActivity() {
                                 message.child("content").getValue(String::class.java)!!
                             )
                         )
-                        chatAdapter.update(messages)
-                        lastMsg = message.key!!.toLong()
                     }
+                    chatAdapter.update(messages)
+                    chatAdapter.notifyDataSetChanged()
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     private fun sendMessage(model: Message) {
@@ -162,8 +181,7 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 }
