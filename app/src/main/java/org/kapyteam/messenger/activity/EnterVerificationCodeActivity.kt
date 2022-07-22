@@ -9,12 +9,17 @@ import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import com.chaos.view.PinView
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.FirebaseAuthAgent
+import org.kapyteam.messenger.util.FileUtil
 
 class EnterVerificationCodeActivity : AppCompatActivity() {
     private lateinit var verificationId: String
     private lateinit var verificationCode: PinView
+    private lateinit var phone: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +28,7 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
 
         verificationCode = findViewById(R.id.verification_code)
         verificationId = intent.getStringExtra("verificationId")!!
+        phone = intent.getStringExtra("phone")!!
         verificationCode.requestFocus()
 
         val inputMethodManager: InputMethodManager =
@@ -34,8 +40,7 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
         )
 
         verificationCode.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 p0.toString().let {
@@ -45,9 +50,7 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
                 }
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
+            override fun afterTextChanged(p0: Editable?) {}
         })
     }
 
@@ -61,9 +64,35 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
             .getInstance()
             .signInWithCredential(credentials)
             .addOnCompleteListener {
-                val intentToSetup = Intent(applicationContext, SetupProfileActivity::class.java)
-                intentToSetup.putExtra("phone", intent.getStringExtra("phone"))
-                startActivity(intentToSetup)
+                FirebaseAuthAgent
+                    .getReference()
+                    .child("users")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.hasChild(phone)) {
+                                val intent = Intent(
+                                    this@EnterVerificationCodeActivity,
+                                    MessengerActivity::class.java
+                                )
+                                intent.putExtra("phone", phone)
+                                FileUtil.saveData(
+                                    "{\"phone\": \"$phone\"}",
+                                    this@EnterVerificationCodeActivity
+                                )
+                                startActivity(intent)
+                            } else {
+                                val intentToSetup = Intent(
+                                    applicationContext,
+                                    SetupProfileActivity::class.java
+                                )
+                                intentToSetup.putExtra("phone", phone)
+                                startActivity(intentToSetup)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+
             }
     }
 }

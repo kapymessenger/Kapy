@@ -29,4 +29,6 @@
     <string name="offline">Offline</string>
     <string name="message">Message...</string>
     <string name="send_icon">send_icon</string>
+    <string name="continue_text">Continue</string>
+    <string name="logo">Logo</string>
 </resources>

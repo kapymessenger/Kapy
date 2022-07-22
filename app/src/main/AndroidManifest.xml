@@ -18,7 +18,7 @@
         <activity
             android:name=".activity.Profile"
             android:exported="true" />
-        <activity>
+        <activity
             android:name=".activity.ChatActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false" />
