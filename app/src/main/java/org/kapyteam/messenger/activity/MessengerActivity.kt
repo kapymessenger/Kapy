@@ -24,6 +24,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
@@ -74,6 +75,7 @@ class ChatsRecyclerAdapter(
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
+    private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
@@ -89,6 +91,17 @@ class MessengerActivity : AppCompatActivity() {
         phone = intent.getStringExtra("phone")!!
 
         DBAgent.setOnline(true)
+
+        addChatBtn = findViewById(R.id.addChat)
+
+        addChatBtn.setOnClickListener {
+            val task = NewDialogActivityTask(
+                this@MessengerActivity,
+                listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
+                phone
+            )
+            task.execute()
+        }
 
         recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -181,12 +194,5 @@ class MessengerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        val task = NewDialogActivityTask(
-            this@MessengerActivity,
-            listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
-            phone
-        )
-        task.execute()
-    }
+    override fun onBackPressed() {}
 }
