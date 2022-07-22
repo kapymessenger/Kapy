@@ -78,7 +78,7 @@ class MessengerActivity : AppCompatActivity() {
 
     private fun fillList(): List<Person> {
         val data = mutableListOf<Person>()
-        (0..30).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99, BitmapFactory.decodeResource(resources, R.drawable.empty_user_image))) }
+        (0..15).forEach { i -> data.add(Person("Еблан", "Пошёл нахуй", "15:33", 99, BitmapFactory.decodeResource(resources, R.drawable.empty_user_image))) }
         return data
     }
 

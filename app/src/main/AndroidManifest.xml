@@ -18,22 +18,19 @@
         <activity
             android:name=".activity.Profile"
             android:exported="true" >
-        </activity>
-        <activity
-            android:name=".activity.GreetingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DrawerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MessengerActivity"
-            android:exported="true"
-            android:label="@string/title_activity_messenger">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.GreetingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MessengerActivity"
+            android:exported="true">
+
         </activity>
         <activity
             android:name=".activity.SetupProfileActivity"

@@ -9,7 +9,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/registration_image"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:text="Саня"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -27,7 +27,7 @@
         android:id="@+id/drawer_person_phone"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:paddingTop="8dp"
         android:text="Телефон Сани"
         android:textColor="#FFFFFF"
