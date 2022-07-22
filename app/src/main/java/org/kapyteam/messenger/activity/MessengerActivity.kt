@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,30 +27,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
+import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.threading.NewDialogActivityTask
 
-data class Person(
-    val name: String,
-    val lats_message: String,
-    val last_message_time: String,
-    val message_count: Int
-)
-
-class ChatsRecyclerAdapter(private val chats: List<String>) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
+class ChatsRecyclerAdapter(
+    private val chats: List<Profile>,
+    private val activity: Activity,
+    private val intent: Intent
+) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
         val contactName: TextView = itemView.findViewById(R.id.contact_name)
         val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
         val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
         val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
-
-        init {
-            itemView.item.setOnClickListener {
-
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -59,10 +53,15 @@ class ChatsRecyclerAdapter(private val chats: List<String>) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.contactName.text = chats[position].name
-        holder.contactLastMessage.text = chats[position].lats_message
-        holder.contactLastMessageTime.text = chats[position].last_message_time
-        holder.contactMessageCount.text = chats[position].message_count.toString()
+        holder.itemView.setOnClickListener {
+            FirebaseAuthAgent.getReference()
+            intent.putExtra("member", chats[position])
+            activity.startActivity(intent)
+        }
+        holder.contactName.text = chats[position].nickname
+        holder.contactLastMessage.text = "some shit"
+        holder.contactLastMessageTime.text = "15:00"
+        holder.contactMessageCount.text = "1"
     }
 
     override fun getItemCount(): Int {
@@ -74,6 +73,7 @@ class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
     private lateinit var dbReference: DatabaseReference
+    private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +82,9 @@ class MessengerActivity : AppCompatActivity() {
         initNavDrawer()
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
+        dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
+
+        DBAgent.setOnline(true)
 
         recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -98,13 +101,27 @@ class MessengerActivity : AppCompatActivity() {
                         data.add(members[1])
                     }
                 }
-                recyclerView.adapter = ChatsRecyclerAdapter(data)
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+                val profiles = mutableListOf<Profile>()
 
+                dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (profile in snapshot.children) {
+                            if (profile.child("phone").getValue(String::class.java) in data) {
+                                profiles.add(Profile.parse(profile.value as Map<*, *>))
+                            }
+                        }
+
+                        recyclerView.adapter = ChatsRecyclerAdapter(
+                            profiles,
+                            this@MessengerActivity,
+                            Intent(this@MessengerActivity, ChatActivity::class.java)
+                        )
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 

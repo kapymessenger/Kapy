@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.Contacts
 import org.kapyteam.messenger.util.IWait
+import java.time.LocalDateTime
 
 class DBAgent {
     companion object {
@@ -55,6 +56,17 @@ class DBAgent {
                     _interface.onSuccess(snapshot)
                 }
             })
+        }
+
+        fun setOnline(online: Boolean) {
+            FirebaseAuthAgent.getReference().child("users").child("+12345678900").let {
+                if (online) {
+                    it.child("online").setValue(true)
+                } else {
+                   it.child("lastSeen").setValue(LocalDateTime.now())
+                    it.child("online").setValue(false)
+                }
+            }
         }
     }
 }

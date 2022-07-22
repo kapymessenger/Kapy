@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
 
@@ -39,6 +40,28 @@ class ChatActivity : AppCompatActivity() {
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
 
         member = intent.getSerializableExtra("member") as Profile
+
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(member.phone)
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    println("EVENT!")
+                    member.firstname = snapshot.child("firstname").getValue(String::class.java)!!
+                    member.lastSeen = snapshot.child("lastSeen").getValue(String::class.java)!!
+                    member.nickname = snapshot.child("nickname").getValue(String::class.java)!!
+                    member.online = snapshot.child("online").getValue(Boolean::class.java)!!
+                    member.photo = snapshot.child("photo").getValue(String::class.java)!!
+                    member.lastname = snapshot.child("lastname").getValue(String::class.java)!!
+                    initUpPanel()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
 
         initClickListeners()
         initUpPanel()
@@ -69,7 +92,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun initUpPanel() {
         usernameText.text = "${member.firstname} ${member.lastname}"
-        statusText.text = if (member.online) "Online" else member.lastSeen
+        statusText.text = if (member.online) "Online" else "Offline"
         // TODO: add avatar
     }
 

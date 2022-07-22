@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 
 class SplashActivity : AppCompatActivity() {

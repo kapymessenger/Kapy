@@ -8,13 +8,13 @@ package org.kapyteam.messenger.model
 import java.io.Serializable
 
 data class Profile(
-    val firstname: String,
-    val lastname: String,
-    val phone: String,
-    val nickname: String,
-    val photo: String = "",
-    val lastSeen: String = "",
-    val online: Boolean = false
+    var firstname: String,
+    var lastname: String,
+    var phone: String,
+    var nickname: String,
+    var photo: String = "",
+    var lastSeen: String = "",
+    var online: Boolean = false
 ) : Serializable {
     companion object {
         fun parse(meta: Map<*, *>): Profile {
