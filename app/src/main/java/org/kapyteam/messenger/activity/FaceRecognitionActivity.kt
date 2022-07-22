@@ -38,6 +38,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
     private lateinit var resText: TextView
     private lateinit var imageView: ImageView
 
+
     private val imageSize = 224
 
     override fun onCreate(savedInstanceState: Bundle?) {
