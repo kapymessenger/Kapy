@@ -147,7 +147,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val sendButton = dialog.findViewById(R.id.sendButton) as Button
 
         sendButton.setOnClickListener {
-            Toast.makeText(this, "This shit was sent! \n FUCK YOU!!!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "This shit was sent!", Toast.LENGTH_LONG).show()
         }
 
         copyButton.setOnClickListener {
