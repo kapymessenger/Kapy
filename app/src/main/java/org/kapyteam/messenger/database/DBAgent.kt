@@ -30,12 +30,12 @@ object DBAgent {
 //            }
     }
 
-    fun setOnline(online: Boolean) {
-        FirebaseAuthAgent.getReference().child("users").child("+12345678900").let {
+    fun setOnline(online: Boolean, phone: String) {
+        FirebaseAuthAgent.getReference().child("users").child(phone).let {
             if (online) {
                 it.child("online").setValue(true)
             } else {
-                it.child("lastSeen").setValue(LocalDateTime.now())
+                it.child("lastSeen").setValue(LocalDateTime.now().toString())
                 it.child("online").setValue(false)
             }
         }

@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -54,17 +55,67 @@ class ChatsRecyclerAdapter(
         return MyViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: MyViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
         holder.itemView.setOnClickListener {
             FirebaseAuthAgent.getReference()
             intent.putExtra("member", chats[position])
             intent.putExtra("phone", phone)
             activity.startActivity(intent)
         }
+
+        val refer = FirebaseAuthAgent
+            .getReference()
+            .child("chats")
+            .ref
+
+
+        refer
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    refer
+                        .child(getChild(snapshot, position))
+                        .child("messages")
+                        .orderByKey()
+                        .limitToLast(1)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot_: DataSnapshot) {
+                                applyMetadata(snapshot_, holder)
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
         holder.contactName.text = chats[position].nickname
-        holder.contactLastMessage.text = "some shit"
-        holder.contactLastMessageTime.text = "15:00"
         holder.contactMessageCount.text = "1"
+    }
+
+    private fun getChild(snapshot: DataSnapshot, position: Int): String {
+        return if (snapshot.hasChild("${phone}&${chats[position].phone}")) {
+            "${phone}&${chats[position].phone}"
+        } else if (snapshot.hasChild("${chats[position].phone}&${phone}")) {
+            "${chats[position].phone}&${phone}"
+        } else {
+            "null"
+        }
+    }
+
+    private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
+        snapshot.children.first().let {
+            holder.contactLastMessage.text = it
+                .child("content")
+                .value.toString()
+
+            holder.contactLastMessageTime.text = it
+                .child("createTime")
+                .value.toString()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -91,8 +142,6 @@ class MessengerActivity : AppCompatActivity() {
 
         initNavDrawer()
 
-        DBAgent.setOnline(true)
-
         addChatBtn = findViewById(R.id.addChat)
 
         addChatBtn.setOnClickListener {
@@ -118,8 +167,9 @@ class MessengerActivity : AppCompatActivity() {
 
     private fun createDialogList() {
         val data = mutableListOf<String>()
-        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                DBAgent.setOnline(true, phone)
                 for (dialog in snapshot.children) {
                     val members = dialog.child("members").value as MutableList<String>
                     if (members.contains(phone)) {
@@ -181,6 +231,26 @@ class MessengerActivity : AppCompatActivity() {
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
 
+        val name: TextView = header.findViewById(R.id.drawer_person_name)
+        val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
+        val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
+
+        phoneText.text = phone
+
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(phone)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    name.text =
+                        "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
+                    nickname.text = "@${snapshot.child("nickname").value}"
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -203,25 +273,21 @@ class MessengerActivity : AppCompatActivity() {
             }
             true
         }
+    }
 
-        val name: TextView = header.findViewById(R.id.drawer_person_name)
-        val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
-        val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
+    override fun onDestroy() {
+        DBAgent.setOnline(false, phone)
+        super.onDestroy()
+    }
 
-        phoneText.text = phone
+    override fun onResume() {
+        DBAgent.setOnline(true, phone)
+        super.onResume()
+    }
 
-        FirebaseAuthAgent
-            .getReference()
-            .child("users")
-            .child(phone)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    name.text = "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
-                    nickname.text = "@${snapshot.child("nickname").value}"
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
+    override fun onRestart() {
+        DBAgent.setOnline(true, phone)
+        super.onRestart()
     }
 
     override fun onBackPressed() {}

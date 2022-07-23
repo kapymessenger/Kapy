@@ -40,5 +40,4 @@
         android:text="Телефон Сани"
         android:textColor="#FFFFFF"
         android:textSize="13sp" />
-
 </LinearLayout>

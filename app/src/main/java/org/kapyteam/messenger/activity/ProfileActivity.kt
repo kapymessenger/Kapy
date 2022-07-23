@@ -6,13 +6,15 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.model.Profile
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var profile: Profile
     private lateinit var avatar: ImageView
     private lateinit var name: TextView
-    private lateinit var phone: TextView
+    private lateinit var phoneNum: TextView
+    private lateinit var phone: String
     private lateinit var status: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +24,14 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         profile = intent.getSerializableExtra("profile") as Profile
+        phone = intent.getStringExtra("phone")!!
         avatar = findViewById(R.id.profile_image)
         name = findViewById(R.id.profile_name)
-        phone = findViewById(R.id.profile_phone_number)
+        phoneNum = findViewById(R.id.profile_phone_number)
         status = findViewById(R.id.profile_status)
 
         name.text = "${profile.firstname} ${profile.lastname} (@${profile.nickname})"
-        phone.text = profile.phone
+        phoneNum.text = profile.phone
         status.text = if (profile.online) "Online" else profile.lastSeen
     }
 
@@ -38,5 +41,20 @@ class ProfileActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    override fun onDestroy() {
+        DBAgent.setOnline(false, phone)
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        DBAgent.setOnline(true, phone)
+        super.onResume()
+    }
+
+    override fun onRestart() {
+        DBAgent.setOnline(true, phone)
+        super.onRestart()
     }
 }
