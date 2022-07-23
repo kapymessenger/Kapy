@@ -28,12 +28,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.threading.NewDialogActivityTask
+import org.kapyteam.messenger.util.DialogUtil
 
 class ChatsRecyclerAdapter(
     private val chats: List<Profile>,
@@ -59,6 +62,7 @@ class ChatsRecyclerAdapter(
         holder: MyViewHolder,
         @SuppressLint("RecyclerView") position: Int
     ) {
+
         holder.itemView.setOnClickListener {
             FirebaseAuthAgent.getReference()
             intent.putExtra("member", chats[position])
@@ -75,14 +79,29 @@ class ChatsRecyclerAdapter(
         refer
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    val child = getChild(snapshot, position)
                     refer
-                        .child(getChild(snapshot, position))
+                        .child(child)
                         .child("messages")
                         .orderByKey()
                         .limitToLast(1)
                         .addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshot_: DataSnapshot) {
                                 applyMetadata(snapshot_, holder)
+//                                if (shouldUpdate) {
+//                                    val json =
+//                                        DialogUtil.loadMessagesMetadata(activity.applicationContext).asJsonObject
+//
+//                                    snapshot_.children.first().child("content").value.toString()
+//                                        .let {
+//                                            if (json.has(child)) {
+//                                                updateJson(json, child, it)
+//                                            } else {
+//                                                json.add(child, JsonParser.parseString(it))
+//                                                DialogUtil.saveMessagesMetadata(json, activity.applicationContext)
+//                                            }
+//                                        }
+//                                }
                             }
 
                             override fun onCancelled(error: DatabaseError) {}
@@ -94,6 +113,23 @@ class ChatsRecyclerAdapter(
 
         holder.contactName.text = chats[position].nickname
         holder.contactMessageCount.text = "1"
+    }
+
+    private fun updateJson(json: JsonObject, target: String, msg: String) {
+        val new = JsonObject()
+
+        json.keySet().iterator().let {
+            while (it.hasNext()) {
+                val key = it.next()
+                if (key == target) {
+                    new.add(key, JsonParser.parseString(msg))
+                } else {
+                    new.add(key, json.get(key))
+                }
+            }
+        }
+
+        DialogUtil.saveMessagesMetadata(new, activity.applicationContext)
     }
 
     private fun getChild(snapshot: DataSnapshot, position: Int): String {
