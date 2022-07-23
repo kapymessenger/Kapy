@@ -20,7 +20,7 @@
     </style>
 
     <style name="ButtonStyle">
-        <item name="cornerRadius">80sp</item>
+        <item name="cornerRadius">10sp</item>
         <item name="android:layout_width">150sp</item>
         <item name="android:layout_height">48sp</item>
     </style>

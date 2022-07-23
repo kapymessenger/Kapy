@@ -51,6 +51,12 @@
                 android:background="@drawable/self_message"
                 android:padding="20dp"
                 android:text="my msg" />
+
+            <TextView
+                android:id="@+id/self_msg_metadata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="creation date / time" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.component.chat.ChatAdapter
+import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
@@ -25,9 +27,9 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var usernameText: TextView
     private lateinit var statusText: TextView
     private lateinit var member: Profile
-    private lateinit var self: Profile
     private lateinit var chatRecView: RecyclerView
     private lateinit var msgEdit: EditText
+    private lateinit var avatar: ImageView
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var dbReference: DatabaseReference
     private lateinit var phone: String
@@ -43,12 +45,13 @@ class ChatActivity : AppCompatActivity() {
         usernameText = findViewById(R.id.user_name)
         statusText = findViewById(R.id.user_status)
         msgEdit = findViewById(R.id.message_edit)
+        avatar = findViewById(R.id.profile_avatar)
 
         member = intent.getSerializableExtra("member") as Profile
 
         phone = intent.getStringExtra("phone")!!
 
-        chatAdapter = ChatAdapter(messages, this@ChatActivity, phone)
+        chatAdapter = ChatAdapter(messages, phone)
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
 
@@ -70,6 +73,7 @@ class ChatActivity : AppCompatActivity() {
                     member.photo = snapshot.child("photo").getValue(String::class.java)!!
                     member.lastname = snapshot.child("lastname").getValue(String::class.java)!!
                     initUpPanel()
+                    DBAgent.setOnline(true, phone)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -112,6 +116,15 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         }
+        avatar.setOnClickListener {
+            val intent = Intent(
+                this,
+                ProfileActivity::class.java
+            )
+            intent.putExtra("phone", phone)
+            intent.putExtra("profile", member)
+            startActivity(intent)
+        }
     }
 
     private fun buildModel(content: String): Message {
@@ -125,7 +138,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun initUpPanel() {
         usernameText.text = "${member.firstname} ${member.lastname}"
-        statusText.text = if (member.online) "Online" else "Offline"
+        statusText.text = if (member.online) "Online" else member.lastSeen
         // TODO: add avatar
     }
 
@@ -146,6 +159,9 @@ class ChatActivity : AppCompatActivity() {
                     }
                     chatAdapter.update(messages)
                     chatAdapter.notifyDataSetChanged()
+                    if (messages.size > 0) {
+                        chatRecView.smoothScrollToPosition(messages.size - 1)
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -159,13 +175,13 @@ class ChatActivity : AppCompatActivity() {
                     dbReference
                         .child("${model.sender}&${model.receiver}")
                         .child("messages")
-                        .child(System.currentTimeMillis().toString())
+                        .push()
                         .setValue(model)
                 } else if (snapshot.hasChild("${model.receiver}&${model.sender}")) {
                     dbReference
                         .child("${model.receiver}&${model.sender}")
                         .child("messages")
-                        .child(System.currentTimeMillis().toString())
+                        .push()
                         .setValue(model)
                 } else {
                     dbReference
@@ -175,7 +191,7 @@ class ChatActivity : AppCompatActivity() {
                                 .setValue(listOf(model.sender, model.receiver))
                             it
                                 .child("messages")
-                                .child(System.currentTimeMillis().toString())
+                                .push()
                                 .setValue(model)
                         }
                 }
@@ -183,5 +199,20 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    override fun onDestroy() {
+        DBAgent.setOnline(false, phone)
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        DBAgent.setOnline(true, phone)
+        super.onResume()
+    }
+
+    override fun onRestart() {
+        DBAgent.setOnline(true, phone)
+        super.onRestart()
     }
 }

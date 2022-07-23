@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -24,14 +25,18 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.threading.NewDialogActivityTask
+import org.kapyteam.messenger.util.DialogUtil
 
 class ChatsRecyclerAdapter(
     private val chats: List<Profile>,
@@ -53,17 +58,100 @@ class ChatsRecyclerAdapter(
         return MyViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: MyViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
+
         holder.itemView.setOnClickListener {
             FirebaseAuthAgent.getReference()
             intent.putExtra("member", chats[position])
             intent.putExtra("phone", phone)
             activity.startActivity(intent)
         }
+
+        val refer = FirebaseAuthAgent
+            .getReference()
+            .child("chats")
+            .ref
+
+
+        refer
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val child = getChild(snapshot, position)
+                    refer
+                        .child(child)
+                        .child("messages")
+                        .orderByKey()
+                        .limitToLast(1)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot_: DataSnapshot) {
+                                applyMetadata(snapshot_, holder)
+//                                if (shouldUpdate) {
+//                                    val json =
+//                                        DialogUtil.loadMessagesMetadata(activity.applicationContext).asJsonObject
+//
+//                                    snapshot_.children.first().child("content").value.toString()
+//                                        .let {
+//                                            if (json.has(child)) {
+//                                                updateJson(json, child, it)
+//                                            } else {
+//                                                json.add(child, JsonParser.parseString(it))
+//                                                DialogUtil.saveMessagesMetadata(json, activity.applicationContext)
+//                                            }
+//                                        }
+//                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
         holder.contactName.text = chats[position].nickname
-        holder.contactLastMessage.text = "some shit"
-        holder.contactLastMessageTime.text = "15:00"
         holder.contactMessageCount.text = "1"
+    }
+
+    private fun updateJson(json: JsonObject, target: String, msg: String) {
+        val new = JsonObject()
+
+        json.keySet().iterator().let {
+            while (it.hasNext()) {
+                val key = it.next()
+                if (key == target) {
+                    new.add(key, JsonParser.parseString(msg))
+                } else {
+                    new.add(key, json.get(key))
+                }
+            }
+        }
+
+        DialogUtil.saveMessagesMetadata(new, activity.applicationContext)
+    }
+
+    private fun getChild(snapshot: DataSnapshot, position: Int): String {
+        return if (snapshot.hasChild("${phone}&${chats[position].phone}")) {
+            "${phone}&${chats[position].phone}"
+        } else if (snapshot.hasChild("${chats[position].phone}&${phone}")) {
+            "${chats[position].phone}&${phone}"
+        } else {
+            "null"
+        }
+    }
+
+    private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
+        snapshot.children.first().let {
+            holder.contactLastMessage.text = it
+                .child("content")
+                .value.toString()
+
+            holder.contactLastMessageTime.text = it
+                .child("createTime")
+                .value.toString()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -74,6 +162,7 @@ class ChatsRecyclerAdapter(
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMessengerBinding
+    private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
@@ -82,13 +171,30 @@ class MessengerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
-        initNavDrawer()
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
 
-        DBAgent.setOnline(true)
+        initNavDrawer()
+
+        addChatBtn = findViewById(R.id.addChat)
+
+        addChatBtn.setOnClickListener {
+            // TODO: get contact list from device
+            val task = NewDialogActivityTask(
+                this@MessengerActivity,
+                listOf(
+                    "+12345678900",
+                    "+12345678902",
+                    "+12345678901",
+                    "+12345678902",
+                    "+12345678903"
+                ),
+                phone
+            )
+            task.execute()
+        }
 
         recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -97,16 +203,17 @@ class MessengerActivity : AppCompatActivity() {
 
     private fun createDialogList() {
         val data = mutableListOf<String>()
-        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                DBAgent.setOnline(true, phone)
                 for (dialog in snapshot.children) {
                     val members = dialog.child("members").value as MutableList<String>
                     if (members.contains(phone)) {
-                       if (members[0] == phone) {
-                           data.add(members[1])
-                       } else {
-                           data.add(members[0])
-                       }
+                        if (members[0] == phone) {
+                            data.add(members[1])
+                        } else {
+                            data.add(members[0])
+                        }
                     }
                 }
 
@@ -127,9 +234,11 @@ class MessengerActivity : AppCompatActivity() {
                             phone
                         )
                     }
+
                     override fun onCancelled(error: DatabaseError) {}
                 })
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -156,6 +265,27 @@ class MessengerActivity : AppCompatActivity() {
     private fun initNavDrawer() {
         val drawerLayout: DrawerLayout = findViewById(R.id.container)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        val header = navigationView.inflateHeaderView(R.layout.drawer_header)
+
+        val name: TextView = header.findViewById(R.id.drawer_person_name)
+        val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
+        val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
+
+        phoneText.text = phone
+
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(phone)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    name.text =
+                        "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
+                    nickname.text = "@${snapshot.child("nickname").value}"
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -181,12 +311,20 @@ class MessengerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        val task = NewDialogActivityTask(
-            this@MessengerActivity,
-            listOf("+12345678900", "+12345678902", "+12345678901", "+12345678902", "+12345678903"),
-            phone
-        )
-        task.execute()
+    override fun onDestroy() {
+        DBAgent.setOnline(false, phone)
+        super.onDestroy()
     }
+
+    override fun onResume() {
+        DBAgent.setOnline(true, phone)
+        super.onResume()
+    }
+
+    override fun onRestart() {
+        DBAgent.setOnline(true, phone)
+        super.onRestart()
+    }
+
+    override fun onBackPressed() {}
 }

@@ -17,10 +17,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import org.kapyteam.messenger.activity.CreateDialogActivity
-import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
-import org.kapyteam.messenger.util.IWait
 import org.kapyteam.messenger.util.SerializableObject
 
 @Suppress("deprecation", "StaticFieldLeak")

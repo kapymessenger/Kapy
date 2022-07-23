@@ -8,6 +8,7 @@ package org.kapyteam.messenger.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
@@ -21,6 +22,8 @@ class CreateDialogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_dialog)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val contactList: ListView = findViewById(R.id.contact_view)
 
@@ -49,12 +52,20 @@ class CreateDialogActivity : AppCompatActivity() {
     private fun convertToString(list: List<Profile>): MutableList<String> {
         val stringList: MutableList<String> = mutableListOf()
         for (profile in list) {
-            stringList.add("${profile.nickname}")
+            stringList.add(profile.nickname)
         }
         return stringList
     }
 
     private fun getProfile(nickname: String): Profile {
         return profiles.first { it.nickname == nickname }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
     }
 }

@@ -5,20 +5,16 @@
 
 package org.kapyteam.messenger.component.chat
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.model.Message
-import org.kapyteam.messenger.model.Profile
 
 class ChatAdapter(
     private var messages: MutableList<Message>,
-    private val context: Context,
     private val self: String
 ) : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 
@@ -41,6 +37,7 @@ class ChatAdapter(
         var anotherMessage: TextView = view.findViewById(R.id.another_message)
         var selfMessage: TextView = view.findViewById(R.id.self_message)
         var anotherMetadata: TextView = view.findViewById(R.id.another_msg_metadata)
+        val selfMetadata: TextView = view.findViewById(R.id.self_msg_metadata)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -49,10 +46,14 @@ class ChatAdapter(
             holder.selfMessage.visibility = View.VISIBLE
             holder.anotherMessage.visibility = View.GONE
             holder.selfMessage.text = message.content
+            holder.selfMetadata.text = message.createTime
+            holder.anotherMetadata.text = ""
         } else {
             holder.selfMessage.visibility = View.GONE
             holder.anotherMessage.visibility = View.VISIBLE
             holder.anotherMessage.text = message.content
+            holder.anotherMetadata.text = message.createTime
+            holder.selfMetadata.text = ""
         }
     }
 }

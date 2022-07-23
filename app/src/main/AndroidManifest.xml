@@ -16,14 +16,16 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".activity.Profile"
+            android:name=".activity.ProfileActivity"
+            android:label="Profile"
             android:exported="true" />
-        <activity>
+        <activity
             android:name=".activity.ChatActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".activity.CreateDialogActivity"
+            android:label="New dialog"
             android:exported="false" />
         <activity
             android:name=".activity.GreetingActivity"
@@ -35,13 +37,16 @@
         </activity>
         <activity
             android:name=".activity.SetupProfileActivity"
+            android:label="@string/setup_profile"
             android:exported="false" />
         <activity
             android:name=".activity.EnterVerificationCodeActivity"
             android:exported="true"
+            android:label="Enter verification code"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.EnterPhoneNumberActivity"
+            android:label="Enter phone number"
             android:exported="false" />
         <activity
             android:name=".activity.FaceRecognitionActivity"
