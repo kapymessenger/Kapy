@@ -11,4 +11,8 @@
         android:icon="@drawable/message_icon"
         android:title="@string/title_chats" />
 
+    <item
+        android:id="@+id/navigation_calls"
+        android:icon="@drawable/phone_icon"
+        android:title="@string/calls" />
 </menu>

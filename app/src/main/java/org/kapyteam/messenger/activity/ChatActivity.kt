@@ -5,12 +5,16 @@
 
 package org.kapyteam.messenger.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -31,8 +35,13 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var msgEdit: EditText
     private lateinit var avatar: ImageView
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var callBtn: ImageView
+    private lateinit var videoCallBtn: ImageView
     private lateinit var dbReference: DatabaseReference
     private lateinit var phone: String
+
+    private val PERMISSION_REQ_ID_RECORD_AUDIO = 22
+    private val PERMISSION_REQ_ID_CAMERA = PERMISSION_REQ_ID_RECORD_AUDIO + 1
 
     private val messages = mutableListOf<Message>()
 
@@ -59,6 +68,8 @@ class ChatActivity : AppCompatActivity() {
         chatRecView.setHasFixedSize(true)
         chatRecView.layoutManager = LinearLayoutManager(this@ChatActivity)
         chatRecView.adapter = chatAdapter
+        callBtn = findViewById(R.id.call_btn)
+        videoCallBtn = findViewById(R.id.video_call_btn)
 
         FirebaseAuthAgent
             .getReference()
@@ -123,6 +134,20 @@ class ChatActivity : AppCompatActivity() {
             )
             intent.putExtra("phone", phone)
             intent.putExtra("profile", member)
+            startActivity(intent)
+        }
+        videoCallBtn.setOnClickListener {
+            val intent = Intent(
+                this@ChatActivity,
+                VideoCallActivity::class.java
+            )
+            intent.putExtra("channelName", "test")
+            if (phone == "+12345678900") {
+                intent.putExtra("userRole", 1)
+            } else {
+                intent.putExtra("userRole", 1)
+            }
+
             startActivity(intent)
         }
     }
