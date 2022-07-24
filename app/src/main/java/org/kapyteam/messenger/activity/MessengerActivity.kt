@@ -31,6 +31,7 @@ import com.google.firebase.database.*
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
@@ -199,6 +200,7 @@ class MessengerActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.chats_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         createDialogList()
+        CallAgent.prepareListener(this, phone)
     }
 
     private fun createDialogList() {

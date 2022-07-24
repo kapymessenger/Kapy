@@ -20,10 +20,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.component.chat.ChatAdapter
+import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
+import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
+import kotlin.random.Random
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var backBtn: ImageView
@@ -137,17 +140,21 @@ class ChatActivity : AppCompatActivity() {
             startActivity(intent)
         }
         videoCallBtn.setOnClickListener {
+            val call = Call(
+                phone,
+                member.phone,
+                Random.nextInt(1, 100000000).toString(),
+                "PENDING",
+                "VIDEO_CALL"
+            )
+            CallAgent.sendCall(call)
             val intent = Intent(
                 this@ChatActivity,
                 VideoCallActivity::class.java
             )
-            intent.putExtra("channelName", "test")
-            if (phone == "+12345678900") {
-                intent.putExtra("userRole", 1)
-            } else {
-                intent.putExtra("userRole", 1)
-            }
-
+            intent.putExtra("phone", phone)
+            intent.putExtra("channelName", call.id)
+            intent.putExtra("userRole", 1)
             startActivity(intent)
         }
     }

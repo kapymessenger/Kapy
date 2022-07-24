@@ -5,6 +5,7 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,11 +13,20 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.gson.JsonParser
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.database.CallAgent
+import kotlin.random.Random
 
 class VideoCallActivity : AppCompatActivity() {
     private val APP_ID = "f86dfc376b1047288576893f4874ae71"
@@ -27,6 +37,7 @@ class VideoCallActivity : AppCompatActivity() {
     private lateinit var toggleMicro: ImageView
     private lateinit var toggleCamera: ImageView
     private lateinit var changeCamera: ImageView
+    private lateinit var phone: String
     private lateinit var endCall: ImageView
 
     private var mutedMicro = false
@@ -64,14 +75,16 @@ class VideoCallActivity : AppCompatActivity() {
         setContentView(R.layout.activity_video_call)
 
         channelName = intent.getStringExtra("channelName")!!
-        userRole = intent.getIntExtra("userRole", 0)
+        userRole = intent.getIntExtra("userRole", 1)
         localVideoContainer = findViewById(R.id.local_video_container)
         remoteVideoContainer = findViewById(R.id.remote_video_container)
         toggleMicro = findViewById(R.id.micro_button)
+        phone = intent.getStringExtra("phone")!!
         endCall = findViewById(R.id.phone_button)
         toggleCamera = findViewById(R.id.video_button)
         changeCamera = findViewById(R.id.switch_camera_button)
 
+        setupDbListener()
         initClickListeners()
         initAgora()
         joinChannel()
@@ -98,8 +111,37 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         endCall.setOnClickListener {
+            CallAgent.updateCall(channelName)
             onRemoteUserLeft()
         }
+    }
+
+    private fun setupDbListener() {
+        FirebaseDatabase
+            .getInstance()
+            .getReference("calls")
+            .child(channelName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child("callState").value.toString() == "COMPLETED") {
+                        onCallEnd()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+    }
+
+    private fun onCallEnd() {
+        (localVideoContainer as FrameLayout).removeAllViews()
+        mRtcEngine.leaveChannel()
+        RtcEngine.destroy()
+        val intent = Intent(
+            this,
+            MessengerActivity::class.java
+        )
+        intent.putExtra("phone", phone)
+        startActivity(intent)
     }
 
     override fun onBackPressed() {
@@ -115,13 +157,34 @@ class VideoCallActivity : AppCompatActivity() {
         mRtcEngine.setClientRole(userRole)
         mRtcEngine.enableVideo()
 
-        mRtcEngine.joinChannel(
-            "006f86dfc376b1047288576893f4874ae71IADvdVtXeZ9HX3IDCan4G23yZTHofmC7mpQWyUfcFTGl7Ax+f9gAAAAAEAAtDEjTfW3dYgEAAQB9bd1i",
-            channelName,
-            null,
-            0
-        )
-        setupLocalVideo()
+        val thread = Thread {
+            val uid = Random.nextInt(0, 100)
+
+            val request = Request.Builder()
+                .url("https://kapy-auth-server.herokuapp.com/token?channel_name=$channelName&uid=$uid")
+                .build()
+
+            val client = OkHttpClient()
+            val response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                val json = response.body.string()
+                val jsonObj = JsonParser.parseString(json).asJsonObject
+                val token = jsonObj.get("token").asString
+
+                runOnUiThread {
+                    mRtcEngine.joinChannel(
+                        token,
+                        channelName,
+                        null,
+                        uid
+                    )
+                    setupLocalVideo()
+                }
+
+            }
+        }
+        thread.start()
     }
 
     private fun setupLocalVideo() {

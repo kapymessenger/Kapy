@@ -3,18 +3,18 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.fragment.chats
+package org.kapyteam.messenger.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.kapyteam.messenger.databinding.FragmentChatsBinding
+import org.kapyteam.messenger.databinding.FragmentCallsBinding
 
-class ChatsFragment : Fragment() {
+class CallsFragment : Fragment() {
 
-    private var _binding: FragmentChatsBinding? = null
+    private var _binding: FragmentCallsBinding? = null
 
     private val binding get() = _binding!!
 
@@ -24,7 +24,7 @@ class ChatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentChatsBinding.inflate(inflater, container, false)
+        _binding = FragmentCallsBinding.inflate(inflater, container, false)
 
         return binding.root
     }
