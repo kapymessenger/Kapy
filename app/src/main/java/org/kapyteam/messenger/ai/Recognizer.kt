@@ -1,91 +1,43 @@
-/*
- * This file is a part of Kapy Messenger project.
- * Original link: https://github.com/kapymessenger/Kapy
- */
+package org.kapyteam.messenger.ai
 
-package org.kapyteam.messenger.activity
-
+import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.media.ThumbnailUtils
-import android.os.Bundle
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import org.kapyteam.messenger.R
-import org.kapyteam.messenger.databinding.ActivityFaceRecognitionBinding
+import org.kapyteam.messenger.activity.ChatActivity
 import org.kapyteam.messenger.ml.ModelUnquant
+import org.kapyteam.messenger.model.Message
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.math.min
 
-
-class FaceRecognitionActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityFaceRecognitionBinding
-    private lateinit var button: Button
-    private lateinit var resText: TextView
-    private lateinit var imageView: ImageView
-
-
-    private val imageSize = 224
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityFaceRecognitionBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        button = binding.photoButton
-        resText = binding.resultText
-        imageView = binding.imageView2
-
-
-
-        button.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                takePicturePreview.launch(null)
-            } else {
-                requestedPermission.launch(android.Manifest.permission.CAMERA)
-            }
+object Recognizer {
+    fun takePicture(activity: ChatActivity) {
+        if (ContextCompat.checkSelfPermission(
+                activity.applicationContext,
+                android.Manifest.permission.CAMERA
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            activity.takePicturePreview.launch(null)
+        } else {
+            activity.requestedPermission.launch(android.Manifest.permission.CAMERA)
         }
-
     }
 
-    private val requestedPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                takePicturePreview.launch(null)
-            }
-        }
-
-    private val takePicturePreview =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-            if (bitmap != null) {
-                val dimension = min(bitmap.width, bitmap.height)
-                var bitmap_fin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
-
-                bitmap_fin = Bitmap.createScaledBitmap(bitmap_fin, imageSize, imageSize, false)
-                imageView.setImageBitmap(bitmap_fin)
-                outputGenerator(bitmap_fin)
-            }
-        }
-
-    private fun outputGenerator(bitmap: Bitmap) {
-        val model = ModelUnquant.newInstance(this)
+    fun outputGenerator(bitmap: Bitmap, activity: ChatActivity, imageSize: Int = 224) {
+        val model = ModelUnquant.newInstance(activity)
 
 // Creates inputs for reference.
         val inputFeature0 =
@@ -122,21 +74,20 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
         val classes = arrayOf("😀", "😡", "👆", "✊", "🤟", "🐱", "🐔", "🐴")
 
-        showDialog(classes[maxPos], confidences[maxPos] * 100, bitmap)
+        showDialog(classes[maxPos], confidences[maxPos] * 100, bitmap, activity)
 
         var s = ""
         for (i in classes.indices) {
             if ((confidences[i] * 100).toInt() != 0)
                 s += String.format("%s: %.1f%%\n", classes[i], confidences[i] * 100)
         }
-        resText.text = s
 
         model.close()
 
     }
 
-    private fun showDialog(title: String, percent: Float, bitmap: Bitmap) {
-        val dialog = Dialog(this)
+    private fun showDialog(title: String, percent: Float, bitmap: Bitmap, activity: ChatActivity) {
+        val dialog = Dialog(activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.dialog_window)
@@ -151,24 +102,37 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val sendButton = dialog.findViewById(R.id.sendButton) as Button
 
         sendButton.setOnClickListener {
-            Toast.makeText(this, "This shit was sent!", Toast.LENGTH_LONG).show()
+            activity.sendMessage(Message(
+                sender = activity.phone,
+                receiver = activity.member.phone,
+                createTime = "Generated via AI",
+                content = title
+            ))
+            Toast.makeText(
+                activity.applicationContext,
+                "Message was sent!",
+                Toast.LENGTH_LONG
+            )
+                .show()
+            dialog.dismiss()
         }
 
         copyButton.setOnClickListener {
             val clipboard: ClipboardManager =
-                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", title)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(this, "$title was copied!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity.applicationContext,
+                "$title was copied!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
         }
 
         okButton.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
-
     }
 }
-
-
-//https://www.kaggle.com/datasets/jonathanoheix/face-expression-recognition-dataset

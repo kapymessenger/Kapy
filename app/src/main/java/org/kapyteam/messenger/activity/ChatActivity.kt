@@ -6,15 +6,19 @@
 package org.kapyteam.messenger.activity
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.ai.Recognizer
 import org.kapyteam.messenger.component.chat.ChatAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
@@ -22,14 +26,16 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
+import kotlin.math.min
 import kotlin.random.Random
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var backBtn: ImageView
+    private lateinit var aiBtn: ImageView
     private lateinit var sendBtn: ImageView
     private lateinit var usernameText: TextView
     private lateinit var statusText: TextView
-    private lateinit var member: Profile
+    lateinit var member: Profile
     private lateinit var chatRecView: RecyclerView
     private lateinit var msgEdit: EditText
     private lateinit var avatar: ImageView
@@ -37,10 +43,29 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var callBtn: ImageView
     private lateinit var videoCallBtn: ImageView
     private lateinit var dbReference: DatabaseReference
-    private lateinit var phone: String
+    lateinit var phone: String
 
-    private val PERMISSION_REQ_ID_RECORD_AUDIO = 22
-    private val PERMISSION_REQ_ID_CAMERA = PERMISSION_REQ_ID_RECORD_AUDIO + 1
+    private val imageSize = 224
+
+    val requestedPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                takePicturePreview.launch(null)
+            }
+        }
+
+    val takePicturePreview =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            if (bitmap != null) {
+                val dimension = min(bitmap.width, bitmap.height)
+                var bitmap_fin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
+
+                bitmap_fin = Bitmap.createScaledBitmap(bitmap_fin,
+                    imageSize,
+                    imageSize, false)
+                Recognizer.outputGenerator(bitmap_fin, this)
+            }
+        }
 
     private val messages = mutableListOf<Message>()
 
@@ -53,6 +78,7 @@ class ChatActivity : AppCompatActivity() {
         usernameText = findViewById(R.id.user_name)
         statusText = findViewById(R.id.user_status)
         msgEdit = findViewById(R.id.message_edit)
+        aiBtn = findViewById(R.id.ai_btn)
         avatar = findViewById(R.id.profile_avatar)
 
         member = intent.getSerializableExtra("member") as Profile
@@ -173,6 +199,9 @@ class ChatActivity : AppCompatActivity() {
             intent.putExtra("userRole", 1)
             startActivity(intent)
         }
+        aiBtn.setOnClickListener {
+            Recognizer.takePicture(this)
+        }
     }
 
     private fun buildModel(content: String): Message {
@@ -216,7 +245,7 @@ class ChatActivity : AppCompatActivity() {
             })
     }
 
-    private fun sendMessage(model: Message) {
+    fun sendMessage(model: Message) {
         dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.hasChild("${model.sender}&${model.receiver}")) {
