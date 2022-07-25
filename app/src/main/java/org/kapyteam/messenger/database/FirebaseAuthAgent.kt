@@ -6,53 +6,57 @@
 package org.kapyteam.messenger.database
 
 import android.app.Activity
+import android.content.Intent
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import org.kapyteam.messenger.model.Profile
 import java.util.concurrent.TimeUnit
 
-class FirebaseAuthAgent {
-    companion object {
-        @JvmStatic
-        private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+object FirebaseAuthAgent {
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var dbReference = FirebaseDatabase
+        .getInstance()
+        .getReferenceFromUrl("https://kapy-messenger-default-rtdb.firebaseio.com/")
 
-        fun getInstance(): FirebaseAuth = auth
+    fun getInstance(): FirebaseAuth = auth
 
-        fun getCurrentUser(): FirebaseUser? = auth.currentUser
+    fun getReference(): DatabaseReference = dbReference
 
-        fun phoneAuth(phone: String, activity: Activity) {
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phone,
-                120,
-                TimeUnit.SECONDS,
-                activity,
-                verifyCallback(),
+    fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-                )
+    fun phoneAuth(activity: Activity, intent: Intent) {
+        val options = PhoneAuthOptions
+            .newBuilder(auth)
+            .setPhoneNumber(intent.getStringExtra("phone")!!)
+            .setTimeout(120, TimeUnit.SECONDS)
+            .setActivity(activity)
+            .setCallbacks(verifyCallback(activity, intent))
+            .build()
+
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    fun registerProfile(profile: Profile) {
+        dbReference.child("users").child(profile.phone).setValue(profile)
+    }
+
+    private fun verifyCallback(activity: Activity, intent: Intent) =
+        object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationFailed(e: FirebaseException) {
+
+            }
+
+            override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
+                intent.putExtra("verificationId", id)
+                activity.startActivity(intent)
+            }
+
+            override fun onVerificationCompleted(p0: PhoneAuthCredential) {}
         }
 
-        private fun verifyCallback() =
-            object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                override fun onVerificationCompleted(
-                    credential: PhoneAuthCredential
-                ) {
-
-                }
-
-                override fun onVerificationFailed(
-                    e: FirebaseException
-                ) {
-
-                }
-
-                override fun onCodeSent(
-                    id: String,
-                    token: PhoneAuthProvider.ForceResendingToken
-                ) {
-
-                }
-            }
+    fun test() {
+        println(dbReference.child("users").child(auth.uid!!).toString())
     }
 }

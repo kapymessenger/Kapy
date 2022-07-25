@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_chats"
+        android:icon="@drawable/message_icon"
+        android:title="@string/title_chats" />
+
+    <item
+        android:id="@+id/navigation_calls"
+        android:icon="@drawable/phone_icon"
+        android:title="@string/calls" />
+</menu>
