@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is a part of Kapy Messenger project.
+  ~ Original link: https://github.com/kapymessenger/Kapy
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChatActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/back_arrow_icon"
+            android:contentDescription="@string/back_to_dialogs"
+            android:paddingStart="12sp"
+            android:paddingEnd="2sp" />
+
+        <ImageView
+            android:id="@+id/profile_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+
+            android:layout_toEndOf="@id/back_btn"
+            android:contentDescription="@string/avatar_of_user"
+            android:src="@drawable/empty_user_image" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:id="@+id/user_data_layout"
+            android:layout_toEndOf="@id/profile_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/username"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/user_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/offline"
+                android:textColor="#505050"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/call_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/audio_call_button"
+                app:srcCompat="@drawable/phone_icon" />
+
+            <ImageView
+                android:id="@+id/video_call_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignEnd="@id/call_btn"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="50dp"
+                android:contentDescription="@string/video_cal_button"
+                app:srcCompat="@drawable/videocam_icon" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout"
+        android:layout_marginBottom="60dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <EditText
+            android:id="@+id/message_edit"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="100dp"
+            android:backgroundTint="#00000000"
+            android:hint="@string/message"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/send_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/send_icon"
+            android:src="@drawable/send_icon" />
+
+        <ImageView
+            android:id="@+id/ai_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="60dp"
+            android:contentDescription="@string/send_icon"
+            android:src="@drawable/face_icon" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.Kapy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#B40CE8</item>
-        <item name="colorPrimaryVariant">#B40CE8</item>
+        <item name="colorPrimary">#EBAE31</item>
+        <item name="colorPrimaryVariant">#EB7F31</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#005550</item>
-        <item name="colorSecondaryVariant">#005550</item>
+        <item name="colorSecondary">#E0602F</item>
+        <item name="colorSecondaryVariant">#E0602F</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">#B40CE8</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#EB7F31</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -20,7 +20,7 @@
     </style>
 
     <style name="ButtonStyle">
-        <item name="cornerRadius">80sp</item>
+        <item name="cornerRadius">10sp</item>
         <item name="android:layout_width">150sp</item>
         <item name="android:layout_height">48sp</item>
     </style>
@@ -30,6 +30,7 @@
 
         <item name="cornerRadius">25sp</item>
         <item name="android:background">@drawable/rounder_edittext</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="Theme.Kapy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

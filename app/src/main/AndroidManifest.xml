@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.kapyteam.messenger">
+    package="org.kapyteam.messenger" >
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -12,22 +23,63 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kapy"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".activity.registration2"
+            android:name=".ProfileEditing"
+            android:exported="true" >
+        </activity>
+        <activity
+            android:name=".activity.AudioCallActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.registration1"
+            android:name=".activity.IncomingCallActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.FaceRecognitionActivity"
-            android:exported="false" />
+            android:name=".activity.VideoCallActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true" />
+            android:name=".activity.ProfileActivity"
+            android:exported="true"
+            android:label="Profile" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activity.CreateDialogActivity"
+            android:exported="false"
+            android:label="New dialog" />
         <activity
             android:name=".activity.GreetingActivity"
-            android:exported="true">
+            android:exported="false" />
+        <activity
+            android:name=".activity.MessengerActivity"
+            android:exported="true"
+            android:label="@string/title_activity_messenger" >
+        </activity>
+        <activity
+            android:name=".activity.SetupProfileActivity"
+            android:exported="false"
+            android:label="@string/setup_profile" />
+        <activity
+            android:name=".activity.EnterVerificationCodeActivity"
+            android:exported="true"
+            android:label="Enter verification code"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.EnterPhoneNumberActivity"
+            android:exported="false"
+            android:label="Enter phone number" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activity.FaceRecognitionActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
