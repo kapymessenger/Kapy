@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.kapyteam.messenger">
+    package="org.kapyteam.messenger" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
@@ -14,31 +14,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kapy"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".ProfileEditing"
+            android:exported="true" >
+        </activity>
         <activity
             android:name=".activity.ProfileActivity"
-            android:label="Profile"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Profile" />
         <activity
             android:name=".activity.ChatActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".activity.CreateDialogActivity"
-            android:label="New dialog"
-            android:exported="false" />
+            android:exported="false"
+            android:label="New dialog" />
         <activity
             android:name=".activity.GreetingActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MessengerActivity"
             android:exported="true"
-            android:label="@string/title_activity_messenger">
+            android:label="@string/title_activity_messenger" >
         </activity>
         <activity
             android:name=".activity.SetupProfileActivity"
-            android:label="@string/setup_profile"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/setup_profile" />
         <activity
             android:name=".activity.EnterVerificationCodeActivity"
             android:exported="true"
@@ -46,8 +50,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.EnterPhoneNumberActivity"
-            android:label="Enter phone number"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Enter phone number" />
         <activity
             android:name=".activity.FaceRecognitionActivity"
             android:exported="false" />
@@ -56,9 +60,10 @@
             android:exported="true" />
         <activity
             android:name=".activity.SplashActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

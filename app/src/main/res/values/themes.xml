@@ -30,6 +30,7 @@
 
         <item name="cornerRadius">25sp</item>
         <item name="android:background">@drawable/rounder_edittext</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="Theme.Kapy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
