@@ -36,13 +36,33 @@ object CallAgent {
                                 IncomingCallActivity::class.java
                             )
                             intent.putExtra("call", call)
-                            intent.putExtra(
-                                "incomingProfile",
-                                Profile("", "", "", "", "", "", true)
-                            )
-                            activity.startActivity(intent)
+                            findUserAndInitCall(intent, activity, self)
                         }
                     }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+    }
+
+    private fun findUserAndInitCall(intent: Intent, activity: Activity, phone: String) {
+        FirebaseDatabase
+            .getInstance()
+            .getReference("users")
+            .child(phone)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val profile = Profile(
+                        firstname = snapshot.child("firstname").value.toString(),
+                        lastname = snapshot.child("lastname").value.toString(),
+                        nickname = snapshot.child("nickname").value.toString(),
+                        phone = snapshot.child("phone").value.toString(),
+                        photo = snapshot.child("photo").value.toString(),
+                        lastSeen = snapshot.child("lastSeen").value.toString(),
+                        online = snapshot.child("online").getValue(Boolean::class.java)!!
+                    )
+                    intent.putExtra("incomingProfile", profile)
+                    activity.startActivity(intent)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -72,7 +92,6 @@ object CallAgent {
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
-
             })
     }
 }

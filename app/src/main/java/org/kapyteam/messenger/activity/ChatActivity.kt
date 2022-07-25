@@ -5,16 +5,12 @@
 
 package org.kapyteam.messenger.activity
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -154,6 +150,26 @@ class ChatActivity : AppCompatActivity() {
             )
             intent.putExtra("phone", phone)
             intent.putExtra("channelName", call.id)
+            intent.putExtra("userRole", 1)
+            startActivity(intent)
+        }
+        callBtn.setOnClickListener {
+            val call = Call(
+                phone,
+                member.phone,
+                Random.nextInt(1, 100000000).toString(),
+                "PENDING",
+                "AUDIO_CALL"
+            )
+            CallAgent.sendCall(call)
+            val intent = Intent(
+                this@ChatActivity,
+                AudioCallActivity::class.java
+            )
+            intent.putExtra("call", call)
+            intent.putExtra("phone", phone)
+            intent.putExtra("isOutgoing", true)
+            intent.putExtra("profile", member)
             intent.putExtra("userRole", 1)
             startActivity(intent)
         }

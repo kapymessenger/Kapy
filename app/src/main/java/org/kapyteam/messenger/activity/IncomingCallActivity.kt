@@ -38,6 +38,8 @@ class IncomingCallActivity : AppCompatActivity() {
         incomingProfile = intent.getSerializableExtra("incomingProfile") as Profile
         call = intent.getSerializableExtra("call") as Call
 
+        initMetadataViews()
+
         acceptCall.setOnClickListener {
             handleCall()
         }
@@ -47,20 +49,38 @@ class IncomingCallActivity : AppCompatActivity() {
         }
     }
 
+    private fun initMetadataViews() {
+        profileName.text = "${incomingProfile.firstname} ${incomingProfile.lastname}"
+        phoneNumber.text = incomingProfile.phone
+    }
+
     private fun closeCall() {
         CallAgent.updateCall(call.id)
         finish()
     }
 
     private fun handleCall() {
-        if (call.callType == "VIDEO_CALL") {
-            val intent = Intent(
-                this,
-                VideoCallActivity::class.java
-            )
-            intent.putExtra("channelName", call.id)
-            intent.putExtra("phone", call.receiver)
-            startActivity(intent)
+        when (call.callType) {
+            "VIDEO_CALL" -> {
+                val intent = Intent(
+                    this,
+                    VideoCallActivity::class.java
+                )
+                intent.putExtra("channelName", call.id)
+                intent.putExtra("phone", call.receiver)
+                startActivity(intent)
+            }
+            "AUDIO_CALL" -> {
+                val intent = Intent(
+                    this,
+                    AudioCallActivity::class.java
+                )
+                intent.putExtra("profile", incomingProfile)
+                intent.putExtra("phone", call.receiver)
+                intent.putExtra("call", call)
+                intent.putExtra("isOutgoing", false)
+                startActivity(intent)
+            }
         }
     }
 

@@ -24,6 +24,9 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AudioCallActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.IncomingCallActivity"
             android:exported="false" />
         <activity
