@@ -60,5 +60,5 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/greeting_text"
-        app:srcCompat="@drawable/capybara1" />
+        app:srcCompat="@drawable/kapy2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
