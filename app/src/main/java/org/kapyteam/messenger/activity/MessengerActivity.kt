@@ -269,11 +269,15 @@ class MessengerActivity : AppCompatActivity() {
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
 
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
         val name: TextView = header.findViewById(R.id.drawer_person_name)
         val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
         val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
 
-        phoneText.text = phone
+
 
         FirebaseAuthAgent
             .getReference()
@@ -281,19 +285,19 @@ class MessengerActivity : AppCompatActivity() {
             .child(phone)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    phoneText.text = phone
                     name.text =
                         "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
                     nickname.text = "@${snapshot.child("nickname").value}"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {

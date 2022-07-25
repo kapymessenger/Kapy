@@ -14,15 +14,14 @@
     <RelativeLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp">
 
         <ImageView
             android:id="@+id/back_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
             android:background="@drawable/back_arrow_icon"
             android:contentDescription="@string/back_to_dialogs"
             android:paddingStart="12sp"
@@ -34,7 +33,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
+
             android:layout_toEndOf="@id/back_btn"
             android:contentDescription="@string/avatar_of_user"
             android:src="@drawable/empty_user_image" />
@@ -69,8 +68,9 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true">
+
             <ImageView
                 android:id="@+id/call_btn"
                 android:layout_width="30dp"
@@ -84,8 +84,8 @@
             <ImageView
                 android:id="@+id/video_call_btn"
                 android:layout_width="30dp"
-                android:layout_alignEnd="@id/call_btn"
                 android:layout_height="30dp"
+                android:layout_alignEnd="@id/call_btn"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="50dp"
                 android:contentDescription="@string/video_cal_button"
@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout"
-        android:layout_marginBottom="70dp" />
+        android:layout_marginBottom="60dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -111,9 +111,9 @@
         <EditText
             android:id="@+id/message_edit"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="110dp"
+            android:layout_marginEnd="100dp"
             android:backgroundTint="#00000000"
             android:hint="@string/message"
             android:importantForAutofill="no"
@@ -122,20 +122,20 @@
 
         <ImageView
             android:id="@+id/send_btn"
-            android:layout_width="40dp"
-            android:layout_centerVertical="true"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/send_icon"
             android:src="@drawable/send_icon" />
 
         <ImageView
             android:id="@+id/ai_btn"
-            android:layout_width="40dp"
-            android:layout_centerVertical="true"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="60dp"
             android:contentDescription="@string/send_icon"
             android:src="@drawable/face_icon" />
