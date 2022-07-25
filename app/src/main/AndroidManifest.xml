@@ -79,11 +79,6 @@
         <activity
             android:name=".activity.FaceRecognitionActivity"
             android:exported="true"/>
-            android:name=".activity.FaceRecognitionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="true" />
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true" >
