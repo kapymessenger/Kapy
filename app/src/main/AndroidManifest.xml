@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.kapyteam.messenger" >
+    package="org.kapyteam.messenger">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -23,11 +23,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kapy"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".QRScan"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ProfileEditing"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.AudioCallActivity"
             android:exported="false" />
@@ -56,8 +64,7 @@
         <activity
             android:name=".activity.MessengerActivity"
             android:exported="true"
-            android:label="@string/title_activity_messenger" >
-        </activity>
+            android:label="@string/title_activity_messenger"></activity>
         <activity
             android:name=".activity.SetupProfileActivity"
             android:exported="false"
@@ -73,18 +80,22 @@
             android:label="Enter phone number" />
         <activity
             android:name=".activity.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activity.FaceRecognitionActivity"
-            android:exported="true"/>
+            android:exported="true" />
+        <activity android:name=".actionOnQRScanned"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"/>
         <activity
             android:name=".activity.SplashActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
     </application>
 
