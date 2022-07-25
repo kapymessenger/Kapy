@@ -4,6 +4,14 @@
     package="org.kapyteam.messenger" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +27,16 @@
             android:name=".ProfileEditing"
             android:exported="true" >
         </activity>
+        <activity
+            android:name=".activity.AudioCallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.IncomingCallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.VideoCallActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".activity.ProfileActivity"
             android:exported="true"

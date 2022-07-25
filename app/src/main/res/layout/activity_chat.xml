@@ -73,8 +73,8 @@
             android:layout_centerVertical="true">
             <ImageView
                 android:id="@+id/call_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
@@ -83,9 +83,9 @@
 
             <ImageView
                 android:id="@+id/video_call_btn"
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_alignEnd="@id/call_btn"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="50dp"
                 android:contentDescription="@string/video_cal_button"

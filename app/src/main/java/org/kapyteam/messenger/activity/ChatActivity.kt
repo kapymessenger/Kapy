@@ -16,10 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.component.chat.ChatAdapter
+import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
+import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
+import kotlin.random.Random
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var backBtn: ImageView
@@ -31,8 +34,13 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var msgEdit: EditText
     private lateinit var avatar: ImageView
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var callBtn: ImageView
+    private lateinit var videoCallBtn: ImageView
     private lateinit var dbReference: DatabaseReference
     private lateinit var phone: String
+
+    private val PERMISSION_REQ_ID_RECORD_AUDIO = 22
+    private val PERMISSION_REQ_ID_CAMERA = PERMISSION_REQ_ID_RECORD_AUDIO + 1
 
     private val messages = mutableListOf<Message>()
 
@@ -59,6 +67,8 @@ class ChatActivity : AppCompatActivity() {
         chatRecView.setHasFixedSize(true)
         chatRecView.layoutManager = LinearLayoutManager(this@ChatActivity)
         chatRecView.adapter = chatAdapter
+        callBtn = findViewById(R.id.call_btn)
+        videoCallBtn = findViewById(R.id.video_call_btn)
 
         FirebaseAuthAgent
             .getReference()
@@ -123,6 +133,44 @@ class ChatActivity : AppCompatActivity() {
             )
             intent.putExtra("phone", phone)
             intent.putExtra("profile", member)
+            startActivity(intent)
+        }
+        videoCallBtn.setOnClickListener {
+            val call = Call(
+                phone,
+                member.phone,
+                Random.nextInt(1, 100000000).toString(),
+                "PENDING",
+                "VIDEO_CALL"
+            )
+            CallAgent.sendCall(call)
+            val intent = Intent(
+                this@ChatActivity,
+                VideoCallActivity::class.java
+            )
+            intent.putExtra("phone", phone)
+            intent.putExtra("channelName", call.id)
+            intent.putExtra("userRole", 1)
+            startActivity(intent)
+        }
+        callBtn.setOnClickListener {
+            val call = Call(
+                phone,
+                member.phone,
+                Random.nextInt(1, 100000000).toString(),
+                "PENDING",
+                "AUDIO_CALL"
+            )
+            CallAgent.sendCall(call)
+            val intent = Intent(
+                this@ChatActivity,
+                AudioCallActivity::class.java
+            )
+            intent.putExtra("call", call)
+            intent.putExtra("phone", phone)
+            intent.putExtra("isOutgoing", true)
+            intent.putExtra("profile", member)
+            intent.putExtra("userRole", 1)
             startActivity(intent)
         }
     }
