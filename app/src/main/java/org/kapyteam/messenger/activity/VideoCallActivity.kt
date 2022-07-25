@@ -29,7 +29,7 @@ import org.kapyteam.messenger.database.CallAgent
 import kotlin.random.Random
 
 class VideoCallActivity : AppCompatActivity() {
-    private val APP_ID = "f86dfc376b1047288576893f4874ae71"
+    private val appId = "f86dfc376b1047288576893f4874ae71"
     private lateinit var channelName: String
     private lateinit var mRtcEngine: RtcEngine
     private lateinit var localVideoContainer: View
@@ -56,10 +56,6 @@ class VideoCallActivity : AppCompatActivity() {
             runOnUiThread {
                 onRemoteUserLeft()
             }
-        }
-
-        override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
-            runOnUiThread { println("success!!") }
         }
 
         override fun onRemoteVideoStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
@@ -149,7 +145,7 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun initAgora() {
-        mRtcEngine = RtcEngine.create(baseContext, APP_ID, mRtcEventHandler)
+        mRtcEngine = RtcEngine.create(baseContext, appId, mRtcEventHandler)
     }
 
     private fun joinChannel() {

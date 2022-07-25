@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.chaos.view.PinView
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.database.DataSnapshot
@@ -63,6 +64,10 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
         FirebaseAuthAgent
             .getInstance()
             .signInWithCredential(credentials)
+            .addOnFailureListener {
+                verificationCode.text?.clear()
+                Toast.makeText(this, "Invalid code. Please try again", 2)
+            }
             .addOnCompleteListener {
                 FirebaseAuthAgent
                     .getReference()

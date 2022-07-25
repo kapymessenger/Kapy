@@ -17,8 +17,6 @@ import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 
 class CreateDialogActivity : AppCompatActivity() {
-    private lateinit var profiles: MutableList<Profile>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_dialog)
@@ -27,18 +25,20 @@ class CreateDialogActivity : AppCompatActivity() {
 
         val contactList: ListView = findViewById(R.id.contact_view)
 
-        if (intent.hasExtra("profiles")) {
-            profiles = (intent.getSerializableExtra("profiles") as SerializableObject).obj as MutableList<Profile>
-        }
+        val profiles =
+            (intent.getSerializableExtra("profiles") as SerializableObject).obj as MutableList<Profile>
 
         val phone = intent.getStringExtra("phone")
 
-        contactList.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, convertToString(profiles))
+        contactList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            profiles.map { it.nickname }
+        )
 
         contactList.setOnItemClickListener { _, item, _, _ ->
             val textView = item as TextView
-            val charName = textView.text.toString()
-            val character = getProfile(charName)
+            val character = profiles.first { it.nickname == textView.text.toString() }
             val intent = Intent(
                 this,
                 ChatActivity::class.java
@@ -47,18 +47,6 @@ class CreateDialogActivity : AppCompatActivity() {
             intent.putExtra("phone", phone)
             startActivity(intent)
         }
-    }
-
-    private fun convertToString(list: List<Profile>): MutableList<String> {
-        val stringList: MutableList<String> = mutableListOf()
-        for (profile in list) {
-            stringList.add(profile.nickname)
-        }
-        return stringList
-    }
-
-    private fun getProfile(nickname: String): Profile {
-        return profiles.first { it.nickname == nickname }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

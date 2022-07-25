@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.ai.Recognizer
-import org.kapyteam.messenger.component.chat.ChatAdapter
+import org.kapyteam.messenger.component.ChatAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
@@ -43,6 +43,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var callBtn: ImageView
     private lateinit var videoCallBtn: ImageView
     private lateinit var dbReference: DatabaseReference
+    private lateinit var chatId: String
     lateinit var phone: String
 
     private val imageSize = 224
@@ -58,12 +59,14 @@ class ChatActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             if (bitmap != null) {
                 val dimension = min(bitmap.width, bitmap.height)
-                var bitmap_fin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
+                var bitmapFin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
 
-                bitmap_fin = Bitmap.createScaledBitmap(bitmap_fin,
+                bitmapFin = Bitmap.createScaledBitmap(
+                    bitmapFin,
                     imageSize,
-                    imageSize, false)
-                Recognizer.outputGenerator(bitmap_fin, this)
+                    imageSize, false
+                )
+                Recognizer.outputGenerator(bitmapFin, this)
             }
         }
 
@@ -127,13 +130,9 @@ class ChatActivity : AppCompatActivity() {
             .child("chats")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.hasChild("${member.phone}&${phone}")) {
-                        receiveMessage("${member.phone}&${phone}")
-                    } else if (snapshot.hasChild("${phone}&${member.phone}")) {
-                        receiveMessage("${phone}&${member.phone}")
-                    } else {
-                        receiveMessage("${phone}&${member.phone}")
-                    }
+                    chatId =
+                        if (snapshot.hasChild("${member.phone}&${phone}")) "${member.phone}&${phone}" else "${phone}&${member.phone}"
+                    receiveMessage(chatId)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -248,30 +247,16 @@ class ChatActivity : AppCompatActivity() {
     fun sendMessage(model: Message) {
         dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChild("${model.sender}&${model.receiver}")) {
-                    dbReference
-                        .child("${model.sender}&${model.receiver}")
-                        .child("messages")
-                        .push()
-                        .setValue(model)
-                } else if (snapshot.hasChild("${model.receiver}&${model.sender}")) {
-                    dbReference
-                        .child("${model.receiver}&${model.sender}")
-                        .child("messages")
-                        .push()
-                        .setValue(model)
-                } else {
-                    dbReference
-                        .child("${model.sender}&${model.receiver}").let {
-                            it
-                                .child("members")
-                                .setValue(listOf(model.sender, model.receiver))
-                            it
-                                .child("messages")
-                                .push()
-                                .setValue(model)
-                        }
-                }
+                dbReference
+                    .child(chatId).let {
+                        it
+                            .child("members")
+                            .setValue(listOf(model.sender, model.receiver))
+                        it
+                            .child("messages")
+                            .push()
+                            .setValue(model)
+                    }
             }
 
             override fun onCancelled(error: DatabaseError) {}

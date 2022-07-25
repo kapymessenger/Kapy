@@ -25,12 +25,11 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".QRScan"
-            android:exported="true">
-        </activity>
+            android:name=".activity.QRScanActivity"
+            android:exported="true"/>
         <activity
-            android:name=".ProfileEditing"
-            android:exported="true"></activity>
+            android:name=".activity.ProfileEditingActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.AudioCallActivity"
             android:exported="false" />
@@ -59,7 +58,7 @@
         <activity
             android:name=".activity.MessengerActivity"
             android:exported="true"
-            android:label="@string/title_activity_messenger"></activity>
+            android:label="@string/title_activity_messenger" />
         <activity
             android:name=".activity.SetupProfileActivity"
             android:exported="false"
@@ -74,13 +73,10 @@
             android:exported="false"
             android:label="Enter phone number" />
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.FaceRecognitionActivity"
             android:exported="true" />
-        <activity android:name=".actionOnQRScanned"
-            android:screenOrientation="portrait"
+        <activity android:name=".util.ActionOnQRScanned"
+            android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"/>
         <activity

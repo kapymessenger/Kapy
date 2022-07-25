@@ -44,9 +44,7 @@ object FirebaseAuthAgent {
 
     private fun verifyCallback(activity: Activity, intent: Intent) =
         object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationFailed(e: FirebaseException) {
-
-            }
+            override fun onVerificationFailed(e: FirebaseException) {}
 
             override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
                 intent.putExtra("verificationId", id)
@@ -55,8 +53,4 @@ object FirebaseAuthAgent {
 
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {}
         }
-
-    fun test() {
-        println(dbReference.child("users").child(auth.uid!!).toString())
-    }
 }

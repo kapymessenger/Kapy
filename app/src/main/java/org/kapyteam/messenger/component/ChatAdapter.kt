@@ -3,7 +3,12 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.component.chat
+/*
+ * This file is a part of Kapy Messenger project.
+ * Original link: https://github.com/kapymessenger/Kapy
+ */
+
+package org.kapyteam.messenger.component
 
 import android.view.LayoutInflater
 import android.view.View

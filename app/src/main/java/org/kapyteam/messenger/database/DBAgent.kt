@@ -1,10 +1,9 @@
 package org.kapyteam.messenger.database
 
-import android.app.Activity
 import java.time.LocalDateTime
 
 object DBAgent {
-    fun parseContacts(activity: Activity) {
+//    fun parseContacts(activity: Activity) {
 //            val contacts = listOf("+12345678900", "+12345678901", "+12345678902")
 //            for (contact in contacts) {
 //                if (isInDB(contact)) {
@@ -28,7 +27,7 @@ object DBAgent {
 //                    })
 //                }
 //            }
-    }
+//    }
 
     fun setOnline(online: Boolean, phone: String) {
         FirebaseAuthAgent.getReference().child("users").child(phone).let {

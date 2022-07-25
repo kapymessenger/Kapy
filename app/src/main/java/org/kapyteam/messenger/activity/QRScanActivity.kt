@@ -1,27 +1,29 @@
-package org.kapyteam.messenger
+/*
+ * This file is a part of Kapy Messenger project.
+ * Original link: https://github.com/kapymessenger/Kapy
+ */
+
+package org.kapyteam.messenger.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
-import android.content.DialogInterface
 
 import org.kapyteam.messenger.R
-import android.view.View
+import org.kapyteam.messenger.util.ActionOnQRScanned
 
 
-class QRScan : AppCompatActivity() {
-    private lateinit var scan_button: Button
+class QRScanActivity : AppCompatActivity() {
+    private lateinit var scanButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qrscan)
-        scan_button = findViewById(R.id.scan_qr_activity_button)
-        scan_button.setOnClickListener(View.OnClickListener { v: View? -> scanCode() })
+        scanButton = findViewById(R.id.scan_qr_activity_button)
+        scanButton.setOnClickListener { scanCode() }
     }
 
     private fun scanCode() {
@@ -29,16 +31,16 @@ class QRScan : AppCompatActivity() {
         options.setPrompt("Point the camera at the QR-code")
         options.setBeepEnabled(true)
         options.setOrientationLocked(true)
-        options.captureActivity = actionOnQRScanned::class.java
-        barLaucher.launch(options)
+        options.captureActivity = ActionOnQRScanned::class.java
+        barLauncher.launch(options)
     }
 
-    var barLaucher = registerForActivityResult(
+    private var barLauncher = registerForActivityResult(
         ScanContract()
     ) { result: ScanIntentResult ->
         if (result.contents != null) {
             val builder =
-                AlertDialog.Builder(this@QRScan)
+                AlertDialog.Builder(this@QRScanActivity)
             builder.setTitle("Result")
             builder.setMessage(result.contents)
             builder.setPositiveButton(

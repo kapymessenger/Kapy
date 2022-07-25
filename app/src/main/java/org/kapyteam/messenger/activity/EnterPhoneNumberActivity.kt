@@ -3,12 +3,12 @@ package org.kapyteam.messenger.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.FirebaseAuthAgent
-import org.kapyteam.messenger.util.Validator
 
 class EnterPhoneNumberActivity : AppCompatActivity() {
     private lateinit var phoneEdit: EditText
@@ -28,7 +28,7 @@ class EnterPhoneNumberActivity : AppCompatActivity() {
 
         continueButton.setOnClickListener {
             phoneEdit.text.toString().let {
-                if (Validator.isPhoneNumber(it)) {
+                if (PhoneNumberUtils.isGlobalPhoneNumber(it)) {
                     val intent = Intent(this, EnterVerificationCodeActivity::class.java)
                     intent.putExtra("phone", it)
                     FirebaseAuthAgent.phoneAuth(this, intent)

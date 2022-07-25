@@ -32,13 +32,10 @@ import kotlin.math.min
 
 
 class FaceRecognitionActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityFaceRecognitionBinding
     private lateinit var button: Button
     private lateinit var resText: TextView
     private lateinit var imageView: ImageView
-
-
     private val imageSize = 224
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +47,6 @@ class FaceRecognitionActivity : AppCompatActivity() {
         button = binding.photoButton
         resText = binding.resultText
         imageView = binding.imageView2
-
-
 
         button.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -76,11 +71,11 @@ class FaceRecognitionActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             if (bitmap != null) {
                 val dimension = min(bitmap.width, bitmap.height)
-                var bitmap_fin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
+                var bitmapFin = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension)
 
-                bitmap_fin = Bitmap.createScaledBitmap(bitmap_fin, imageSize, imageSize, false)
-                imageView.setImageBitmap(bitmap_fin)
-                outputGenerator(bitmap_fin)
+                bitmapFin = Bitmap.createScaledBitmap(bitmapFin, imageSize, imageSize, false)
+                imageView.setImageBitmap(bitmapFin)
+                outputGenerator(bitmapFin)
             }
         }
 
@@ -93,7 +88,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
         val byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(imageSize * imageSize)
-        bitmap!!.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         var pixel = 0
         for (i in 0 until imageSize) {
             for (j in 0 until imageSize) {
@@ -130,9 +125,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
                 s += String.format("%s: %.1f%%\n", classes[i], confidences[i] * 100)
         }
         resText.text = s
-
         model.close()
-
     }
 
     private fun showDialog(title: String, percent: Float, bitmap: Bitmap) {
@@ -166,7 +159,6 @@ class FaceRecognitionActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
-
     }
 }
 

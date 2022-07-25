@@ -1,6 +1,5 @@
 package org.kapyteam.messenger.ai
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -45,7 +44,7 @@ object Recognizer {
         val byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(imageSize * imageSize)
-        bitmap!!.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         var pixel = 0
         for (i in 0 until imageSize) {
             for (j in 0 until imageSize) {
