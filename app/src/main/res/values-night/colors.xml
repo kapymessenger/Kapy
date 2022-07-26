@@ -7,8 +7,8 @@
     <color name="teal_700">#E0B82F</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="defaultBackground">#FFFFFF</color>
-    <color name="invertedBackground">#000000</color>
+    <color name="defaultBackground">#000000</color>
+    <color name="invertedBackground">#FFFFFF</color>
 
     <color name="buttons">#D49037</color>
     <color name="main_color">#EB7F31</color>

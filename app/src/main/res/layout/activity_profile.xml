@@ -19,11 +19,11 @@
 
     <TextView
         android:id="@+id/profile_name"
+        style="@style/BlackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Саня"
-        android:textColor="#000000"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -136,16 +136,17 @@
             android:clickable="true"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/profile_chosen_messages_icon"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:paddingStart="20dp"
-                android:src="@drawable/star" />
+<!--            <ImageView-->
+<!--                android:id="@+id/profile_chosen_messages_icon"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="start"-->
+<!--                android:paddingStart="20dp"-->
+<!--                android:src="@drawable/star" />-->
 
             <TextView
                 android:id="@+id/profile_chosen_messages_text"
+                style="@style/BlackText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -153,7 +154,6 @@
                 android:clickable="false"
                 android:paddingStart="40dp"
                 android:text="Chosen messages"
-                android:textColor="#000000"
                 android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>

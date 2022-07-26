@@ -9,7 +9,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ChatActivity">
+    tools:context=".activity.ChatActivity"
+    android:background="@color/defaultBackground">
 
     <RelativeLayout
         android:id="@+id/layout"
@@ -49,6 +50,7 @@
 
             <TextView
                 android:id="@+id/user_name"
+                style="@style/BlackText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -62,14 +64,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="@string/offline"
-                android:textColor="#505050"
+                android:textColor="#9E9E9E"
                 android:textSize="13sp" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true">
+            >
 
             <ImageView
                 android:id="@+id/call_btn"
@@ -104,9 +106,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        >
 
         <EditText
             android:id="@+id/message_edit"
