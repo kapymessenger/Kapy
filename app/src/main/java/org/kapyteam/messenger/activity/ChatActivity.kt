@@ -26,6 +26,9 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -206,9 +209,9 @@ class ChatActivity : AppCompatActivity() {
     private fun buildModel(content: String): Message {
         return Message(
             sender = phone,
-            receiver = member.phone,
-            createTime = "testTime",
-            content = content
+            createTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm").format(LocalDateTime.now()),
+            content = content,
+            metadata = ""
         )
     }
 
@@ -226,10 +229,10 @@ class ChatActivity : AppCompatActivity() {
                     for (message in snapshot.children) {
                         messages.add(
                             Message(
-                                message.child("sender").getValue(String::class.java)!!,
-                                message.child("receiver").getValue(String::class.java)!!,
-                                message.child("createTime").getValue(String::class.java)!!,
-                                message.child("content").getValue(String::class.java)!!
+                                message.child("sender").value.toString(),
+                                message.child("createTime").value.toString(),
+                                message.child("content").value.toString(),
+                                message.child("metadata").value.toString()
                             )
                         )
                     }
@@ -251,7 +254,7 @@ class ChatActivity : AppCompatActivity() {
                     .child(chatId).let {
                         it
                             .child("members")
-                            .setValue(listOf(model.sender, model.receiver))
+                            .setValue(listOf(model.sender, member.phone))
                         it
                             .child("messages")
                             .push()

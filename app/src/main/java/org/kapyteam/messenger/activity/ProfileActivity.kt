@@ -14,7 +14,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var avatar: ImageView
     private lateinit var name: TextView
     private lateinit var phoneNum: TextView
-    private lateinit var phone: String
     private lateinit var status: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +23,6 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         profile = intent.getSerializableExtra("profile") as Profile
-        phone = intent.getStringExtra("phone")!!
         avatar = findViewById(R.id.profile_image)
         name = findViewById(R.id.profile_name)
         phoneNum = findViewById(R.id.profile_phone_number)
@@ -41,20 +39,5 @@ class ProfileActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    override fun onDestroy() {
-        DBAgent.setOnline(false, phone)
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        DBAgent.setOnline(true, phone)
-        super.onResume()
-    }
-
-    override fun onRestart() {
-        DBAgent.setOnline(true, phone)
-        super.onRestart()
     }
 }

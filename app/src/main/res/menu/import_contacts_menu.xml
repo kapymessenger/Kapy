@@ -3,14 +3,18 @@
   ~ Original link: https://github.com/kapymessenger/Kapy
   -->
 
-<!--
-  ~ This file is a part of Kapy Messenger project.
-  ~ Original link: https://github.com/kapymessenger/Kapy
-  -->
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/scan_qr"
-        android:icon="@drawable/qr_icon"
-        android:title="@string/scan_qr_code" />
+    <item android:title="@string/qr">
+        <menu>
+            <item
+                android:id="@+id/scan_qr"
+                android:icon="@drawable/qr_scan_icon"
+                android:title="@string/scan_qr_code" />
+
+            <item
+                android:id="@+id/share_qr"
+                android:icon="@drawable/qr_icon"
+                android:title="@string/share_qr_code" />
+        </menu>
+    </item>
 </menu>

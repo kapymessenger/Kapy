@@ -7,7 +7,7 @@ package org.kapyteam.messenger.model
 
 data class Message(
     val sender: String,
-    val receiver: String,
     val createTime: String,
-    val content: String
+    val content: String,
+    val metadata: String
 )

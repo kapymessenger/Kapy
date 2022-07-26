@@ -1,16 +1,50 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+
     <style name="Theme.Kapy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">#363636</item>
+        <item name="colorPrimary">#FFC041</item>
+        <item name="colorPrimaryVariant">#EB7F31</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">#363636</item>
+        <item name="colorSecondary">#E0602F</item>
+        <item name="colorSecondaryVariant">#E0602F</item>
+        <item name="colorOnSecondary">#E0602F </item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#EB7F31</item>
+
+        <item name="defaultBackground">#000000</item>
+        <item name="invertedBackground">#FFFFFF</item>
+
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.Kapy.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="cornerRadius">10sp</item>
+        <item name="android:layout_width">150sp</item>
+        <item name="android:layout_height">48sp</item>
+    </style>
+
+    <style name="RegisterEditTextStyle">
+        <item name="android:textColor">#A4A4A4</item>
+
+        <item name="cornerRadius">25sp</item>
+        <item name="android:background">@drawable/rounder_edittext</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="color">#303030</item>
+        <item name="android:textColorHint">#575757</item>
+    </style>
+
+    <style name="BlackText">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.Kapy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Kapy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
