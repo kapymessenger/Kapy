@@ -25,58 +25,58 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31" >
         <activity
-            android:name=".activity.ShareQRActivity"
+            android:name=".activity.chats.ShareQRActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ProfileEditingActivity"
+            android:name=".activity.profile.ProfileEditingActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.AudioCallActivity"
+            android:name=".activity.calls.AudioCallActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.IncomingCallActivity"
+            android:name=".activity.calls.IncomingCallActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.VideoCallActivity"
+            android:name=".activity.calls.VideoCallActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activity.ProfileActivity"
+            android:name=".activity.profile.ProfileActivity"
             android:exported="true"
             android:label="Profile" />
         <activity
-            android:name=".activity.ChatActivity"
+            android:name=".activity.chats.ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".activity.CreateDialogActivity"
+            android:name=".activity.chats.CreateDialogActivity"
             android:exported="false"
             android:label="New dialog" />
         <activity
-            android:name=".activity.GreetingActivity"
+            android:name=".activity.init.GreetingActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MessengerActivity"
+            android:name=".activity.chats.MessengerActivity"
             android:exported="true"
             android:label="@string/title_activity_messenger" />
         <activity
-            android:name=".activity.SetupProfileActivity"
+            android:name=".activity.profile.SetupProfileActivity"
             android:exported="false"
             android:label="@string/setup_profile" />
         <activity
-            android:name=".activity.EnterVerificationCodeActivity"
+            android:name=".activity.init.EnterVerificationCodeActivity"
             android:exported="true"
             android:label="Enter verification code"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activity.EnterPhoneNumberActivity"
+            android:name=".activity.init.EnterPhoneNumberActivity"
             android:exported="false"
             android:label="Enter phone number" />
         <activity
-            android:name=".activity.FaceRecognitionActivity"
+            android:name=".activity.chats.FaceRecognitionActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.init.SplashActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

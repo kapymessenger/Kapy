@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ChatActivity">
+    tools:context=".activity.chats.ChatActivity">
 
     <RelativeLayout
         android:id="@+id/layout"

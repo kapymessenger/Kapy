@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.calls.AudioCallActivity
+import org.kapyteam.messenger.activity.profile.ProfileActivity
+import org.kapyteam.messenger.activity.calls.VideoCallActivity
 import org.kapyteam.messenger.ai.Recognizer
 import org.kapyteam.messenger.component.ChatAdapter
 import org.kapyteam.messenger.database.CallAgent
@@ -26,7 +29,6 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.min

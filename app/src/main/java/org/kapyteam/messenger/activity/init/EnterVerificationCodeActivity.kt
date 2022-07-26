@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.init
 
 import android.content.Context
 import android.content.Intent
@@ -14,6 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.MessengerActivity
+import org.kapyteam.messenger.activity.profile.SetupProfileActivity
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.util.FileUtil
 

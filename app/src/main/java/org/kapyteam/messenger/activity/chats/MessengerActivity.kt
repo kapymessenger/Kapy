@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +28,8 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.profile.ProfileActivity
+import org.kapyteam.messenger.activity.init.GreetingActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent

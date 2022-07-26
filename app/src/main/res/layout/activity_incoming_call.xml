@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/black"
     android:layout_height="match_parent"
-    tools:context=".activity.IncomingCallActivity">
+    tools:context=".activity.calls.IncomingCallActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
