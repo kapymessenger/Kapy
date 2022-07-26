@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -211,7 +212,29 @@ class MessengerActivity : AppCompatActivity() {
                     scanCode()
                 }
                 R.id.ignore_list -> {
-                    Toast.makeText(this, "ignore list", Toast.LENGTH_LONG).show()
+                    val intent = Intent(
+                        this,
+                        IgnoreListActivity::class.java
+                    )
+                    intent.putExtra("phone", phone)
+                    startActivity(intent)
+                }
+                R.id.notes ->{
+                    val intent = Intent(
+                        this,
+                        TextEditor::class.java
+                    )
+                    startActivity(intent)
+                }
+                R.id.theme_switch ->{
+                    println("Хуй")
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        println("Большой хуй")
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        println("Гигантский хуй")
+                    }
                 }
             }
             true
