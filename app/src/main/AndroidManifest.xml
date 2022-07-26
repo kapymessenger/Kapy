@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.kapyteam.messenger" >
+    package="org.kapyteam.messenger">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +23,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kapy"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".GroupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddMembersActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.chats.ShareQRActivity"
             android:exported="false" />
@@ -77,7 +83,7 @@
             android:exported="true" />
         <activity
             android:name=".activity.init.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
