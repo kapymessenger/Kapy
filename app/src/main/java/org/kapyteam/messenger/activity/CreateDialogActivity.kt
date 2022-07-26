@@ -18,6 +18,8 @@ import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 
 class CreateDialogActivity : AppCompatActivity() {
+    private lateinit var phone: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_dialog)
@@ -29,7 +31,7 @@ class CreateDialogActivity : AppCompatActivity() {
         val profiles =
             (intent.getSerializableExtra("profiles") as SerializableObject).obj as MutableList<Profile>
 
-        val phone = intent.getStringExtra("phone")
+        phone = intent.getStringExtra("phone")!!
 
         contactList.adapter = ArrayAdapter(
             this,
@@ -68,6 +70,7 @@ class CreateDialogActivity : AppCompatActivity() {
                         this,
                         ShareQRActivity::class.java
                     )
+                    intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
             }

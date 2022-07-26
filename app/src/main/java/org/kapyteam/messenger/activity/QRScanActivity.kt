@@ -43,39 +43,36 @@ class QRScanActivity : AppCompatActivity() {
         ScanContract()
     ) { result: ScanIntentResult ->
         if (result.contents != null) {
+            println(result.contents)
             FirebaseDatabase
                 .getInstance()
                 .getReference("users")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        for (child in snapshot.children) {
-                            if (child.child("nickname").value.toString() == result.contents) {
-                                val intent = Intent(
-                                    this@QRScanActivity,
-                                    ProfileActivity::class.java
-                                )
-                                intent.putExtra("profile", Profile(
-                                    firstname = child.child("firstname").value.toString(),
-                                    lastname = child.child("lastname").value.toString(),
-                                    phone = child.child("phone").value.toString(),
-                                    nickname = child.child("nickname").value.toString(),
-                                    photo = child.child("photo").value.toString(),
-                                    lastSeen = child.child("lastSeen").value.toString(),
-                                    online = child.child("online").getValue(Boolean::class.java)!!
-                                ))
-                                startActivity(intent)
-                                finish()
-                                return
-                            }
+                        if (snapshot.hasChild(result.contents)) {
+                            val intent = Intent(
+                                this@QRScanActivity,
+                                ProfileActivity::class.java
+                            )
+                            intent.putExtra("profile", Profile(
+                                firstname = snapshot.child(result.contents).child("firstname").value.toString(),
+                                lastname = snapshot.child(result.contents).child("lastname").value.toString(),
+                                phone = snapshot.child(result.contents).child("phone").value.toString(),
+                                nickname = snapshot.child(result.contents).child("nickname").value.toString(),
+                                photo = snapshot.child(result.contents).child("photo").value.toString(),
+                                lastSeen = snapshot.child(result.contents).child("lastSeen").value.toString(),
+                                online = snapshot.child(result.contents).child("online").getValue(Boolean::class.java)!!
+                            ))
+                            startActivity(intent)
+                        } else {
+                            val builder =
+                                AlertDialog.Builder(this@QRScanActivity)
+                            builder.setTitle("Error")
+                            builder.setMessage("Profile not recognized. Try again.")
+                            builder.setPositiveButton(
+                                "OK"
+                            ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
                         }
-                        val builder =
-                            AlertDialog.Builder(this@QRScanActivity)
-                        builder.setTitle("Error")
-                        builder.setMessage("Profile not recognized. Try again.")
-                        builder.setPositiveButton(
-                            "OK"
-                        ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
-
                     }
 
                     override fun onCancelled(error: DatabaseError) {}
