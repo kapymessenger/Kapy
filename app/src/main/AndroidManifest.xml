@@ -25,6 +25,10 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
+            android:name=".activity.IgnoreListActivity"
+            android:exported="true"
+            android:label="@string/title_activity_messenger" />
+        <activity
             android:name=".activity.QRScanActivity"
             android:exported="true" />
         <activity

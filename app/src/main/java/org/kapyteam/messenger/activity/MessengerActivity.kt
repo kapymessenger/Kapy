@@ -201,7 +201,12 @@ class MessengerActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.ignore_list -> {
-                    Toast.makeText(this, "ignore list", Toast.LENGTH_LONG).show()
+                    val intent = Intent(
+                        this,
+                        IgnoreListActivity::class.java
+                    )
+                    intent.putExtra("phone", phone)
+                    startActivity(intent)
                 }
             }
             true
