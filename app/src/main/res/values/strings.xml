@@ -41,4 +41,6 @@
     <string name="management">Management</string>
     <string name="button">button</string>
     <string name="calls">Calls</string>
+    <string name="share_qr_code">Share QR-code</string>
+    <string name="qr">QR</string>
 </resources>

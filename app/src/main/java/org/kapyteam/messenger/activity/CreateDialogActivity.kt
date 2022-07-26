@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import com.google.android.material.navigation.NavigationView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
@@ -46,6 +47,31 @@ class CreateDialogActivity : AppCompatActivity() {
             intent.putExtra("member", character)
             intent.putExtra("phone", phone)
             startActivity(intent)
+        }
+
+        initMenu()
+    }
+
+    private fun initMenu() {
+        val menu: NavigationView = findViewById(R.id.new_dialog_menu_view)
+        menu.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.scan_qr -> {
+                    val intent = Intent(
+                        this,
+                        QRScanActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+                R.id.share_qr -> {
+                    val intent = Intent(
+                        this,
+                        ShareQRActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+            }
+            true
         }
     }
 

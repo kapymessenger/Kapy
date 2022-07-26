@@ -5,17 +5,21 @@
 
 package org.kapyteam.messenger.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
-
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.ActionOnQRScanned
-
 
 class QRScanActivity : AppCompatActivity() {
     private lateinit var scanButton: Button
@@ -29,7 +33,7 @@ class QRScanActivity : AppCompatActivity() {
     private fun scanCode() {
         val options = ScanOptions()
         options.setPrompt("Point the camera at the QR-code")
-        options.setBeepEnabled(true)
+        options.setBeepEnabled(false)
         options.setOrientationLocked(true)
         options.captureActivity = ActionOnQRScanned::class.java
         barLauncher.launch(options)
@@ -39,15 +43,43 @@ class QRScanActivity : AppCompatActivity() {
         ScanContract()
     ) { result: ScanIntentResult ->
         if (result.contents != null) {
-            val builder =
-                AlertDialog.Builder(this@QRScanActivity)
-            builder.setTitle("Result")
-            builder.setMessage(result.contents)
-            builder.setPositiveButton(
-                "OK"
-            ) { dialogInterface, i -> dialogInterface.dismiss() }.show()
+            FirebaseDatabase
+                .getInstance()
+                .getReference("users")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (child in snapshot.children) {
+                            if (child.child("nickname").value.toString() == result.contents) {
+                                val intent = Intent(
+                                    this@QRScanActivity,
+                                    ProfileActivity::class.java
+                                )
+                                intent.putExtra("profile", Profile(
+                                    firstname = child.child("firstname").value.toString(),
+                                    lastname = child.child("lastname").value.toString(),
+                                    phone = child.child("phone").value.toString(),
+                                    nickname = child.child("nickname").value.toString(),
+                                    photo = child.child("photo").value.toString(),
+                                    lastSeen = child.child("lastSeen").value.toString(),
+                                    online = child.child("online").getValue(Boolean::class.java)!!
+                                ))
+                                startActivity(intent)
+                                finish()
+                                return
+                            }
+                        }
+                        val builder =
+                            AlertDialog.Builder(this@QRScanActivity)
+                        builder.setTitle("Error")
+                        builder.setMessage("Profile not recognized. Try again.")
+                        builder.setPositiveButton(
+                            "OK"
+                        ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
 
-            // write all scripts inside this if
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
         }
     }
 }
