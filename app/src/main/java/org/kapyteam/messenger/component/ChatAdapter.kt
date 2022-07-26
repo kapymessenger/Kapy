@@ -40,6 +40,8 @@ class ChatAdapter(
 
     class MyViewHolder(@NonNull val view: View) : RecyclerView.ViewHolder(view) {
         var anotherMessage: TextView = view.findViewById(R.id.another_message)
+        var anotherMsgDate: TextView = view.findViewById(R.id.another_msg_date)
+        var selfMsgDate: TextView = view.findViewById(R.id.self_msg_date)
         var selfMessage: TextView = view.findViewById(R.id.self_message)
         var anotherMetadata: TextView = view.findViewById(R.id.another_msg_metadata)
         val selfMetadata: TextView = view.findViewById(R.id.self_msg_metadata)
@@ -51,13 +53,17 @@ class ChatAdapter(
             holder.selfMessage.visibility = View.VISIBLE
             holder.anotherMessage.visibility = View.GONE
             holder.selfMessage.text = message.content
-            holder.selfMetadata.text = message.createTime
+            holder.selfMsgDate.text = message.createTime
+            holder.selfMetadata.text = message.metadata
             holder.anotherMetadata.text = ""
+            holder.anotherMsgDate.text = ""
         } else {
             holder.selfMessage.visibility = View.GONE
             holder.anotherMessage.visibility = View.VISIBLE
             holder.anotherMessage.text = message.content
-            holder.anotherMetadata.text = message.createTime
+            holder.anotherMsgDate.text = message.createTime
+            holder.anotherMetadata.text = message.metadata
+            holder.selfMetadata.text = ""
             holder.selfMetadata.text = ""
         }
     }

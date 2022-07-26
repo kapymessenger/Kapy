@@ -20,6 +20,9 @@ import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 object Recognizer {
     fun takePicture(activity: ChatActivity) {
@@ -103,9 +106,9 @@ object Recognizer {
         sendButton.setOnClickListener {
             activity.sendMessage(Message(
                 sender = activity.phone,
-                receiver = activity.member.phone,
-                createTime = "Generated via AI",
-                content = title
+                createTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm").format(LocalDateTime.now()),
+                content = title,
+                metadata = "Generated with AI"
             ))
             Toast.makeText(
                 activity.applicationContext,

@@ -5,6 +5,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,10 +31,24 @@
                 android:text="another msg" />
 
             <TextView
-                android:id="@+id/another_msg_metadata"
-                android:layout_width="wrap_content"
+                android:id="@+id/another_msg_date"
+                android:layout_width="match_parent"
+                android:textAlignment="textStart"
+                android:layout_marginStart="5dp"
+                android:textSize="11sp"
                 android:layout_height="wrap_content"
                 android:text="creation date / time" />
+
+            <TextView
+                android:id="@+id/another_msg_metadata"
+                android:layout_width="match_parent"
+                android:textAlignment="textStart"
+                android:layout_marginStart="3dp"
+                android:paddingStart="2dp"
+                android:textSize="10sp"
+                android:layout_height="wrap_content"
+                android:text="Generated with AI"
+                tools:ignore="SmallSp" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,10 +68,24 @@
                 android:text="my msg" />
 
             <TextView
-                android:id="@+id/self_msg_metadata"
-                android:layout_width="wrap_content"
+                android:id="@+id/self_msg_date"
+                android:layout_width="match_parent"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="5dp"
+                android:textSize="11sp"
                 android:layout_height="wrap_content"
                 android:text="creation date / time" />
+
+            <TextView
+                android:id="@+id/self_msg_metadata"
+                android:layout_width="match_parent"
+                android:textAlignment="textEnd"
+                android:layout_marginEnd="3dp"
+                android:paddingEnd="2dp"
+                android:textSize="10sp"
+                android:layout_height="wrap_content"
+                android:text="Generated with AI"
+                tools:ignore="SmallSp" />
         </LinearLayout>
 
     </RelativeLayout>
