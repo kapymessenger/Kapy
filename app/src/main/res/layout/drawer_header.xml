@@ -7,9 +7,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/drawer_person_avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/registration_image" />
 
@@ -17,7 +17,7 @@
         android:id="@+id/drawer_person_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:text="Саня"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -27,7 +27,7 @@
         android:id="@+id/drawer_person_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:text="Телефон Сани"
         android:textColor="#FFFFFF"
         android:textSize="15sp" />
@@ -36,7 +36,8 @@
         android:id="@+id/drawer_person_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
+        android:paddingBottom="10dp"
         android:text="Телефон Сани"
         android:textColor="#FFFFFF"
         android:textSize="13sp" />

@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,8 +30,11 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.IgnoreListActivity
+import org.kapyteam.messenger.activity.TextEditor
 import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.activity.init.GreetingActivity
+import org.kapyteam.messenger.activity.profile.ProfileEditingActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
@@ -179,7 +181,7 @@ class MessengerActivity : AppCompatActivity() {
             .getReference()
             .child("users")
             .child(phone)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     phoneText.text = phone
                     name.text =
@@ -189,12 +191,18 @@ class MessengerActivity : AppCompatActivity() {
                     snapshot.child("photo").value.toString().let {
                         if (it != "") Picasso.get().load(it).into(avatar)
                     }
-
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
             })
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        avatar.setOnClickListener {
+            val intent = Intent(this, ProfileEditingActivity::class.java)
+            intent.putExtra("phone", phone)
+            startActivity(intent)
+        }
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -296,21 +304,6 @@ class MessengerActivity : AppCompatActivity() {
                     override fun onCancelled(error: DatabaseError) {}
                 })
         }
-    }
-
-    override fun onDestroy() {
-        DBAgent.setOnline(false, phone)
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        DBAgent.setOnline(true, phone)
-        super.onResume()
-    }
-
-    override fun onRestart() {
-        DBAgent.setOnline(true, phone)
-        super.onRestart()
     }
 
     override fun onBackPressed() {}

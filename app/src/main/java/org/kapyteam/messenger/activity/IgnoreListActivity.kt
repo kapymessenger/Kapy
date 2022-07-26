@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.ChatActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent

@@ -32,10 +32,10 @@
             android:exported="true"
             android:label="@string/title_activity_messenger" />
         <activity
-            android:name=".GroupActivity"
+            android:name=".activity.chats.group.GroupActivity"
             android:exported="false" />
         <activity
-            android:name=".AddMembersActivity"
+            android:name=".activity.chats.group.AddMembersActivity"
             android:exported="false" />
         <activity
             android:name=".activity.chats.ShareQRActivity"
