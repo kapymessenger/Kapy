@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.VideoCallActivity"
-    android:background="?defaultBackground">
+    android:background="@color/defaultBackground">
 
     <FrameLayout
         android:id="@+id/remote_video_container"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="?defaultBackground"
+        android:background="@color/defaultBackground"
         android:orientation="horizontal">
 
         <ImageView

@@ -136,13 +136,13 @@
             android:clickable="true"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/profile_chosen_messages_icon"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:paddingStart="20dp"
-                android:src="@drawable/star" />
+<!--            <ImageView-->
+<!--                android:id="@+id/profile_chosen_messages_icon"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="start"-->
+<!--                android:paddingStart="20dp"-->
+<!--                android:src="@drawable/star" />-->
 
             <TextView
                 android:id="@+id/profile_chosen_messages_text"

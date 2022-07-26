@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -198,6 +199,16 @@ class MessengerActivity : AppCompatActivity() {
                         QRScanActivity::class.java
                     )
                     startActivity(intent)
+                }
+                R.id.theme_switch ->{
+                    println("Хуй")
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        println("Большой хуй")
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        println("Гигантский хуй")
+                    }
                 }
             }
             true
