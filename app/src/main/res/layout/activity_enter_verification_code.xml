@@ -31,24 +31,25 @@
 
     <com.chaos.view.PinView
         android:id="@+id/verification_code"
+        style="@style/PinWidget.PinView"
         android:layout_width="wrap_content"
         android:layout_height="60sp"
         android:layout_marginTop="173dp"
         android:elevation="10dp"
-        style="@style/PinWidget.PinView"
         android:hint="000000"
         android:inputType="number"
         android:itemBackground="@drawable/rounder_edittext"
+        android:textColor="#555555"
+        app:itemCount="6"
+        app:itemHeight="50dp"
+        app:itemRadius="10dp"
         app:itemSpacing="15dp"
+        app:itemWidth="50dp"
         app:layout_constraintBottom_toTopOf="@+id/register_continue2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_image2"
-        app:itemRadius="10dp"
         app:lineColor="#D9D9D9"
-        app:itemCount="6"
-        app:itemHeight="50dp"
-        app:itemWidth="50dp"
-        app:viewType="rectangle"/>
+        app:viewType="rectangle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
