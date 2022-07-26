@@ -23,6 +23,7 @@
     <string name="main_image">main image</string>
     <string name="additional">Additional</string>
     <string name="scan_qr_code">Scan QR-code</string>
+    <string name="ignore_list">Ignore List</string>
     <string name="avatar_of_user">avatar of user</string>
     <string name="back_to_dialogs">back_to_dialogs</string>
     <string name="username">Username</string>

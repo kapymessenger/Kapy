@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -198,6 +199,9 @@ class MessengerActivity : AppCompatActivity() {
                         QRScanActivity::class.java
                     )
                     startActivity(intent)
+                }
+                R.id.ignore_list -> {
+                    Toast.makeText(this, "ignore list", Toast.LENGTH_LONG).show()
                 }
             }
             true

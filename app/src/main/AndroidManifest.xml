@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.kapyteam.messenger">
+    package="org.kapyteam.messenger" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,10 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kapy"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
             android:name=".activity.QRScanActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activity.ProfileEditingActivity"
             android:exported="true" />
@@ -75,13 +75,14 @@
         <activity
             android:name=".activity.FaceRecognitionActivity"
             android:exported="true" />
-        <activity android:name=".util.ActionOnQRScanned"
+        <activity
+            android:name=".util.ActionOnQRScanned"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"/>
+            android:theme="@style/zxing_CaptureTheme" />
         <activity
             android:name=".activity.SplashActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
