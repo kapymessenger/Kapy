@@ -83,5 +83,4 @@ class TextEditor : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
-
 }
