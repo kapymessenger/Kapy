@@ -21,11 +21,16 @@
                 android:id="@+id/ignore_list"
                 android:icon="@drawable/ignore"
                 android:title="@string/ignore_list" />
+
         </menu>
     </item>
 
     <item android:title="@string/management">
         <menu>
+            <item
+                android:id="@+id/notes"
+                android:icon="@drawable/notes"
+                android:title="@string/notes" />
             <item
                 android:id="@+id/drawer_settings"
                 android:icon="@drawable/settings_icon"
@@ -35,6 +40,7 @@
                 android:id="@+id/drawer_logout"
                 android:icon="@drawable/logout_icon"
                 android:title="@string/log_out" />
+
         </menu>
     </item>
 </menu>

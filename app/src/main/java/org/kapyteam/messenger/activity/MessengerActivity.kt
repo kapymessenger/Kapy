@@ -202,7 +202,19 @@ class MessengerActivity : AppCompatActivity() {
                     scanCode()
                 }
                 R.id.ignore_list -> {
-                    Toast.makeText(this, "ignore list", Toast.LENGTH_LONG).show()
+                    val intent = Intent(
+                        this,
+                        IgnoreListActivity::class.java
+                    )
+                    intent.putExtra("phone", phone)
+                    startActivity(intent)
+                }
+                R.id.notes ->{
+                    val intent = Intent(
+                        this,
+                        TextEditor::class.java
+                    )
+                    startActivity(intent)
                 }
                 R.id.theme_switch ->{
                     println("Хуй")
