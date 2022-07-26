@@ -12,11 +12,14 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import com.google.android.material.navigation.NavigationView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 
 class CreateDialogActivity : AppCompatActivity() {
+    private lateinit var phone: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_dialog)
@@ -28,7 +31,7 @@ class CreateDialogActivity : AppCompatActivity() {
         val profiles =
             (intent.getSerializableExtra("profiles") as SerializableObject).obj as MutableList<Profile>
 
-        val phone = intent.getStringExtra("phone")
+        phone = intent.getStringExtra("phone")!!
 
         contactList.adapter = ArrayAdapter(
             this,
@@ -46,6 +49,32 @@ class CreateDialogActivity : AppCompatActivity() {
             intent.putExtra("member", character)
             intent.putExtra("phone", phone)
             startActivity(intent)
+        }
+
+        initMenu()
+    }
+
+    private fun initMenu() {
+        val menu: NavigationView = findViewById(R.id.new_dialog_menu_view)
+        menu.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.scan_qr -> {
+                    val intent = Intent(
+                        this,
+                        QRScanActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+                R.id.share_qr -> {
+                    val intent = Intent(
+                        this,
+                        ShareQRActivity::class.java
+                    )
+                    intent.putExtra("phone", phone)
+                    startActivity(intent)
+                }
+            }
+            true
         }
     }
 
