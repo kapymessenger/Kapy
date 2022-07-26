@@ -19,6 +19,7 @@
     <string name="close">Close</string>
     <string name="title_activity_messenger">MessengerActivity</string>
     <string name="title_chats">Chats</string>
+    <string name="title_ignore_list">Ignore List</string>
     <string name="add_dialog">add dialog</string>
     <string name="main_image">main image</string>
     <string name="additional">Additional</string>
