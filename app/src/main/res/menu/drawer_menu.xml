@@ -19,7 +19,7 @@
                 android:title="Switch app theme" />
                 <item
                 android:id="@+id/ignore_list"
-                android:icon="@drawable/ignore"
+                android:icon="@drawable/message_icon"
                 android:title="@string/ignore_list" />
 
         </menu>

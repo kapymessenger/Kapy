@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.init
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

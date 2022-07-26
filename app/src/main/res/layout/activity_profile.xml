@@ -5,7 +5,7 @@
     android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProfileActivity">
+    tools:context=".activity.profile.ProfileActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"

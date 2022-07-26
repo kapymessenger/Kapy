@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ChatActivity"
+    tools:context=".activity.chats.ChatActivity"
     android:background="@color/defaultBackground">
 
     <RelativeLayout
@@ -28,7 +28,7 @@
             android:paddingStart="12sp"
             android:paddingEnd="2sp" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"

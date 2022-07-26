@@ -11,12 +11,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
@@ -28,7 +29,7 @@ class ChatsRecyclerAdapter(
     private val phone: String
 ) : RecyclerView.Adapter<ChatsRecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val contactImage: ImageView = itemView.findViewById(R.id.contact_image)
+        val contactImage: CircleImageView = itemView.findViewById(R.id.contact_image)
         val contactName: TextView = itemView.findViewById(R.id.contact_name)
         val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
         val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
@@ -94,6 +95,20 @@ class ChatsRecyclerAdapter(
 
         holder.contactName.text = chats[position].nickname
         holder.contactMessageCount.text = "1"
+
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(chats[position].phone)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.child("photo").value.toString().let { pic ->
+                        if (pic != "") Picasso.get().load(pic).into(holder.contactImage)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
 //    private fun updateJson(json: JsonObject, target: String, msg: String) {

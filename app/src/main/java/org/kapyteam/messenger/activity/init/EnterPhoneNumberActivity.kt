@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.init
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.MessengerActivity
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 
 class EnterPhoneNumberActivity : AppCompatActivity() {

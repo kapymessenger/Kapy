@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import android.app.Dialog
 import android.content.ClipData

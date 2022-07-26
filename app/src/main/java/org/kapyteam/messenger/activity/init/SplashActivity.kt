@@ -1,10 +1,11 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.init
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.MessengerActivity
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.util.FileUtil
 

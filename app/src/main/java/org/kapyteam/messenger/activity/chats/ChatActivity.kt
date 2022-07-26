@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -17,7 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.calls.AudioCallActivity
+import org.kapyteam.messenger.activity.profile.ProfileActivity
+import org.kapyteam.messenger.activity.calls.VideoCallActivity
 import org.kapyteam.messenger.ai.Recognizer
 import org.kapyteam.messenger.component.ChatAdapter
 import org.kapyteam.messenger.database.CallAgent
@@ -26,7 +30,6 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Message
 import org.kapyteam.messenger.model.Profile
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.min
@@ -108,12 +111,17 @@ class ChatActivity : AppCompatActivity() {
             .child(member.phone)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    member.firstname = snapshot.child("firstname").getValue(String::class.java)!!
-                    member.lastSeen = snapshot.child("lastSeen").getValue(String::class.java)!!
-                    member.nickname = snapshot.child("nickname").getValue(String::class.java)!!
+                    member.firstname = snapshot.child("firstname").value.toString()
+                    member.lastSeen = snapshot.child("lastSeen").value.toString()
+                    member.nickname = snapshot.child("nickname").value.toString()
                     member.online = snapshot.child("online").getValue(Boolean::class.java)!!
-                    member.photo = snapshot.child("photo").getValue(String::class.java)!!
-                    member.lastname = snapshot.child("lastname").getValue(String::class.java)!!
+                    member.photo = snapshot.child("photo").value.toString()
+                    member.lastname = snapshot.child("lastname").value.toString()
+
+                    snapshot.child("photo").value.toString().let {
+                        if (it != "") Picasso.get().load(it).into(avatar)
+                    }
+
                     initUpPanel()
                     DBAgent.setOnline(true, phone)
                 }
@@ -264,20 +272,5 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
-    }
-
-    override fun onDestroy() {
-        DBAgent.setOnline(false, phone)
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        DBAgent.setOnline(true, phone)
-        super.onResume()
-    }
-
-    override fun onRestart() {
-        DBAgent.setOnline(true, phone)
-        super.onRestart()
     }
 }
