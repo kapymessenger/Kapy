@@ -17,9 +17,9 @@ import org.kapyteam.messenger.R
 
 class TextEditor : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var clearButton: Button
-    lateinit var copyButton: Button
-    lateinit var editText: EditText
+    private lateinit var clearButton: Button
+    private lateinit var copyButton: Button
+    private lateinit var editText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
