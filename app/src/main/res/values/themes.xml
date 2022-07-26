@@ -8,7 +8,7 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#E0602F</item>
         <item name="colorSecondaryVariant">#E0602F</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#E0602F </item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#EB7F31</item>
         <!-- Customize your theme here. -->
@@ -31,6 +31,7 @@
         <item name="cornerRadius">25sp</item>
         <item name="android:background">@drawable/rounder_edittext</item>
         <item name="android:paddingLeft">10dp</item>
+        <item name="android:textColorHint">#A8A8A8</item>
     </style>
 
     <style name="Theme.Kapy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
