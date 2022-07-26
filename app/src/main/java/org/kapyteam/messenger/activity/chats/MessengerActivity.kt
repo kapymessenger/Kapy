@@ -27,6 +27,8 @@ import com.google.firebase.database.*
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.activity.init.GreetingActivity
@@ -170,6 +172,7 @@ class MessengerActivity : AppCompatActivity() {
         val name: TextView = header.findViewById(R.id.drawer_person_name)
         val nickname: TextView = header.findViewById(R.id.drawer_person_nickname)
         val phoneText: TextView = header.findViewById(R.id.drawer_person_phone)
+        val avatar: CircleImageView = header.findViewById(R.id.drawer_person_avatar)
 
         FirebaseAuthAgent
             .getReference()
@@ -181,6 +184,11 @@ class MessengerActivity : AppCompatActivity() {
                     name.text =
                         "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
                     nickname.text = "@${snapshot.child("nickname").value}"
+
+                    snapshot.child("photo").value.toString().let {
+                        if (it != "") Picasso.get().load(it).into(avatar)
+                    }
+
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
 

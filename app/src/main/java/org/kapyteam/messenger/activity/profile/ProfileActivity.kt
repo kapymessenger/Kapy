@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.model.Profile
@@ -27,6 +28,8 @@ class ProfileActivity : AppCompatActivity() {
         name = findViewById(R.id.profile_name)
         phoneNum = findViewById(R.id.profile_phone_number)
         status = findViewById(R.id.profile_status)
+
+        if (profile.photo != "") Picasso.get().load(profile.photo).into(avatar)
 
         name.text = "${profile.firstname} ${profile.lastname} (@${profile.nickname})"
         phoneNum.text = profile.phone

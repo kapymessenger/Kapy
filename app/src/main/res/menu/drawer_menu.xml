@@ -15,7 +15,7 @@
                 android:title="@string/scan_qr_code" />
             <item
                 android:id="@+id/ignore_list"
-                android:icon="@drawable/ignore"
+                android:icon="@drawable/message_icon"
                 android:title="@string/ignore_list" />
         </menu>
     </item>
