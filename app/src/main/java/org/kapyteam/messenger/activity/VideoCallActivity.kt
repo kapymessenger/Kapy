@@ -157,7 +157,7 @@ class VideoCallActivity : AppCompatActivity() {
             val uid = Random.nextInt(0, 100)
 
             val request = Request.Builder()
-                .url("https://kapy-auth-server.herokuapp.com/token?channel_name=$channelName&uid=$uid")
+                .url("https://kapy-messenger.herokuapp.com/token?channel_name=$channelName&uid=$uid")
                 .build()
 
             val client = OkHttpClient()
