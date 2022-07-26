@@ -208,6 +208,13 @@ class MessengerActivity : AppCompatActivity() {
                     intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
+                R.id.notes ->{
+                    val intent = Intent(
+                        this,
+                        TextEditor::class.java
+                    )
+                    startActivity(intent)
+                }
             }
             true
         }

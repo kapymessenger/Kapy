@@ -25,7 +25,7 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".TextEditor"
+            android:name=".activity.TextEditor"
             android:exported="false" />
         <activity
             android:name=".activity.IgnoreListActivity"
