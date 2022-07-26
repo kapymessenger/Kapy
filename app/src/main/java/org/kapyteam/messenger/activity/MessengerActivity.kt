@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -23,6 +24,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
@@ -194,17 +198,70 @@ class MessengerActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.drawer_qr -> {
-                    val intent = Intent(
-                        this,
-                        QRScanActivity::class.java
-                    )
-                    startActivity(intent)
+                    scanCode()
                 }
                 R.id.ignore_list -> {
                     Toast.makeText(this, "ignore list", Toast.LENGTH_LONG).show()
                 }
             }
             true
+        }
+    }
+
+    private fun scanCode() {
+        val options = ScanOptions()
+        options.setPrompt("Point the camera at the QR-code")
+        options.setBeepEnabled(false)
+        options.setOrientationLocked(false)
+        barLauncher.launch(options)
+    }
+
+    private var barLauncher = registerForActivityResult(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents != null) {
+            FirebaseDatabase
+                .getInstance()
+                .getReference("users")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.hasChild(result.contents)) {
+                            val intent = Intent(
+                                this@MessengerActivity,
+                                ProfileActivity::class.java
+                            )
+                            intent.putExtra(
+                                "profile", Profile(
+                                    firstname = snapshot.child(result.contents)
+                                        .child("firstname").value.toString(),
+                                    lastname = snapshot.child(result.contents)
+                                        .child("lastname").value.toString(),
+                                    phone = snapshot.child(result.contents)
+                                        .child("phone").value.toString(),
+                                    nickname = snapshot.child(result.contents)
+                                        .child("nickname").value.toString(),
+                                    photo = snapshot.child(result.contents)
+                                        .child("photo").value.toString(),
+                                    lastSeen = snapshot.child(result.contents)
+                                        .child("lastSeen").value.toString(),
+                                    online = snapshot.child(result.contents).child("online")
+                                        .getValue(Boolean::class.java)!!
+                                )
+                            )
+                            startActivity(intent)
+                        } else {
+                            val builder =
+                                AlertDialog.Builder(this@MessengerActivity)
+                            builder.setTitle("Error")
+                            builder.setMessage("Profile not recognized. Try again.")
+                            builder.setPositiveButton(
+                                "OK"
+                            ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
         }
     }
 

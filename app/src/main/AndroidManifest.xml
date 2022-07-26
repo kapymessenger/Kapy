@@ -28,9 +28,6 @@
             android:name=".activity.ShareQRActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.QRScanActivity"
-            android:exported="true" />
-        <activity
             android:name=".activity.ProfileEditingActivity"
             android:exported="true" />
         <activity
@@ -78,11 +75,6 @@
         <activity
             android:name=".activity.FaceRecognitionActivity"
             android:exported="true" />
-        <activity
-            android:name=".util.ActionOnQRScanned"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme" />
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true" >
