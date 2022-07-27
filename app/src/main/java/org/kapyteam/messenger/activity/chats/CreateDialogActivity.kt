@@ -105,6 +105,7 @@ class CreateDialogActivity : AppCompatActivity() {
                                 this@CreateDialogActivity,
                                 ProfileActivity::class.java
                             )
+                            intent.putExtra("phone", phone)
                             intent.putExtra(
                                 "profile", Profile(
                                     firstname = snapshot.child(result.contents)

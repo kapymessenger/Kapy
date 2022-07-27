@@ -50,6 +50,7 @@ import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
+import java.lang.Exception
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.dolatkia.animatedThemeManager.ThemeAnimationListener
@@ -131,6 +132,7 @@ class MessengerActivity : ThemeActivity() {
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
+    private lateinit var archiveList: MutableList<String>
     private lateinit var binder: ActivityMessengerBinding
     private lateinit var drawerLayout: DrawerLayout
 
@@ -154,11 +156,10 @@ class MessengerActivity : ThemeActivity() {
     override fun getStartTheme(): AppTheme {
         return LightTheme()
     }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
+        archiveList = mutableListOf()
 
         binder = ActivityMessengerBinding.inflate(LayoutInflater.from(this))
         setContentView(binder.root)
@@ -191,7 +192,7 @@ class MessengerActivity : ThemeActivity() {
                         snapshot.children.forEach { snap ->
                             val contact = contacts.find { snap.key == it }
                             if (contact != null) {
-                                profiles.add(Profile.parse(snap.value as Map<*, *>))
+                                profiles.add(Profile.parse(snap.value as Map<*, *>, false))
                             }
                         }
                         val intent = Intent(
@@ -230,8 +231,8 @@ class MessengerActivity : ThemeActivity() {
                 dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (profile in snapshot.children) {
-                            if (profile.child("phone").getValue(String::class.java) in data) {
-                                profiles.add(Profile.parse(profile.value as Map<*, *>))
+                            if (profile.child("phone").value.toString() in data && profile.child("phone").value.toString() !in archiveList) {
+                                profiles.add(Profile.parse(profile.value as Map<*, *>, false))
                             }
                         }
 
@@ -298,6 +299,9 @@ class MessengerActivity : ThemeActivity() {
                     snapshot.child("photo").value.toString().let {
                         if (it != "") Picasso.get().load(it).into(avatar)
                     }
+                    try {
+                        archiveList = (snapshot.child("archiveList").value as List<String>).toMutableList()
+                    } catch (e: Exception) {}
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -341,13 +345,22 @@ class MessengerActivity : ThemeActivity() {
                     intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
-                R.id.notes ->{
+                R.id.notes -> {
                     val intent = Intent(
                         this,
                         TextEditor::class.java
                     )
                     startActivity(intent)
                 }
+                R.id.theme_switch -> {
+                    println("Хуй")
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        println("Большой хуй")
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        println("Гигантский хуй")
+                    }
                 R.id.drawer_logout -> {
                     FirebaseAuthAgent.getInstance().signOut()
                     val intent = Intent(
@@ -403,7 +416,9 @@ class MessengerActivity : ThemeActivity() {
                                     lastSeen = snapshot.child(result.contents)
                                         .child("lastSeen").value.toString(),
                                     online = snapshot.child(result.contents).child("online")
-                                        .getValue(Boolean::class.java)!!
+                                        .getValue(Boolean::class.java)!!,
+                                    archiveList = snapshot.child(result.contents)
+                                        .child("archiveList").value as MutableList<String>
                                 )
                             )
                             startActivity(intent)
