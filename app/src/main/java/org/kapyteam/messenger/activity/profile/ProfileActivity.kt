@@ -89,9 +89,9 @@ class ProfileActivity : AppCompatActivity() {
                             .addOnCompleteListener {
                                 Toast.makeText(
                                     this@ProfileActivity,
-                                    if (remove) "User was removed from archive list" else "User was added to archive list",
-                                    2
-                                )
+                                    if (remove) "User was removed from ignore list" else "User was added to ignore list",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                     } else {
                         val archiveList = listOf(profile.phone)
@@ -104,9 +104,9 @@ class ProfileActivity : AppCompatActivity() {
                             .addOnCompleteListener {
                                 Toast.makeText(
                                     this@ProfileActivity,
-                                    "User was added to archive list",
-                                    2
-                                )
+                                    "User was added to ignore list",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                     }
                 }
