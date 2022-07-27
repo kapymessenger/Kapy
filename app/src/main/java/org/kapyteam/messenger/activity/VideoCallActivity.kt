@@ -6,12 +6,15 @@
 package org.kapyteam.messenger.activity
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -65,11 +68,15 @@ class VideoCallActivity : AppCompatActivity() {
             }
         }
     }
-
+    val requestedPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
-
+        if (ContextCompat.checkSelfPermission(this.applicationContext, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestedPermission.launch(android.Manifest.permission.CAMERA)
+        }
         channelName = intent.getStringExtra("channelName")!!
         userRole = intent.getIntExtra("userRole", 1)
         localVideoContainer = findViewById(R.id.local_video_container)
@@ -84,6 +91,8 @@ class VideoCallActivity : AppCompatActivity() {
         initClickListeners()
         initAgora()
         joinChannel()
+
+
     }
 
     private fun initClickListeners() {
@@ -141,7 +150,7 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Toast.makeText(applicationContext, "Please end your call to exit", 2)
+        Toast.makeText(applicationContext, "Please end your call to exit", Toast.LENGTH_SHORT)
     }
 
     private fun initAgora() {
