@@ -14,10 +14,23 @@ data class Profile(
     var nickname: String,
     var photo: String = "",
     var lastSeen: String = "",
-    var online: Boolean = false
+    var online: Boolean = false,
+    var archiveList: List<String> = listOf()
 ) : Serializable {
     companion object {
-        fun parse(meta: Map<*, *>): Profile {
+        fun parse(meta: Map<*, *>, archive: Boolean): Profile {
+            if (archive) {
+                return Profile(
+                    meta["firstname"] as String,
+                    meta["lastname"] as String,
+                    meta["phone"] as String,
+                    meta["nickname"] as String,
+                    meta["photo"] as String,
+                    meta["lastSeen"] as String,
+                    meta["online"] as Boolean,
+                    meta["archiveList"] as MutableList<String>
+                )
+            }
             return Profile(
                 meta["firstname"] as String,
                 meta["lastname"] as String,

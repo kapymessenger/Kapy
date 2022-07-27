@@ -27,7 +27,7 @@
             app:navGraph="@navigation/ignore_list_navigation" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chats_recycler_view"
+            android:id="@+id/chats_recycler_view_ignore"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"

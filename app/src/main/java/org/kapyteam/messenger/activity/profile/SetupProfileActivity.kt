@@ -104,7 +104,8 @@ class SetupProfileActivity : AppCompatActivity() {
                 firstname = firstnameEdit.text.toString(),
                 lastname = lastnameEdit.text.toString(),
                 phone = phoneNumber,
-                nickname = nicknameEdit.text.toString()
+                nickname = nicknameEdit.text.toString(),
+                archiveList = listOf("")
             )
         )
     }

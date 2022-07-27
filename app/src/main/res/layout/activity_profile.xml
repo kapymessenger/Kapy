@@ -92,5 +92,15 @@
             android:scaleType="centerInside"
             android:src="@drawable/videocam_icon"
             tools:ignore="RedundantDescriptionCheck" />
+
+        <ImageView
+            android:id="@+id/to_archive_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:contentDescription="@string/button"
+            android:scaleType="centerInside"
+            android:src="@drawable/ignore"
+            tools:ignore="RedundantDescriptionCheck" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

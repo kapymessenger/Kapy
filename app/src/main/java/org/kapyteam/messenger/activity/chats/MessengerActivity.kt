@@ -42,6 +42,7 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
+import java.lang.Exception
 
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -51,10 +52,12 @@ class MessengerActivity : AppCompatActivity() {
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
+    private lateinit var archiveList: MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBottomDrawer()
+        archiveList = mutableListOf()
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
@@ -84,7 +87,7 @@ class MessengerActivity : AppCompatActivity() {
                         snapshot.children.forEach { snap ->
                             val contact = contacts.find { snap.key == it }
                             if (contact != null) {
-                                profiles.add(Profile.parse(snap.value as Map<*, *>))
+                                profiles.add(Profile.parse(snap.value as Map<*, *>, false))
                             }
                         }
                         val intent = Intent(
@@ -123,8 +126,8 @@ class MessengerActivity : AppCompatActivity() {
                 dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (profile in snapshot.children) {
-                            if (profile.child("phone").getValue(String::class.java) in data) {
-                                profiles.add(Profile.parse(profile.value as Map<*, *>))
+                            if (profile.child("phone").value.toString() in data && profile.child("phone").value.toString() !in archiveList) {
+                                profiles.add(Profile.parse(profile.value as Map<*, *>, false))
                             }
                         }
 
@@ -191,6 +194,9 @@ class MessengerActivity : AppCompatActivity() {
                     snapshot.child("photo").value.toString().let {
                         if (it != "") Picasso.get().load(it).into(avatar)
                     }
+                    try {
+                        archiveList = (snapshot.child("archiveList").value as List<String>).toMutableList()
+                    } catch (e: Exception) {}
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -227,14 +233,14 @@ class MessengerActivity : AppCompatActivity() {
                     intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
-                R.id.notes ->{
+                R.id.notes -> {
                     val intent = Intent(
                         this,
                         TextEditor::class.java
                     )
                     startActivity(intent)
                 }
-                R.id.theme_switch ->{
+                R.id.theme_switch -> {
                     println("Хуй")
                     if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                         println("Большой хуй")
@@ -286,7 +292,9 @@ class MessengerActivity : AppCompatActivity() {
                                     lastSeen = snapshot.child(result.contents)
                                         .child("lastSeen").value.toString(),
                                     online = snapshot.child(result.contents).child("online")
-                                        .getValue(Boolean::class.java)!!
+                                        .getValue(Boolean::class.java)!!,
+                                    archiveList = snapshot.child(result.contents)
+                                        .child("archiveList").value as MutableList<String>
                                 )
                             )
                             startActivity(intent)

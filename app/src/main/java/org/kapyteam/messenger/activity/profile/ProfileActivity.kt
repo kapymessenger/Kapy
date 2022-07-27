@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.calls.AudioCallActivity
 import org.kapyteam.messenger.activity.calls.VideoCallActivity
 import org.kapyteam.messenger.activity.chats.ChatActivity
 import org.kapyteam.messenger.database.CallAgent
+import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Call
 import org.kapyteam.messenger.model.Profile
 import kotlin.random.Random
 
 class ProfileActivity : AppCompatActivity() {
+    private lateinit var archiveListButton: ImageView
     private lateinit var audioCallButton: ImageView
     private lateinit var videoCallButton: ImageView
     private lateinit var messageButton: ImageView
@@ -41,6 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         status = findViewById(R.id.profile_status)
         audioCallButton = findViewById(R.id.audio_call_button)
         videoCallButton = findViewById(R.id.video_call_button)
+        archiveListButton = findViewById(R.id.to_archive_button)
         messageButton = findViewById(R.id.message_button)
 
         if (profile.photo != "") Picasso.get().load(profile.photo).into(avatar)
@@ -50,6 +57,40 @@ class ProfileActivity : AppCompatActivity() {
         name.text = "${profile.firstname} ${profile.lastname} (@${profile.nickname})"
         phoneNum.text = profile.phone
         status.text = if (profile.online) "Online" else profile.lastSeen
+    }
+
+    private fun archive() {
+        FirebaseAuthAgent
+            .getReference()
+            .child("users")
+            .child(phone)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val archiveList = snapshot.child("archiveList").value as MutableList<String>
+                    var remove = false
+                    if (archiveList.contains(profile.phone)) {
+                        archiveList.remove(profile.phone)
+                        remove = true
+                    } else {
+                        archiveList.add(profile.phone)
+                    }
+                    FirebaseAuthAgent
+                        .getReference()
+                        .child("users")
+                        .child(phone)
+                        .child("archiveList")
+                        .setValue(archiveList)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                if (remove) "User was removed from archive list" else "User was added to archive list",
+                                2
+                            )
+                        }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     private fun initClickListeners() {
@@ -101,6 +142,10 @@ class ProfileActivity : AppCompatActivity() {
             intent.putExtra("member", profile)
             intent.putExtra("phone", phone)
             startActivity(intent)
+        }
+
+        archiveListButton.setOnClickListener {
+            archive()
         }
     }
 
