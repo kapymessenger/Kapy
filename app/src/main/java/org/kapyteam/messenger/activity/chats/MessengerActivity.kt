@@ -39,7 +39,6 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
-import org.kapyteam.messenger.activity.calls.CallsListActivity
 import org.kapyteam.messenger.activity.IgnoreListActivity
 import org.kapyteam.messenger.activity.TextEditor
 import org.kapyteam.messenger.activity.profile.ProfileActivity
@@ -51,7 +50,6 @@ import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
-import java.lang.Exception
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.dolatkia.animatedThemeManager.ThemeAnimationListener
@@ -127,12 +125,12 @@ class MyThemeAnimationListener(var context: Context, var drawer: DrawerLayout) :
 
 class MessengerActivity : ThemeActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var binding: ActivityMessengerBinding
     private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
-    private lateinit var archiveList: MutableList<String>
     private lateinit var binder: ActivityMessengerBinding
     private lateinit var drawerLayout: DrawerLayout
 
@@ -144,7 +142,7 @@ class MessengerActivity : ThemeActivity() {
         binder.root.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
 
         //set text color
-        binder.navView.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
+//        binder.navView.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
         binder.navigationView.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
         binder.navigationView.itemBackground = myAppTheme.firstActivityBackgroundColor(this).toDrawable()
         binder.navigationView.itemTextColor = ColorStateList.valueOf(myAppTheme.firstActivityTextColor(this))
@@ -156,16 +154,18 @@ class MessengerActivity : ThemeActivity() {
     override fun getStartTheme(): AppTheme {
         return LightTheme()
     }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_messenger)
+        initBottomDrawer()
+
+        binder = ActivityMessengerBinding.inflate(LayoutInflater.from(this))
+        setContentView(binder.root)
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
-
-
-
 
         initNavDrawer()
 
@@ -230,7 +230,7 @@ class MessengerActivity : ThemeActivity() {
                 dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (profile in snapshot.children) {
-                            if (profile.child("phone").value.toString() in data && profile.child("phone").value.toString() !in archiveList) {
+                            if (profile.child("phone").getValue(String::class.java) in data) {
                                 profiles.add(Profile.parse(profile.value as Map<*, *>, false))
                             }
                         }
@@ -253,6 +253,21 @@ class MessengerActivity : ThemeActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return toggle.onOptionsItemSelected(item)
+    }
+
+    private fun initBottomDrawer() {
+        binding = ActivityMessengerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+//        val navView: BottomNavigationView = binding.navView
+//
+//        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
+//
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(R.id.navigation_chats)
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
     }
 
     private fun initNavDrawer() {
@@ -283,9 +298,6 @@ class MessengerActivity : ThemeActivity() {
                     snapshot.child("photo").value.toString().let {
                         if (it != "") Picasso.get().load(it).into(avatar)
                     }
-                    try {
-                        archiveList = (snapshot.child("archiveList").value as List<String>).toMutableList()
-                    } catch (e: Exception) {}
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -329,30 +341,13 @@ class MessengerActivity : ThemeActivity() {
                     intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
-                R.id.notes -> {
+                R.id.notes ->{
                     val intent = Intent(
                         this,
                         TextEditor::class.java
                     )
                     startActivity(intent)
                 }
-
-                R.id.calls -> {
-                    val intent = Intent(
-                        this,
-                        CallsListActivity::class.java
-                    )
-                    startActivity(intent)
-                }
-                R.id.theme_switch ->{
-                    println("Хуй")
-                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                        println("Большой хуй")
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        println("Гигантский хуй")
-                    }
                 R.id.drawer_logout -> {
                     FirebaseAuthAgent.getInstance().signOut()
                     val intent = Intent(
@@ -408,9 +403,7 @@ class MessengerActivity : ThemeActivity() {
                                     lastSeen = snapshot.child(result.contents)
                                         .child("lastSeen").value.toString(),
                                     online = snapshot.child(result.contents).child("online")
-                                        .getValue(Boolean::class.java)!!,
-                                    archiveList = snapshot.child(result.contents)
-                                        .child("archiveList").value as MutableList<String>
+                                        .getValue(Boolean::class.java)!!
                                 )
                             )
                             startActivity(intent)
