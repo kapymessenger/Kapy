@@ -32,7 +32,12 @@ class IgnoreListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ignore_list)
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
-        phone = intent.getStringExtra("phone")!!
+
+        if (intent.hasExtra("phone")) {
+            phone = intent.getStringExtra("phone")!!
+        } else {
+            finish()
+        }
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -56,9 +61,11 @@ class IgnoreListActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 DBAgent.setOnline(true, phone)
                 for (dialog in snapshot.children) {
-                    val members = dialog.child("members").value as MutableList<String>
-                    if (members.contains(phone)) {
-                        data.add(members[if (members[0] == phone) 1 else 0])
+                    if (dialog.hasChild("members")) {
+                        val members = dialog.child("members").value as MutableList<String>
+                        if (members.contains(phone)) {
+                            data.add(members[if (members[0] == phone) 1 else 0])
+                        }
                     }
                 }
                 dbReferenceUsers
@@ -67,8 +74,10 @@ class IgnoreListActivity : AppCompatActivity() {
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot_: DataSnapshot) {
                             val profiles = mutableListOf<Profile>()
-                            snapshot_.children.forEach { child ->
-                                if (child.value != "") archiveList.add(child.value.toString())
+                            if (snapshot_.hasChildren()) {
+                                snapshot_.children.forEach { child ->
+                                    if (child.value != "") archiveList.add(child.value.toString())
+                                }
                             }
 
                             recyclerView.adapter = ChatsRecyclerAdapter(
@@ -83,18 +92,20 @@ class IgnoreListActivity : AppCompatActivity() {
                                     .child(profile)
                                     .addListenerForSingleValueEvent(object : ValueEventListener {
                                         override fun onDataChange(snap: DataSnapshot) {
-                                            profiles.add(
-                                                Profile(
-                                                    firstname = snap.child("firstname").value.toString(),
-                                                    lastname = snap.child("lastname").value.toString(),
-                                                    nickname = snap.child("nickname").value.toString(),
-                                                    phone = snap.child("phone").value.toString(),
-                                                    photo = snap.child("photo").value.toString(),
-                                                    lastSeen = snap.child("lastSeen").value.toString()
+                                            try {
+                                                profiles.add(
+                                                    Profile(
+                                                        firstname = snap.child("firstname").value.toString(),
+                                                        lastname = snap.child("lastname").value.toString(),
+                                                        nickname = snap.child("nickname").value.toString(),
+                                                        phone = snap.child("phone").value.toString(),
+                                                        photo = snap.child("photo").value.toString(),
+                                                        lastSeen = snap.child("lastSeen").value.toString()
+                                                    )
                                                 )
-                                            )
-                                            (recyclerView.adapter as ChatsRecyclerAdapter).update(profiles)
-                                            (recyclerView.adapter as ChatsRecyclerAdapter).notifyDataSetChanged()
+                                                (recyclerView.adapter as ChatsRecyclerAdapter).update(profiles)
+                                                (recyclerView.adapter as ChatsRecyclerAdapter).notifyDataSetChanged()
+                                            } catch (e: Exception) {}
                                         }
 
                                         override fun onCancelled(error: DatabaseError) {}
@@ -108,21 +119,6 @@ class IgnoreListActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
-    }
-
-    override fun onDestroy() {
-        DBAgent.setOnline(false, phone)
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        DBAgent.setOnline(true, phone)
-        super.onResume()
-    }
-
-    override fun onRestart() {
-        DBAgent.setOnline(true, phone)
-        super.onRestart()
     }
 
     override fun onBackPressed() {}

@@ -9,25 +9,16 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,7 +37,6 @@ import org.kapyteam.messenger.activity.init.GreetingActivity
 import org.kapyteam.messenger.activity.profile.ProfileEditingActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
-import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
@@ -64,7 +54,6 @@ interface MyAppTheme : AppTheme {
 }
 
 class LightTheme : MyAppTheme {
-
     override fun id(): Int { // set unique iD for each theme
         return 0
     }
@@ -83,7 +72,6 @@ class LightTheme : MyAppTheme {
 }
 
 class DarkTheme : MyAppTheme {
-
     override fun id(): Int { // set unique iD for each theme
         return 1
     }
@@ -101,18 +89,16 @@ class DarkTheme : MyAppTheme {
     }
 }
 
-class MyThemeAnimationListener(var context: Context, var drawer: DrawerLayout) : ThemeAnimationListener{
+class MyThemeAnimationListener(var context: Context) :
+    ThemeAnimationListener {
     override fun onAnimationStart(animation: Animator) {
     }
 
     override fun onAnimationEnd(animation: Animator) {
-        println("Хуй")
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            println("Большой хуй")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            println("Гигантский хуй")
         }
     }
 
@@ -135,26 +121,21 @@ class MessengerActivity : ThemeActivity() {
     private lateinit var drawerLayout: DrawerLayout
 
     override fun syncTheme(appTheme: AppTheme) {
-        // change ui colors with new appThem here
-
         val myAppTheme = appTheme as MyAppTheme
-        // set background color
         binder.root.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
 
-        //set text color
 //        binder.navView.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
         binder.navigationView.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
-        binder.navigationView.itemBackground = myAppTheme.firstActivityBackgroundColor(this).toDrawable()
-        binder.navigationView.itemTextColor = ColorStateList.valueOf(myAppTheme.firstActivityTextColor(this))
+        binder.navigationView.itemBackground =
+            myAppTheme.firstActivityBackgroundColor(this).toDrawable()
+        binder.navigationView.itemTextColor =
+            ColorStateList.valueOf(myAppTheme.firstActivityTextColor(this))
 
     }
 
-    // to save the theme for the next time, save it in onDestroy() (exp: in pref or DB) and return it here.
-// it just used for the first time (first activity).
     override fun getStartTheme(): AppTheme {
         return LightTheme()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,7 +146,12 @@ class MessengerActivity : ThemeActivity() {
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
-        phone = intent.getStringExtra("phone")!!
+
+        if (intent.hasExtra("phone")) {
+            phone = intent.getStringExtra("phone")!!
+        } else {
+            finish()
+        }
 
         initNavDrawer()
 
@@ -191,7 +177,10 @@ class MessengerActivity : ThemeActivity() {
                         snapshot.children.forEach { snap ->
                             val contact = contacts.find { snap.key == it }
                             if (contact != null) {
-                                profiles.add(Profile.parse(snap.value as Map<*, *>, false))
+                                try {
+                                    profiles.add(Profile.parse(snap.value as Map<*, *>, false))
+                                } catch (e: Exception) {
+                                }
                             }
                         }
                         val intent = Intent(
@@ -217,7 +206,6 @@ class MessengerActivity : ThemeActivity() {
         val data = mutableListOf<String>()
         dbReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                DBAgent.setOnline(true, phone)
                 for (dialog in snapshot.children) {
                     val members = dialog.child("members").value as MutableList<String>
                     if (members.contains(phone)) {
@@ -229,9 +217,20 @@ class MessengerActivity : ThemeActivity() {
 
                 dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        val archiveList = mutableListOf<String>()
                         for (profile in snapshot.children) {
-                            if (profile.child("phone").getValue(String::class.java) in data) {
-                                profiles.add(Profile.parse(profile.value as Map<*, *>, false))
+                            if (profile.hasChild("phone") && profile.hasChild("archiveList")) {
+                                if (snapshot.child(phone).child("archiveList").hasChildren()) {
+                                    snapshot.child(phone).child("archiveList").children.forEach { child ->
+                                        if (child.value != "") archiveList.add(child.value.toString())
+                                    }
+                                }
+                                if (profile.child("phone").value.toString() in data && profile.child(
+                                        "phone"
+                                    ).value.toString() !in archiveList
+                                ) {
+                                    profiles.add(Profile.parse(profile.value as Map<*, *>, false))
+                                }
                             }
                         }
 
@@ -258,20 +257,10 @@ class MessengerActivity : ThemeActivity() {
     private fun initBottomDrawer() {
         binding = ActivityMessengerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        val navView: BottomNavigationView = binding.navView
-//
-//        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-//
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(R.id.navigation_chats)
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navView.setupWithNavController(navController)
     }
 
     private fun initNavDrawer() {
-        drawerLayout= findViewById(R.id.container)
+        drawerLayout = findViewById(R.id.container)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
 
@@ -290,13 +279,20 @@ class MessengerActivity : ThemeActivity() {
             .child(phone)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    phoneText.text = phone
-                    name.text =
-                        "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
-                    nickname.text = "@${snapshot.child("nickname").value}"
+                    if (snapshot.hasChild("firstname") && snapshot.hasChild("lastname") && snapshot.hasChild(
+                            "nickname"
+                        )
+                    ) {
+                        phoneText.text = phone
+                        name.text =
+                            "${snapshot.child("firstname").value} ${snapshot.child("lastname").value}"
+                        nickname.text = "@${snapshot.child("nickname").value}"
 
-                    snapshot.child("photo").value.toString().let {
-                        if (it != "") Picasso.get().load(it).into(avatar)
+                        if (snapshot.hasChild("photo")) {
+                            snapshot.child("photo").value.toString().let {
+                                if (it != "") Picasso.get().load(it).into(avatar)
+                            }
+                        }
                     }
                 }
 
@@ -315,9 +311,11 @@ class MessengerActivity : ThemeActivity() {
             when (it.itemId) {
                 R.id.drawer_settings -> println("Settings")
                 R.id.drawer_contact -> println("Contact")
-                R.id.theme_switch ->{
-                    println(ThemeManager.instance.getCurrentTheme()
-                        ?.id())
+                R.id.theme_switch -> {
+                    println(
+                        ThemeManager.instance.getCurrentTheme()
+                            ?.id()
+                    )
                     if (ThemeManager.instance.getCurrentTheme()
                             ?.id() == 0
                     ) {
@@ -341,7 +339,7 @@ class MessengerActivity : ThemeActivity() {
                     intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
-                R.id.notes ->{
+                R.id.notes -> {
                     val intent = Intent(
                         this,
                         TextEditor::class.java
@@ -359,11 +357,7 @@ class MessengerActivity : ThemeActivity() {
             }
             true
         }
-        setThemeAnimationListener(MyThemeAnimationListener(this, drawerLayout))
-    }
-
-    public fun openDrawer(){
-        drawerLayout.openDrawer(drawerLayout)
+        setThemeAnimationListener(MyThemeAnimationListener(this))
     }
 
     private fun scanCode() {
@@ -388,39 +382,48 @@ class MessengerActivity : ThemeActivity() {
                                 this@MessengerActivity,
                                 ProfileActivity::class.java
                             )
-                            intent.putExtra(
-                                "profile", Profile(
-                                    firstname = snapshot.child(result.contents)
-                                        .child("firstname").value.toString(),
-                                    lastname = snapshot.child(result.contents)
-                                        .child("lastname").value.toString(),
-                                    phone = snapshot.child(result.contents)
-                                        .child("phone").value.toString(),
-                                    nickname = snapshot.child(result.contents)
-                                        .child("nickname").value.toString(),
-                                    photo = snapshot.child(result.contents)
-                                        .child("photo").value.toString(),
-                                    lastSeen = snapshot.child(result.contents)
-                                        .child("lastSeen").value.toString(),
-                                    online = snapshot.child(result.contents).child("online")
-                                        .getValue(Boolean::class.java)!!
+                            try {
+                                intent.putExtra(
+                                    "profile", Profile(
+                                        firstname = snapshot.child(result.contents)
+                                            .child("firstname").value.toString(),
+                                        lastname = snapshot.child(result.contents)
+                                            .child("lastname").value.toString(),
+                                        phone = snapshot.child(result.contents)
+                                            .child("phone").value.toString(),
+                                        nickname = snapshot.child(result.contents)
+                                            .child("nickname").value.toString(),
+                                        photo = snapshot.child(result.contents)
+                                            .child("photo").value.toString(),
+                                        lastSeen = snapshot.child(result.contents)
+                                            .child("lastSeen").value.toString(),
+                                        online = snapshot.child(result.contents).child("online")
+                                            .getValue(Boolean::class.java)!!
+                                    )
                                 )
-                            )
+                            } catch (e: Exception) {
+                                alert()
+                                return
+                            }
                             startActivity(intent)
                         } else {
-                            val builder =
-                                AlertDialog.Builder(this@MessengerActivity)
-                            builder.setTitle("Error")
-                            builder.setMessage("Profile not recognized. Try again.")
-                            builder.setPositiveButton(
-                                "OK"
-                            ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
+                            alert()
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {}
                 })
         }
+    }
+
+    private fun alert() {
+        val builder =
+            AlertDialog.Builder(this@MessengerActivity)
+        builder.setTitle("Error")
+        builder.setMessage("Profile not recognized. Try again.")
+        builder.setPositiveButton(
+            "OK"
+        ) { dialogInterface, _ -> dialogInterface.dismiss() }.show()
     }
 
     override fun onBackPressed() {}

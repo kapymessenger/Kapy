@@ -39,7 +39,12 @@ class ProfileActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        profile = intent.getSerializableExtra("profile") as Profile
+        if (intent.hasExtra("profile")) {
+            profile = intent.getSerializableExtra("profile") as Profile
+        } else {
+            finish()
+        }
+
         avatar = findViewById(R.id.profile_image)
         name = findViewById(R.id.profile_name)
         phoneNum = findViewById(R.id.profile_phone_number)
@@ -66,27 +71,44 @@ class ProfileActivity : AppCompatActivity() {
             .child(phone)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val archiveList = snapshot.child("archiveList").value as MutableList<String>
-                    var remove = false
-                    if (archiveList.contains(profile.phone)) {
-                        archiveList.remove(profile.phone)
-                        remove = true
-                    } else {
-                        archiveList.add(profile.phone)
-                    }
-                    FirebaseAuthAgent
-                        .getReference()
-                        .child("users")
-                        .child(phone)
-                        .child("archiveList")
-                        .setValue(archiveList)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                this@ProfileActivity,
-                                if (remove) "User was removed from archive list" else "User was added to archive list",
-                                2
-                            )
+                    if (snapshot.hasChild("archiveList")) {
+                        val archiveList = snapshot.child("archiveList").value as MutableList<String>
+                        var remove = false
+                        if (archiveList.contains(profile.phone)) {
+                            archiveList.remove(profile.phone)
+                            remove = true
+                        } else {
+                            archiveList.add(profile.phone)
                         }
+                        FirebaseAuthAgent
+                            .getReference()
+                            .child("users")
+                            .child(phone)
+                            .child("archiveList")
+                            .setValue(archiveList)
+                            .addOnCompleteListener {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    if (remove) "User was removed from archive list" else "User was added to archive list",
+                                    2
+                                )
+                            }
+                    } else {
+                        val archiveList = listOf(profile.phone)
+                        FirebaseAuthAgent
+                            .getReference()
+                            .child("users")
+                            .child(phone)
+                            .child("archiveList")
+                            .setValue(archiveList)
+                            .addOnCompleteListener {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    "User was added to archive list",
+                                    2
+                                )
+                            }
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
