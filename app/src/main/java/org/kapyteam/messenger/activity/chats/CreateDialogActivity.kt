@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.chats
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +22,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 
@@ -104,6 +105,7 @@ class CreateDialogActivity : AppCompatActivity() {
                                 this@CreateDialogActivity,
                                 ProfileActivity::class.java
                             )
+                            intent.putExtra("phone", phone)
                             intent.putExtra(
                                 "profile", Profile(
                                     firstname = snapshot.child(result.contents)

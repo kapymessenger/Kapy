@@ -3,7 +3,7 @@
  * Original link: https://github.com/kapymessenger/Kapy
  */
 
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.calls
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -28,6 +28,7 @@ import io.agora.rtc.video.VideoCanvas
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.MessengerActivity
 import org.kapyteam.messenger.database.CallAgent
 import kotlin.random.Random
 

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.chats.ChatActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
@@ -24,7 +25,7 @@ class IgnoreListActivity : AppCompatActivity() {
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
-
+    private var archiveList: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +36,10 @@ class IgnoreListActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-
-        recyclerView = findViewById(R.id.chats_recycler_view)
+        recyclerView = findViewById(R.id.chats_recycler_view_ignore)
         recyclerView.layoutManager = LinearLayoutManager(this)
         createDialogList()
         CallAgent.prepareListener(this, phone)
-
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -52,10 +50,9 @@ class IgnoreListActivity : AppCompatActivity() {
         return true
     }
 
-
     private fun createDialogList() {
-        val data = mutableListOf<String>()
         dbReference.addValueEventListener(object : ValueEventListener {
+            val data = mutableListOf<String>()
             override fun onDataChange(snapshot: DataSnapshot) {
                 DBAgent.setOnline(true, phone)
                 for (dialog in snapshot.children) {
@@ -64,33 +61,54 @@ class IgnoreListActivity : AppCompatActivity() {
                         data.add(members[if (members[0] == phone) 1 else 0])
                     }
                 }
+                dbReferenceUsers
+                    .child(phone)
+                    .child("archiveList")
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot_: DataSnapshot) {
+                            val profiles = mutableListOf<Profile>()
+                            snapshot_.children.forEach { child ->
+                                if (child.value != "") archiveList.add(child.value.toString())
+                            }
 
-                val profiles = mutableListOf<Profile>()
+                            recyclerView.adapter = ChatsRecyclerAdapter(
+                                profiles,
+                                this@IgnoreListActivity,
+                                Intent(this@IgnoreListActivity, ChatActivity::class.java),
+                                phone
+                            )
 
-                dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for (profile in snapshot.children) {
-                            if (profile.child("phone").getValue(String::class.java) in data) {
-                                profiles.add(Profile.parse(profile.value as Map<*, *>))
+                            for (profile in archiveList) {
+                                dbReferenceUsers
+                                    .child(profile)
+                                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                                        override fun onDataChange(snap: DataSnapshot) {
+                                            profiles.add(
+                                                Profile(
+                                                    firstname = snap.child("firstname").value.toString(),
+                                                    lastname = snap.child("lastname").value.toString(),
+                                                    nickname = snap.child("nickname").value.toString(),
+                                                    phone = snap.child("phone").value.toString(),
+                                                    photo = snap.child("photo").value.toString(),
+                                                    lastSeen = snap.child("lastSeen").value.toString()
+                                                )
+                                            )
+                                            (recyclerView.adapter as ChatsRecyclerAdapter).update(profiles)
+                                            (recyclerView.adapter as ChatsRecyclerAdapter).notifyDataSetChanged()
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {}
+                                    })
                             }
                         }
 
-                        recyclerView.adapter = ChatsRecyclerAdapter(
-                            profiles,
-                            this@IgnoreListActivity,
-                            Intent(this@IgnoreListActivity, ChatActivity::class.java),
-                            phone
-                        )
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {}
-                })
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
     }
-
 
     override fun onDestroy() {
         DBAgent.setOnline(false, phone)

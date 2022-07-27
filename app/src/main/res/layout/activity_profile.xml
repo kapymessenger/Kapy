@@ -5,7 +5,7 @@
     android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProfileActivity">
+    tools:context=".activity.profile.ProfileActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
@@ -46,115 +46,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="Online"
+        android:text="@string/online"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_phone_number" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/video_call_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/circle"
-        android:clickable="true"
-        android:contentDescription="@string/video_cal_button"
-        android:src="@drawable/videocam_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/audio_call_button"
-        app:layout_constraintTop_toBottomOf="@+id/profile_status"
-        app:rippleColor="@color/white" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/audio_call_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/circle"
-        android:clickable="true"
-        android:contentDescription="@string/audio_call_button"
-        android:scaleType="fitCenter"
-        android:src="@drawable/phone_icon"
-        app:iconPadding="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/video_call_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_status"
-
-        app:rippleColor="@color/white" />
-
     <LinearLayout
-        android:id="@+id/profile_menu_linear_layout1"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_status">
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintTop_toBottomOf="@id/profile_status"
+        android:background="@color/defaultBackground"
+        android:orientation="horizontal">
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/profile_mute_notifications_layout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:clickable="true"-->
-<!--            android:orientation="horizontal">-->
+        <ImageView
+            android:id="@+id/audio_call_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:contentDescription="@string/button"
+            android:scaleType="centerInside"
+            android:src="@drawable/phone_icon"
+            tools:ignore="RedundantDescriptionCheck" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/profile_mute_notifications_icon"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:paddingStart="20dp"-->
-<!--                android:src="@drawable/bell_icon" />-->
+        <ImageView
+            android:id="@+id/message_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:contentDescription="@string/button"
+            android:scaleType="centerInside"
+            android:src="@drawable/message_icon"
+            tools:ignore="RedundantDescriptionCheck" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/profile_mute_notifications_text"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_weight="1"-->
-<!--                android:paddingStart="40dp"-->
-<!--                android:text="Mute notifications"-->
-<!--                android:textColor="#000000"-->
-<!--                android:textSize="24sp" />-->
+        <ImageView
+            android:id="@+id/video_call_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:contentDescription="@string/button"
+            android:scaleType="centerInside"
+            android:src="@drawable/videocam_icon"
+            tools:ignore="RedundantDescriptionCheck" />
 
-<!--            <Switch-->
-<!--                android:id="@+id/profile_mute_notifications_switch"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="end"-->
-<!--                android:paddingEnd="40dp" />-->
-<!--        </LinearLayout>-->
-
-        <LinearLayout
-            android:id="@+id/profile_chosen_messages_layout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:orientation="horizontal">
-
-<!--            <ImageView-->
-<!--                android:id="@+id/profile_chosen_messages_icon"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:paddingStart="20dp"-->
-<!--                android:src="@drawable/star" />-->
-
-            <TextView
-                android:id="@+id/profile_chosen_messages_text"
-                style="@style/BlackText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:clickable="false"
-                android:paddingStart="40dp"
-                android:text="Chosen messages"
-                android:textSize="24sp" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/to_archive_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:contentDescription="@string/button"
+            android:scaleType="centerInside"
+            android:src="@drawable/ignore"
+            tools:ignore="RedundantDescriptionCheck" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

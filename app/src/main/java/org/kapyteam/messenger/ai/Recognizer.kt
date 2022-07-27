@@ -13,14 +13,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import org.kapyteam.messenger.R
-import org.kapyteam.messenger.activity.ChatActivity
+import org.kapyteam.messenger.activity.chats.ChatActivity
 import org.kapyteam.messenger.ml.ModelUnquant
 import org.kapyteam.messenger.model.Message
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

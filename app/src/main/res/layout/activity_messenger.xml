@@ -34,7 +34,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:rippleColor="@color/white" />
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chats_recycler_view"
             android:layout_width="match_parent"
@@ -54,7 +53,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_menu" >
+        app:itemTextColor="#FFFFFF"
+        app:menu="@menu/drawer_menu">
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
