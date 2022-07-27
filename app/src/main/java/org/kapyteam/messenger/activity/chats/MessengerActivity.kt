@@ -39,6 +39,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.calls.CallsListActivity
 import org.kapyteam.messenger.activity.IgnoreListActivity
 import org.kapyteam.messenger.activity.TextEditor
 import org.kapyteam.messenger.activity.profile.ProfileActivity
@@ -126,7 +127,6 @@ class MyThemeAnimationListener(var context: Context, var drawer: DrawerLayout) :
 
 class MessengerActivity : ThemeActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var binding: ActivityMessengerBinding
     private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
@@ -158,15 +158,14 @@ class MessengerActivity : ThemeActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBottomDrawer()
-        archiveList = mutableListOf()
-
-        binder = ActivityMessengerBinding.inflate(LayoutInflater.from(this))
-        setContentView(binder.root)
+        setContentView(R.layout.activity_messenger)
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
+
+
+
 
         initNavDrawer()
 
@@ -256,21 +255,6 @@ class MessengerActivity : ThemeActivity() {
         return toggle.onOptionsItemSelected(item)
     }
 
-    private fun initBottomDrawer() {
-        binding = ActivityMessengerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-//        val navView: BottomNavigationView = binding.navView
-//
-//        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-//
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(R.id.navigation_chats)
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navView.setupWithNavController(navController)
-    }
-
     private fun initNavDrawer() {
         drawerLayout= findViewById(R.id.container)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
@@ -352,7 +336,15 @@ class MessengerActivity : ThemeActivity() {
                     )
                     startActivity(intent)
                 }
-                R.id.theme_switch -> {
+
+                R.id.calls -> {
+                    val intent = Intent(
+                        this,
+                        CallsListActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+                R.id.theme_switch ->{
                     println("Хуй")
                     if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                         println("Большой хуй")

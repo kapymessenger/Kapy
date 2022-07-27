@@ -25,12 +25,16 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
+            android:name=".activity.calls.CallsListActivity"
+            android:exported="false"
+            android:label="@string/calls" />
+        <activity
             android:name=".activity.TextEditor"
             android:exported="false" />
         <activity
             android:name=".activity.IgnoreListActivity"
             android:exported="true"
-            android:label="@string/title_activity_messenger" />
+            android:label="@string/title_ignore_list" />
         <activity
             android:name=".activity.chats.ShareQRActivity"
             android:exported="false" />
