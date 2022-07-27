@@ -5,29 +5,16 @@
 
 package org.kapyteam.messenger.activity.chats
 
-import android.animation.Animator
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +25,6 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.IgnoreListActivity
 import org.kapyteam.messenger.activity.TextEditor
 import org.kapyteam.messenger.activity.profile.ProfileActivity
@@ -52,76 +38,15 @@ import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
-import com.dolatkia.animatedThemeManager.ThemeAnimationListener
 import com.dolatkia.animatedThemeManager.ThemeManager
+import org.kapyteam.messenger.LightTheme
+import org.kapyteam.messenger.DarkTheme
+import org.kapyteam.messenger.MyAppTheme
+import org.kapyteam.messenger.MyThemeAnimationListener
+import org.kapyteam.messenger.R
+import org.kapyteam.messenger.SettingsActivity
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 
-
-interface MyAppTheme : AppTheme {
-    fun firstActivityBackgroundColor(context: Context): Int
-    fun firstActivityTextColor(context: Context): Int
-    fun firstActivityIconColor(context: Context): Int
-}
-
-class LightTheme : MyAppTheme {
-
-    override fun id(): Int { // set unique iD for each theme
-        return 0
-    }
-
-    override fun firstActivityBackgroundColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.white)
-    }
-
-    override fun firstActivityTextColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.black)
-    }
-
-    override fun firstActivityIconColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.black)
-    }
-}
-
-class DarkTheme : MyAppTheme {
-
-    override fun id(): Int { // set unique iD for each theme
-        return 1
-    }
-
-    override fun firstActivityBackgroundColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.black)
-    }
-
-    override fun firstActivityTextColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.white)
-    }
-
-    override fun firstActivityIconColor(context: Context): Int {
-        return ContextCompat.getColor(context, R.color.white)
-    }
-}
-
-class MyThemeAnimationListener(var context: Context, var drawer: DrawerLayout) : ThemeAnimationListener{
-    override fun onAnimationStart(animation: Animator) {
-    }
-
-    override fun onAnimationEnd(animation: Animator) {
-        println("Хуй")
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            println("Большой хуй")
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            println("Гигантский хуй")
-        }
-    }
-
-    override fun onAnimationCancel(animation: Animator) {
-    }
-
-    override fun onAnimationRepeat(animation: Animator) {
-    }
-}
 
 class MessengerActivity : ThemeActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -313,11 +238,15 @@ class MessengerActivity : ThemeActivity() {
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.drawer_settings -> println("Settings")
+                R.id.drawer_settings -> {
+                    val intent = Intent(
+                        this,
+                        SettingsActivity::class.java
+                    )
+                    startActivity(intent)
+                }
                 R.id.drawer_contact -> println("Contact")
                 R.id.theme_switch ->{
-                    println(ThemeManager.instance.getCurrentTheme()
-                        ?.id())
                     if (ThemeManager.instance.getCurrentTheme()
                             ?.id() == 0
                     ) {
@@ -359,7 +288,7 @@ class MessengerActivity : ThemeActivity() {
             }
             true
         }
-        setThemeAnimationListener(MyThemeAnimationListener(this, drawerLayout))
+        setThemeAnimationListener(MyThemeAnimationListener(this))
     }
 
     public fun openDrawer(){
