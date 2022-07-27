@@ -111,19 +111,22 @@ class ChatActivity : AppCompatActivity() {
             .child(member.phone)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    member.firstname = snapshot.child("firstname").value.toString()
-                    member.lastSeen = snapshot.child("lastSeen").value.toString()
-                    member.nickname = snapshot.child("nickname").value.toString()
-                    member.online = snapshot.child("online").getValue(Boolean::class.java)!!
-                    member.photo = snapshot.child("photo").value.toString()
-                    member.lastname = snapshot.child("lastname").value.toString()
+                    try {
+                        member.firstname = snapshot.child("firstname").value.toString()
+                        member.lastSeen = snapshot.child("lastSeen").value.toString()
+                        member.nickname = snapshot.child("nickname").value.toString()
+                        member.online = snapshot.child("online").getValue(Boolean::class.java)!!
+                        member.photo = snapshot.child("photo").value.toString()
+                        member.lastname = snapshot.child("lastname").value.toString()
 
-                    snapshot.child("photo").value.toString().let {
-                        if (it != "") Picasso.get().load(it).into(avatar)
+                        snapshot.child("photo").value.toString().let {
+                            if (it != "") Picasso.get().load(it).into(avatar)
+                        }
+
+                        initUpPanel()
+                    } catch (e: Exception) {
+                        finish()
                     }
-
-                    initUpPanel()
-                    DBAgent.setOnline(true, phone)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -141,8 +144,15 @@ class ChatActivity : AppCompatActivity() {
             .child("chats")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    chatId =
-                        if (snapshot.hasChild("${member.phone}&${phone}")) "${member.phone}&${phone}" else "${phone}&${member.phone}"
+                    chatId = if (snapshot.hasChild("${member.phone}&${phone}")) {
+                        "${member.phone}&${phone}"
+                    } else if (snapshot.hasChild("${phone}&${member.phone}")) {
+                        "${phone}&${member.phone}"
+                    } else {
+                        finish()
+                        return
+                    }
+
                     receiveMessage(chatId)
                 }
 

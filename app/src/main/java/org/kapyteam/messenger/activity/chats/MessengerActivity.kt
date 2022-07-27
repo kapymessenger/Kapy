@@ -206,10 +206,14 @@ class MessengerActivity : ThemeActivity() {
         val data = mutableListOf<String>()
         dbReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (dialog in snapshot.children) {
-                    val members = dialog.child("members").value as MutableList<String>
-                    if (members.contains(phone)) {
-                        data.add(members[if (members[0] == phone) 1 else 0])
+                if (snapshot.hasChildren()) {
+                    snapshot.children.forEach {
+                        if (it.hasChild("members")) {
+                            val members = it.child("members").value as MutableList<String>
+                            if (members.contains(phone)) {
+                                data.add(members[if (members[0] == phone) 1 else 0])
+                            }
+                        }
                     }
                 }
 

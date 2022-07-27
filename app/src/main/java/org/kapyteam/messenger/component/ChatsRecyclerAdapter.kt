@@ -69,7 +69,6 @@ class ChatsRecyclerAdapter(
                                 override fun onDataChange(snapshot_: DataSnapshot) {
                                     applyMetadata(snapshot_, holder)
                                 }
-
                                 override fun onCancelled(error: DatabaseError) {}
                             })
                     }

@@ -13,11 +13,14 @@ class ShareQRActivity : AppCompatActivity() {
         setContentView(R.layout.activity_share_qr)
 
         val qr: ImageView = findViewById(R.id.idIVQrcode)
-        val nickIntent = intent.getStringExtra("phone")!!
-        val nickname: TextView = findViewById(R.id.nickname_qr)
 
-        nickname.text = nickIntent
-
-        qr.setImageBitmap(QRCode.from(nickIntent).bitmap())
+        if (intent.hasExtra("phone")) {
+            val nickIntent = intent.getStringExtra("phone")!!
+            val nickname: TextView = findViewById(R.id.nickname_qr)
+            nickname.text = nickIntent
+            qr.setImageBitmap(QRCode.from(nickIntent).bitmap())
+        } else {
+            finish()
+        }
     }
 }
