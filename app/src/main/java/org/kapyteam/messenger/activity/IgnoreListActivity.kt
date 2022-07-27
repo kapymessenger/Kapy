@@ -99,12 +99,12 @@ class IgnoreListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_chats)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
+//
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(R.id.navigation_chats)
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun onDestroy() {
