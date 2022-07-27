@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.database.CallAgent
@@ -52,6 +53,9 @@ class IncomingCallActivity : AppCompatActivity() {
     private fun initMetadataViews() {
         profileName.text = "${incomingProfile.firstname} ${incomingProfile.lastname}"
         phoneNumber.text = incomingProfile.phone
+        if (incomingProfile.photo != "") {
+            Picasso.get().load(incomingProfile.photo).into(profileImage)
+        }
     }
 
     private fun closeCall() {

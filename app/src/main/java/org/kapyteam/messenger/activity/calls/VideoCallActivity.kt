@@ -69,7 +69,7 @@ class VideoCallActivity : AppCompatActivity() {
             }
         }
     }
-    val requestedPermission =
+    private val requestedPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->
         }
     override fun onCreate(savedInstanceState: Bundle?) {
