@@ -20,7 +20,6 @@ import org.kapyteam.messenger.model.Profile
 
 class IgnoreListActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var binding: ActivityIgnoreListBinding
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
@@ -29,7 +28,7 @@ class IgnoreListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBottomDrawer()
+        setContentView(R.layout.activity_ignore_list)
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
@@ -92,19 +91,6 @@ class IgnoreListActivity : AppCompatActivity() {
         })
     }
 
-
-    private fun initBottomDrawer() {
-        binding = ActivityIgnoreListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_chats)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-    }
 
     override fun onDestroy() {
         DBAgent.setOnline(false, phone)

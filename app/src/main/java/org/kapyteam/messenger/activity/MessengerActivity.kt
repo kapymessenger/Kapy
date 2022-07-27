@@ -29,17 +29,16 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import org.kapyteam.messenger.R
+import org.kapyteam.messenger.activity.calls.CallsListActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.DBAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
-import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 
 class MessengerActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var binding: ActivityMessengerBinding
     private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
@@ -48,11 +47,14 @@ class MessengerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBottomDrawer()
+        setContentView(R.layout.activity_messenger)
 
         dbReference = FirebaseDatabase.getInstance().getReference("chats")
         dbReferenceUsers = FirebaseDatabase.getInstance().getReference("users")
         phone = intent.getStringExtra("phone")!!
+
+
+
 
         initNavDrawer()
 
@@ -142,20 +144,6 @@ class MessengerActivity : AppCompatActivity() {
         return toggle.onOptionsItemSelected(item)
     }
 
-    private fun initBottomDrawer() {
-        binding = ActivityMessengerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_messenger)
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_chats)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-    }
 
     private fun initNavDrawer() {
         val drawerLayout: DrawerLayout = findViewById(R.id.container)
@@ -213,6 +201,14 @@ class MessengerActivity : AppCompatActivity() {
                     val intent = Intent(
                         this,
                         TextEditor::class.java
+                    )
+                    startActivity(intent)
+                }
+
+                R.id.calls -> {
+                    val intent = Intent(
+                        this,
+                        CallsListActivity::class.java
                     )
                     startActivity(intent)
                 }
