@@ -68,9 +68,9 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
             .signInWithCredential(credentials)
             .addOnFailureListener {
                 verificationCode.text?.clear()
-                Toast.makeText(this, "Invalid code. Please try again", 2)
+                Toast.makeText(this, "Invalid code. Please try again", Toast.LENGTH_SHORT)
             }
-            .addOnCompleteListener {
+            .addOnSuccessListener {
                 FirebaseAuthAgent
                     .getReference()
                     .child("users")
