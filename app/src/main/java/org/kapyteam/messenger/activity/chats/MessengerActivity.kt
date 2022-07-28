@@ -327,9 +327,6 @@ class MessengerActivity : ThemeActivity() {
                     startActivity(intent)
                 }
                 R.id.drawer_contact -> println("Contact")
-                R.id.theme_switch ->{
-
-                }
                 R.id.drawer_contact -> println("Contact")
                 R.id.theme_switch -> {
                     println(
