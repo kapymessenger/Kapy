@@ -12,10 +12,6 @@
         android:title="Edit profile"
         android:icon="@drawable/pencil"/>
     <item
-        android:id="@+id/settings_font_size"
-        android:title="Change font size in notes"
-        android:icon="@drawable/text_size" />
-    <item
         android:id="@+id/settings_log_out"
         android:title="Log out"
         android:icon="@drawable/logout_icon"/>

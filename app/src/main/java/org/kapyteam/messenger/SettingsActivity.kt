@@ -92,7 +92,6 @@ class SettingsActivity : ThemeActivity() {
 //                    intent.putExtra("phone", phone)    Max, please complete this
                     startActivity(intent)
                 }
-                R.id.settings_font_size -> {}
                 R.id.settings_log_out -> {
                     FirebaseAuthAgent.getInstance().signOut()
                     val intent = Intent(
