@@ -5,8 +5,6 @@
 
 package org.kapyteam.messenger.activity.chats
 
-import android.animation.Animator
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -30,7 +28,6 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.IgnoreListActivity
 import org.kapyteam.messenger.activity.TextEditor
 import org.kapyteam.messenger.activity.profile.ProfileActivity
@@ -43,8 +40,13 @@ import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
-import com.dolatkia.animatedThemeManager.ThemeAnimationListener
 import com.dolatkia.animatedThemeManager.ThemeManager
+import org.kapyteam.messenger.LightTheme
+import org.kapyteam.messenger.DarkTheme
+import org.kapyteam.messenger.MyAppTheme
+import org.kapyteam.messenger.MyThemeAnimationListener
+import org.kapyteam.messenger.R
+import org.kapyteam.messenger.SettingsActivity
 import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 
 
@@ -315,6 +317,14 @@ class MessengerActivity : ThemeActivity() {
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.drawer_settings -> {
+                    val intent = Intent(
+                        this,
+                        SettingsActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+                R.id.drawer_contact -> println("Contact")
+                R.id.theme_switch ->{
 
                 }
                 R.id.drawer_contact -> println("Contact")
@@ -365,6 +375,10 @@ class MessengerActivity : ThemeActivity() {
             true
         }
         setThemeAnimationListener(MyThemeAnimationListener(this))
+    }
+
+    public fun openDrawer(){
+        drawerLayout.openDrawer(drawerLayout)
     }
 
     private fun scanCode() {
