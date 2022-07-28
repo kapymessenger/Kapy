@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstname_edit" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/setup_image"
         android:layout_width="179dp"
         android:layout_height="179dp"
@@ -71,5 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/registration_image" />
+        android:src="@drawable/registration_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.TextView
@@ -313,7 +314,9 @@ class MessengerActivity : ThemeActivity() {
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.drawer_settings -> println("Settings")
+                R.id.drawer_settings -> {
+
+                }
                 R.id.drawer_contact -> println("Contact")
                 R.id.theme_switch -> {
                     println(
