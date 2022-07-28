@@ -120,6 +120,7 @@ class MessengerActivity : ThemeActivity() {
     private lateinit var binding: ActivityMessengerBinding
     private lateinit var addChatBtn: FloatingActionButton
     private lateinit var dbReference: DatabaseReference
+    private lateinit var refresh: FloatingActionButton
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
@@ -162,6 +163,11 @@ class MessengerActivity : ThemeActivity() {
         initNavDrawer()
 
         addChatBtn = findViewById(R.id.addChat)
+        refresh = findViewById(R.id.refresh)
+
+        refresh.setOnClickListener {
+            createDialogList()
+        }
 
         addChatBtn.setOnClickListener {
             // TODO: get contact list from device

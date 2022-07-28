@@ -17,6 +17,24 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="100dp"
+            android:background="#E0B82F"
+            android:clickable="true"
+            android:contentDescription="@string/add_dialog"
+            android:src="@drawable/refresh_icon"
+            app:backgroundTint="#E0B82F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:rippleColor="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
