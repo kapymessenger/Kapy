@@ -64,65 +64,53 @@ class IgnoreListActivity : AppCompatActivity() {
     }
 
     private fun createDialogList() {
+        val data = mutableListOf<String>()
         dbReference.addValueEventListener(object : ValueEventListener {
-            val data = mutableListOf<String>()
             override fun onDataChange(snapshot: DataSnapshot) {
-                DBAgent.setOnline(true, phone)
-                for (dialog in snapshot.children) {
-                    if (dialog.hasChild("members")) {
-                        val members = dialog.child("members").value as MutableList<String>
-                        if (members.contains(phone)) {
-                            data.add(members[if (members[0] == phone) 1 else 0])
+                if (snapshot.hasChildren()) {
+                    snapshot.children.forEach {
+                        if (it.hasChild("members")) {
+                            val members = it.child("members").value as MutableList<String>
+                            if (members.contains(phone)) {
+                                data.add(members[if (members[0] == phone) 1 else 0])
+                            }
                         }
                     }
                 }
-                dbReferenceUsers
-                    .child(phone)
-                    .child("archiveList")
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot_: DataSnapshot) {
-                            val profiles = mutableListOf<Profile>()
-                            if (snapshot_.hasChildren()) {
-                                snapshot_.children.forEach { child ->
-                                    if (child.value != "") archiveList.add(child.value.toString())
-                                }
-                            }
 
-                            recyclerView.adapter = ChatsRecyclerAdapter(
-                                profiles,
-                                this@IgnoreListActivity,
-                                Intent(this@IgnoreListActivity, ChatActivity::class.java),
-                                phone
-                            )
+                val profiles = mutableListOf<Profile>()
 
-                            for (profile in archiveList) {
-                                dbReferenceUsers
-                                    .child(profile)
-                                    .addListenerForSingleValueEvent(object : ValueEventListener {
-                                        override fun onDataChange(snap: DataSnapshot) {
-                                            try {
-                                                profiles.add(
-                                                    Profile(
-                                                        firstname = snap.child("firstname").value.toString(),
-                                                        lastname = snap.child("lastname").value.toString(),
-                                                        nickname = snap.child("nickname").value.toString(),
-                                                        phone = snap.child("phone").value.toString(),
-                                                        photo = snap.child("photo").value.toString(),
-                                                        lastSeen = snap.child("lastSeen").value.toString()
-                                                    )
-                                                )
-                                                (recyclerView.adapter as ChatsRecyclerAdapter).update(profiles)
-                                                (recyclerView.adapter as ChatsRecyclerAdapter).notifyDataSetChanged()
-                                            } catch (e: Exception) {}
+                dbReferenceUsers.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val archiveList = mutableListOf<String>()
+                        for (profile in snapshot.children) {
+                            if (profile.hasChild("phone")) {
+                                if (profile.hasChild("archiveList")) {
+                                    if (snapshot.child(phone).child("archiveList").hasChildren()) {
+                                        snapshot.child(phone).child("archiveList").children.forEach { child ->
+                                            if (child.value != "") archiveList.add(child.value.toString())
                                         }
-
-                                        override fun onCancelled(error: DatabaseError) {}
-                                    })
+                                    }
+                                }
+                                if (profile.child("phone").value.toString() in data && profile.child(
+                                        "phone"
+                                    ).value.toString() in archiveList
+                                ) {
+                                    profiles.add(Profile.parse(profile.value as Map<*, *>, false))
+                                }
                             }
                         }
 
-                        override fun onCancelled(error: DatabaseError) {}
-                    })
+                        recyclerView.adapter = ChatsRecyclerAdapter(
+                            profiles,
+                            this@IgnoreListActivity,
+                            Intent(this@IgnoreListActivity, ChatActivity::class.java),
+                            phone
+                        )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {}
