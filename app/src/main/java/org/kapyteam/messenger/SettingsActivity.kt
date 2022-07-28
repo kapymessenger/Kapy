@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Switch
+import android.widget.Toast
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.dolatkia.animatedThemeManager.ThemeManager
@@ -26,14 +27,11 @@ class SettingsActivity : ThemeActivity() {
 
         val myAppTheme = appTheme as MyAppTheme
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         // set background color
         binder.root.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
         binder.settingsProfileName.setTextColor(myAppTheme.firstActivityTextColor(this))
         binder.settingsProfilePhoneNumber.setTextColor(myAppTheme.firstActivityTextColor(this))
         //set text color
-
-
     }
 
 
@@ -56,7 +54,6 @@ class SettingsActivity : ThemeActivity() {
         binder = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
         setContentView(binder.root)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setThemeAnimationListener(MyThemeAnimationListener(this))
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -72,11 +69,18 @@ class SettingsActivity : ThemeActivity() {
                     val intent = intent
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                     finish()
-                    if (ThemeManager.instance.getCurrentTheme()?.id() == 0) {
-                        ThemeManager.instance.changeTheme(DarkTheme(), menu)
+                    val sPref = getSharedPreferences("MyPref", MODE_PRIVATE)
+                    val ed = sPref.edit()
+                    if (sPref.getString("Theme", "") == "0") {
+                        ed.putString("Theme", "1");
+                        ed.commit();
+                        Toast.makeText(this, "Default theme was changed to light", Toast.LENGTH_SHORT).show()
                     } else {
-                        ThemeManager.instance.changeTheme(LightTheme(), menu)
+                        ed.putString("Theme", "0");
+                        ed.commit();
+                        Toast.makeText(this, "Default theme was changed to dark", Toast.LENGTH_SHORT).show()
                     }
+
                     overridePendingTransition(0, 0)
                     startActivity(intent)
                 }
