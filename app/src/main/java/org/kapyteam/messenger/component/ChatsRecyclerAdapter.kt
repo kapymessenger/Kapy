@@ -33,7 +33,6 @@ class ChatsRecyclerAdapter(
         val contactName: TextView = itemView.findViewById(R.id.contact_name)
         val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
         val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
-        val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -69,6 +68,7 @@ class ChatsRecyclerAdapter(
                                 override fun onDataChange(snapshot_: DataSnapshot) {
                                     applyMetadata(snapshot_, holder)
                                 }
+
                                 override fun onCancelled(error: DatabaseError) {}
                             })
                     }
@@ -79,7 +79,6 @@ class ChatsRecyclerAdapter(
 
 
         holder.contactName.text = chats[position].nickname
-        holder.contactMessageCount.text = "1"
 
         FirebaseAuthAgent
             .getReference()
@@ -113,9 +112,13 @@ class ChatsRecyclerAdapter(
     private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
         if (snapshot.hasChildren()) {
             snapshot.children.first().let {
-                holder.contactLastMessage.text = it
-                    .child("content")
-                    .value.toString()
+                if (it.child("content").value.toString().length > 25) {
+                    holder.contactLastMessage.text =
+                        "${it.child("content").value.toString().substring(0, 25)}..."
+                } else {
+                    holder.contactLastMessage.text =
+                        it.child("content").value.toString()
+                }
 
                 holder.contactLastMessageTime.text = it
                     .child("createTime")
