@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/settings_switch_theme"
+        android:title="Change default theme"
+        android:actionLayout="@layout/switch_item"
+        android:icon="@drawable/sun"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/settings_profile_edit"
+        android:title="Edit profile"
+        android:icon="@drawable/pencil"/>
+    <item
+        android:id="@+id/settings_font_size"
+        android:title="Change font size in notes"
+        android:icon="@drawable/text_size"/>
+    <item
+        android:id="@+id/settings_log_out"
+        android:title="Log out"
+        android:icon="@drawable/logout_icon"/>
+</menu>
