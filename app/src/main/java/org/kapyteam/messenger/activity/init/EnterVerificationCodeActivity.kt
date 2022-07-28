@@ -1,5 +1,6 @@
 package org.kapyteam.messenger.activity.init
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,7 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 p0.toString().let {
                     if (it.length == 6) {
+                        ProgressDialog.show(this@EnterVerificationCodeActivity, "", "Please wait...", true)
                         verifyCode(it)
                     }
                 }
