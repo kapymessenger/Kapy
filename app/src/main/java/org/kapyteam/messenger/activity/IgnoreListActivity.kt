@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.chats.ChatActivity
@@ -25,6 +26,7 @@ class IgnoreListActivity : AppCompatActivity() {
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
+    private lateinit var refresh: FloatingActionButton
     private var archiveList: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,12 @@ class IgnoreListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         createDialogList()
         CallAgent.prepareListener(this, phone)
+
+        refresh = findViewById(R.id.refresh)
+
+        refresh.setOnClickListener {
+            createDialogList()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
