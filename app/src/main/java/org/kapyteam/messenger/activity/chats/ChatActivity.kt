@@ -146,11 +146,8 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     chatId = if (snapshot.hasChild("${member.phone}&${phone}")) {
                         "${member.phone}&${phone}"
-                    } else if (snapshot.hasChild("${phone}&${member.phone}")) {
-                        "${phone}&${member.phone}"
                     } else {
-                        finish()
-                        return
+                        "${phone}&${member.phone}"
                     }
 
                     receiveMessage(chatId)

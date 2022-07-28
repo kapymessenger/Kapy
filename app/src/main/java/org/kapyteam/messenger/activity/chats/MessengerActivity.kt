@@ -229,10 +229,12 @@ class MessengerActivity : ThemeActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val archiveList = mutableListOf<String>()
                         for (profile in snapshot.children) {
-                            if (profile.hasChild("phone") && profile.hasChild("archiveList")) {
-                                if (snapshot.child(phone).child("archiveList").hasChildren()) {
-                                    snapshot.child(phone).child("archiveList").children.forEach { child ->
-                                        if (child.value != "") archiveList.add(child.value.toString())
+                            if (profile.hasChild("phone")) {
+                                if (profile.hasChild("archiveList")) {
+                                    if (snapshot.child(phone).child("archiveList").hasChildren()) {
+                                        snapshot.child(phone).child("archiveList").children.forEach { child ->
+                                            if (child.value != "") archiveList.add(child.value.toString())
+                                        }
                                     }
                                 }
                                 if (profile.child("phone").value.toString() in data && profile.child(
@@ -327,7 +329,6 @@ class MessengerActivity : ThemeActivity() {
                     startActivity(intent)
                 }
                 R.id.drawer_contact -> println("Contact")
-                R.id.drawer_contact -> println("Contact")
                 R.id.theme_switch -> {
                     println(
                         ThemeManager.instance.getCurrentTheme()
@@ -343,7 +344,6 @@ class MessengerActivity : ThemeActivity() {
                         ThemeManager.instance.changeTheme(LightTheme(), navigationView)
 
                     }
-
                 }
                 R.id.drawer_qr -> {
                     scanCode()
