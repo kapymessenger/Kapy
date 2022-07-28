@@ -21,6 +21,7 @@ class SettingsActivity : ThemeActivity() {
 
         val myAppTheme = appTheme as MyAppTheme
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         // set background color
         binder.root.setBackgroundColor(myAppTheme.firstActivityBackgroundColor(this))
         binder.settingsSwitchTheme.setTextColor(myAppTheme.firstActivityTextColor(this))
@@ -31,6 +32,8 @@ class SettingsActivity : ThemeActivity() {
 
     }
 
+
+
     override fun getStartTheme(): AppTheme {
         return LightTheme()
     }
@@ -40,6 +43,7 @@ class SettingsActivity : ThemeActivity() {
         binder = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
         setContentView(binder.root)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setThemeAnimationListener(MyThemeAnimationListener(this))
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -62,6 +66,7 @@ class SettingsActivity : ThemeActivity() {
         }
 
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

@@ -5,6 +5,8 @@
 
 package org.kapyteam.messenger.activity.chats
 
+import android.animation.Animator
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -40,6 +42,7 @@ import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
+import com.dolatkia.animatedThemeManager.ThemeAnimationListener
 import com.dolatkia.animatedThemeManager.ThemeManager
 import org.kapyteam.messenger.LightTheme
 import org.kapyteam.messenger.DarkTheme
