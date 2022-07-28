@@ -3,7 +3,6 @@ package org.kapyteam.messenger.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +12,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import org.kapyteam.messenger.R
+
 
 class TextEditor : AppCompatActivity(), View.OnClickListener {
 
@@ -26,9 +27,18 @@ class TextEditor : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_text_editor)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+
+
+
         clearButton = findViewById(R.id.clearButton)
         copyButton = findViewById(R.id.copyButton)
         editText = findViewById(R.id.editText)
+
+
+        val sPref = getSharedPreferences("MyPref", MODE_PRIVATE)
+        val savedText: String? = sPref.getString("Notes", "")
+
+        editText.setText(savedText)
 
         clearButton.setOnClickListener(this)
         copyButton.setOnClickListener(this)
@@ -41,7 +51,10 @@ class TextEditor : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //Into DB
+                val sPref = getSharedPreferences("MyPref", MODE_PRIVATE)
+                val ed = sPref.edit()
+                ed.putString("Notes", editText.text.toString());
+                ed.commit();
             }
         })
     }
@@ -49,6 +62,7 @@ class TextEditor : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
+
             else -> super.onOptionsItemSelected(item)
         }
         return true
