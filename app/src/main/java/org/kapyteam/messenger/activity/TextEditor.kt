@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kapyteam.messenger.R
 
 
+
+
 class TextEditor : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var clearButton: Button

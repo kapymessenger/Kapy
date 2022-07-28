@@ -25,6 +25,8 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
     private lateinit var verificationCode: PinView
     private lateinit var phone: String
 
+    private lateinit var bar: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter_verification_code)
@@ -49,7 +51,7 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 p0.toString().let {
                     if (it.length == 6) {
-                        ProgressDialog.show(this@EnterVerificationCodeActivity, "", "Please wait...", true)
+                        bar = ProgressDialog.show(this@EnterVerificationCodeActivity, "", "Please wait...", true)
                         verifyCode(it)
                     }
                 }
@@ -70,7 +72,8 @@ class EnterVerificationCodeActivity : AppCompatActivity() {
             .signInWithCredential(credentials)
             .addOnFailureListener {
                 verificationCode.text?.clear()
-                Toast.makeText(this, "Invalid code. Please try again", Toast.LENGTH_SHORT)
+                bar.dismiss()
+                Toast.makeText(this, "Invalid code. Please try again", Toast.LENGTH_SHORT).show()
             }
             .addOnSuccessListener {
                 FirebaseAuthAgent
