@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.misc
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -18,7 +18,7 @@ import org.kapyteam.messenger.R
 
 
 
-class TextEditor : AppCompatActivity(), View.OnClickListener {
+class TextEditorActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var clearButton: Button
     private lateinit var copyButton: Button

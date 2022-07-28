@@ -25,7 +25,7 @@
         android:theme="@style/Theme.Kapy"
         tools:targetApi="31">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activity.misc.SettingsActivity"
             android:exported="false"
             android:label="@string/settings"/>
             <activity
@@ -37,10 +37,10 @@
             android:exported="false"
             android:label="@string/calls" />
         <activity
-            android:name=".activity.TextEditor"
+            android:name=".activity.misc.TextEditorActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.IgnoreListActivity"
+            android:name=".activity.misc.IgnoreListActivity"
             android:exported="true"
             android:label="@string/title_ignore_list" />
         <activity

@@ -30,9 +30,10 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.kapyteam.messenger.*
 import org.kapyteam.messenger.R
-import org.kapyteam.messenger.activity.IgnoreListActivity
-import org.kapyteam.messenger.activity.TextEditor
+import org.kapyteam.messenger.activity.misc.IgnoreListActivity
+import org.kapyteam.messenger.activity.misc.TextEditorActivity
 import org.kapyteam.messenger.activity.init.GreetingActivity
+import org.kapyteam.messenger.activity.misc.SettingsActivity
 import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.activity.profile.ProfileEditingActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
@@ -259,9 +260,9 @@ class MessengerActivity : ThemeActivity() {
                         this,
                         SettingsActivity::class.java
                     )
+                    intent.putExtra("phone", phone)
                     startActivity(intent)
                 }
-                R.id.drawer_contact -> println("Contact")
                 R.id.theme_switch -> {
                     println(
                         ThemeManager.instance.getCurrentTheme()
@@ -292,7 +293,7 @@ class MessengerActivity : ThemeActivity() {
                 R.id.notes -> {
                     val intent = Intent(
                         this,
-                        TextEditor::class.java
+                        TextEditorActivity::class.java
                     )
                     startActivity(intent)
                 }

@@ -1,4 +1,4 @@
-package org.kapyteam.messenger.activity
+package org.kapyteam.messenger.activity.misc
 
 import android.content.Intent
 import android.os.Bundle
