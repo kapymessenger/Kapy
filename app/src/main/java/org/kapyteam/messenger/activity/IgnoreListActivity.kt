@@ -3,11 +3,7 @@ package org.kapyteam.messenger.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,18 +12,14 @@ import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.chats.ChatActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
-import org.kapyteam.messenger.database.DBAgent
-import org.kapyteam.messenger.databinding.ActivityIgnoreListBinding
 import org.kapyteam.messenger.model.Profile
 
 class IgnoreListActivity : AppCompatActivity() {
-    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReferenceUsers: DatabaseReference
     private lateinit var recyclerView: RecyclerView
     private lateinit var phone: String
     private lateinit var refresh: FloatingActionButton
-    private var archiveList: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

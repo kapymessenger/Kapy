@@ -5,23 +5,21 @@
 
 package org.kapyteam.messenger.activity.chats
 
-import android.animation.Animator
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
+import com.dolatkia.animatedThemeManager.ThemeManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
@@ -30,27 +28,19 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import org.kapyteam.messenger.*
+import org.kapyteam.messenger.R
 import org.kapyteam.messenger.activity.IgnoreListActivity
 import org.kapyteam.messenger.activity.TextEditor
-import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.activity.init.GreetingActivity
+import org.kapyteam.messenger.activity.profile.ProfileActivity
 import org.kapyteam.messenger.activity.profile.ProfileEditingActivity
 import org.kapyteam.messenger.component.ChatsRecyclerAdapter
 import org.kapyteam.messenger.database.CallAgent
 import org.kapyteam.messenger.database.FirebaseAuthAgent
+import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 import org.kapyteam.messenger.model.Profile
 import org.kapyteam.messenger.util.SerializableObject
-import com.dolatkia.animatedThemeManager.AppTheme
-import com.dolatkia.animatedThemeManager.ThemeActivity
-import com.dolatkia.animatedThemeManager.ThemeAnimationListener
-import com.dolatkia.animatedThemeManager.ThemeManager
-import org.kapyteam.messenger.LightTheme
-import org.kapyteam.messenger.DarkTheme
-import org.kapyteam.messenger.MyAppTheme
-import org.kapyteam.messenger.MyThemeAnimationListener
-import org.kapyteam.messenger.R
-import org.kapyteam.messenger.SettingsActivity
-import org.kapyteam.messenger.databinding.ActivityMessengerBinding
 
 class MessengerActivity : ThemeActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
@@ -318,10 +308,6 @@ class MessengerActivity : ThemeActivity() {
             true
         }
         setThemeAnimationListener(MyThemeAnimationListener(this))
-    }
-
-    public fun openDrawer(){
-        drawerLayout.openDrawer(drawerLayout)
     }
 
     private fun scanCode() {

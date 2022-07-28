@@ -4,19 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
-import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.Toast
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
-import com.dolatkia.animatedThemeManager.ThemeManager
 import com.google.android.material.navigation.NavigationView
 import org.kapyteam.messenger.activity.chats.ShareQRActivity
 import org.kapyteam.messenger.activity.init.GreetingActivity
 import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.databinding.ActivitySettingsBinding
-
 
 class SettingsActivity : ThemeActivity() {
 
@@ -34,19 +29,8 @@ class SettingsActivity : ThemeActivity() {
         //set text color
     }
 
-
-
     override fun getStartTheme(): AppTheme {
         return LightTheme()
-    }
-
-    fun logOut(view: View){
-        FirebaseAuthAgent.getInstance().signOut()
-        val intent = Intent(
-            this,
-            GreetingActivity::class.java
-        )
-        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,12 +56,12 @@ class SettingsActivity : ThemeActivity() {
                     val sPref = getSharedPreferences("MyPref", MODE_PRIVATE)
                     val ed = sPref.edit()
                     if (sPref.getString("Theme", "") == "0") {
-                        ed.putString("Theme", "1");
-                        ed.commit();
+                        ed.putString("Theme", "1")
+                        ed.commit()
                         Toast.makeText(this, "Default theme was changed to light", Toast.LENGTH_SHORT).show()
                     } else {
-                        ed.putString("Theme", "0");
-                        ed.commit();
+                        ed.putString("Theme", "0")
+                        ed.commit()
                         Toast.makeText(this, "Default theme was changed to dark", Toast.LENGTH_SHORT).show()
                     }
 

@@ -2,20 +2,19 @@ package org.kapyteam.messenger.activity.init
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatDelegate
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
-import com.dolatkia.animatedThemeManager.ThemeManager
-import org.kapyteam.messenger.*
+import org.kapyteam.messenger.DarkTheme
+import org.kapyteam.messenger.LightTheme
+import org.kapyteam.messenger.MyAppTheme
+import org.kapyteam.messenger.MyThemeAnimationListener
 import org.kapyteam.messenger.activity.chats.MessengerActivity
 import org.kapyteam.messenger.database.FirebaseAuthAgent
-import org.kapyteam.messenger.databinding.ActivitySettingsBinding
 import org.kapyteam.messenger.databinding.ActivitySplashBinding
 import org.kapyteam.messenger.util.FileUtil
-import kotlin.system.exitProcess
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : ThemeActivity() {

@@ -105,10 +105,6 @@ class ChatsRecyclerAdapter(
         }
     }
 
-    fun update(profiles: List<Profile>) {
-        this.chats = profiles
-    }
-
     private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
         if (snapshot.hasChildren()) {
             snapshot.children.first().let {

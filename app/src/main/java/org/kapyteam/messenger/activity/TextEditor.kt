@@ -55,8 +55,8 @@ class TextEditor : AppCompatActivity(), View.OnClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val sPref = getSharedPreferences("MyPref", MODE_PRIVATE)
                 val ed = sPref.edit()
-                ed.putString("Notes", editText.text.toString());
-                ed.commit();
+                ed.putString("Notes", editText.text.toString())
+                ed.commit()
             }
         })
     }
