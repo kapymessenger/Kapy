@@ -64,19 +64,6 @@
             android:text="12:00 pm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/contact_message_count"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/circle"
-            android:text="5"
-            android:textAlignment="center"
-            android:textColor="#FFFF00"
-            app:layout_constraintStart_toEndOf="@+id/contact_last_message"
-            app:layout_constraintTop_toBottomOf="@+id/contact_last_message_time" />
     </LinearLayout>
 
 </LinearLayout>

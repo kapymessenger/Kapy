@@ -32,6 +32,10 @@
                 android:icon="@drawable/notes"
                 android:title="@string/notes" />
             <item
+                android:id="@+id/calls"
+                android:icon="@drawable/phone_icon"
+                android:title="@string/calls" />
+            <item
                 android:id="@+id/drawer_settings"
                 android:icon="@drawable/settings_icon"
                 android:title="@string/settings" />

@@ -101,29 +101,34 @@ class CreateDialogActivity : AppCompatActivity() {
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.hasChild(result.contents)) {
-                            val intent = Intent(
-                                this@CreateDialogActivity,
-                                ProfileActivity::class.java
-                            )
-                            intent.putExtra(
-                                "profile", Profile(
-                                    firstname = snapshot.child(result.contents)
-                                        .child("firstname").value.toString(),
-                                    lastname = snapshot.child(result.contents)
-                                        .child("lastname").value.toString(),
-                                    phone = snapshot.child(result.contents)
-                                        .child("phone").value.toString(),
-                                    nickname = snapshot.child(result.contents)
-                                        .child("nickname").value.toString(),
-                                    photo = snapshot.child(result.contents)
-                                        .child("photo").value.toString(),
-                                    lastSeen = snapshot.child(result.contents)
-                                        .child("lastSeen").value.toString(),
-                                    online = snapshot.child(result.contents).child("online")
-                                        .getValue(Boolean::class.java)!!
+                            try {
+                                val intent = Intent(
+                                    this@CreateDialogActivity,
+                                    ProfileActivity::class.java
                                 )
-                            )
-                            startActivity(intent)
+                                intent.putExtra("phone", phone)
+                                intent.putExtra(
+                                    "profile", Profile(
+                                        firstname = snapshot.child(result.contents)
+                                            .child("firstname").value.toString(),
+                                        lastname = snapshot.child(result.contents)
+                                            .child("lastname").value.toString(),
+                                        phone = snapshot.child(result.contents)
+                                            .child("phone").value.toString(),
+                                        nickname = snapshot.child(result.contents)
+                                            .child("nickname").value.toString(),
+                                        photo = snapshot.child(result.contents)
+                                            .child("photo").value.toString(),
+                                        lastSeen = snapshot.child(result.contents)
+                                            .child("lastSeen").value.toString(),
+                                        online = snapshot.child(result.contents).child("online")
+                                            .getValue(Boolean::class.java)!!
+                                    )
+                                )
+                                startActivity(intent)
+                            } catch (e: Exception) {
+                                finish()
+                            }
                         } else {
                             val builder =
                                 AlertDialog.Builder(this@CreateDialogActivity)

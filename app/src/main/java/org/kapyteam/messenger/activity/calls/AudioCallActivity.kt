@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.JsonParser
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
@@ -121,7 +122,9 @@ class AudioCallActivity : AppCompatActivity() {
     }
 
     private fun preInitMetadataViews() {
-        // TODO: IMG IMPLEMENT
+        if (profile.photo != "") {
+            Picasso.get().load(profile.photo).into(profileImage)
+        }
         profileName.text = "${profile.firstname} ${profile.lastname}"
         callType.text = if (isOutgoing) "Outgoing audio call" else "Incoming audio call"
         phoneNumber.text = profile.phone

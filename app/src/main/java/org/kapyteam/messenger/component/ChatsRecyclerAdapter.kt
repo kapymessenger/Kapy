@@ -23,7 +23,7 @@ import org.kapyteam.messenger.database.FirebaseAuthAgent
 import org.kapyteam.messenger.model.Profile
 
 class ChatsRecyclerAdapter(
-    private val chats: List<Profile>,
+    private var chats: List<Profile>,
     private val activity: Activity,
     private val intent: Intent,
     private val phone: String
@@ -33,7 +33,6 @@ class ChatsRecyclerAdapter(
         val contactName: TextView = itemView.findViewById(R.id.contact_name)
         val contactLastMessage: TextView = itemView.findViewById(R.id.contact_last_message)
         val contactLastMessageTime: TextView = itemView.findViewById(R.id.contact_last_message_time)
-        val contactMessageCount: TextView = itemView.findViewById(R.id.contact_message_count)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -68,20 +67,6 @@ class ChatsRecyclerAdapter(
                             .addValueEventListener(object : ValueEventListener {
                                 override fun onDataChange(snapshot_: DataSnapshot) {
                                     applyMetadata(snapshot_, holder)
-//                                if (shouldUpdate) {
-//                                    val json =
-//                                        DialogUtil.loadMessagesMetadata(activity.applicationContext).asJsonObject
-//
-//                                    snapshot_.children.first().child("content").value.toString()
-//                                        .let {
-//                                            if (json.has(child)) {
-//                                                updateJson(json, child, it)
-//                                            } else {
-//                                                json.add(child, JsonParser.parseString(it))
-//                                                DialogUtil.saveMessagesMetadata(json, activity.applicationContext)
-//                                            }
-//                                        }
-//                                }
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {}
@@ -94,7 +79,6 @@ class ChatsRecyclerAdapter(
 
 
         holder.contactName.text = chats[position].nickname
-        holder.contactMessageCount.text = "1"
 
         FirebaseAuthAgent
             .getReference()
@@ -111,23 +95,6 @@ class ChatsRecyclerAdapter(
             })
     }
 
-//    private fun updateJson(json: JsonObject, target: String, msg: String) {
-//        val new = JsonObject()
-//
-//        json.keySet().iterator().let {
-//            while (it.hasNext()) {
-//                val key = it.next()
-//                if (key == target) {
-//                    new.add(key, JsonParser.parseString(msg))
-//                } else {
-//                    new.add(key, json.get(key))
-//                }
-//            }
-//        }
-//
-//        DialogUtil.saveMessagesMetadata(new, activity.applicationContext)
-//    }
-
     private fun getChild(snapshot: DataSnapshot, position: Int): String {
         return if (snapshot.hasChild("${phone}&${chats[position].phone}")) {
             "${phone}&${chats[position].phone}"
@@ -138,15 +105,25 @@ class ChatsRecyclerAdapter(
         }
     }
 
-    private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
-        snapshot.children.first().let {
-            holder.contactLastMessage.text = it
-                .child("content")
-                .value.toString()
+    fun update(profiles: List<Profile>) {
+        this.chats = profiles
+    }
 
-            holder.contactLastMessageTime.text = it
-                .child("createTime")
-                .value.toString()
+    private fun applyMetadata(snapshot: DataSnapshot, holder: MyViewHolder) {
+        if (snapshot.hasChildren()) {
+            snapshot.children.first().let {
+                if (it.child("content").value.toString().length > 25) {
+                    holder.contactLastMessage.text =
+                        "${it.child("content").value.toString().substring(0, 25)}..."
+                } else {
+                    holder.contactLastMessage.text =
+                        it.child("content").value.toString()
+                }
+
+                holder.contactLastMessageTime.text = it
+                    .child("createTime")
+                    .value.toString()
+            }
         }
     }
 

@@ -64,7 +64,7 @@ class ChatAdapter(
             holder.anotherMsgDate.text = message.createTime
             holder.anotherMetadata.text = message.metadata
             holder.selfMetadata.text = ""
-            holder.selfMetadata.text = ""
+            holder.selfMsgDate.text = ""
         }
     }
 }
